@@ -7,6 +7,7 @@ create table user(
   userAge varchar(45) not null,
   userImage text not null,
   dogId int(20) not null auto_increment,
+  default character set = utf8,
   primary key(userId),
   foreign key(dogId) REFERENCES dogId(dogId) ON UPDATE CASCADE,
   index(userId)
@@ -21,6 +22,7 @@ create table dog(
   neutral tinyint(1) not null,
   dogComment varchar(100) not null,
   dogImage text not null,
+  default character set = utf8,
   primary key(dogId),
   index(dogId)
 );
@@ -30,6 +32,7 @@ create table location(
   longtitude varchar(45) not null,
   latitude varchar(45) not null,
   locationAddress text not null,
+  default character set = utf8,
   primary key(locationId),
   index(locationId)
 );
@@ -42,6 +45,8 @@ create table post(
   completed tinyint not null,
   locationId int(20) not null auto_increment,
   userId int(20) not null auto_increment,
+  created_at datetime not null default now(),
+  default character set = utf8,
   primary key(postId),
   foreign key(locationId) REFERENCES location(locationId) ON UPDATE CASCADE,
   foreign key(userId) REFERENCES user(userId) ON UPDATE CASCADE,
