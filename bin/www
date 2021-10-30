@@ -9,7 +9,6 @@
  const http = require('http');
 //  const logger = require('../config/logger');
  require('dotenv').config();
- 
  /**
   * Get port from environment and store in Express.
   */

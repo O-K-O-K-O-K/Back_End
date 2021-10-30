@@ -1,14 +1,24 @@
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
-// const logger = require('morgan');
+const logger = require('morgan');
 const app = express();
+
+const swaggerUi = require("swagger-ui-express");
+const swaggerFile = require("./swagger-output");
 
 require('dotenv').config();
 // app.use(compression());
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const dogsRouter = require('./routes/dog');
+// const mainRouter = require('./routes/main');
+// const pagesRouter = require('./routes/mypage');
+// const usersRouter = require('./routes/user');
+
+app.use('/users', dogsRouter);
+// app.use('/users', pagesRouter);
+// app.use('/posts', mainRouter);
+// app.use('/users', usersRouter);
 
 
 const cors = require('cors');
@@ -24,17 +34,18 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+//swagger
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-// app.use(logger('dev'));
+app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
