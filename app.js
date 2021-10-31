@@ -11,13 +11,13 @@ require('dotenv').config();
 // app.use(compression());
 
 const dogsRouter = require('./routes/dog');
-const detailRouter = require('./routes/detail');
+// const detailRouter = require('./routes/detail');
 // const mainRouter = require('./routes/main');
 // const pagesRouter = require('./routes/mypage');
 // const usersRouter = require('./routes/user');
 
 app.use('/users', dogsRouter);
-app.use('/posts', detailRouter);
+// app.use('/posts', detailRouter);
 // app.use('/posts', mainRouter);
 // app.use('/users', usersRouter);
 

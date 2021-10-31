@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "node ./bin/www",
+    "stop": "taskkill -f -im node.exe"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",

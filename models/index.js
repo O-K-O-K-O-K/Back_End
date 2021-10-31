@@ -1,8 +1,20 @@
 const mysql = require('mysql');
 
-exports.db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
+const connection = mysql.createConnection({
+  host: '127.0.0.1',
+  // port : 3000,
+  user: 'root',
+  password: 'test',
+  database: 'dogdogdog',
 });
+
+connection.connect();
+
+// connection.query('SELECT * FROM topic', function(error, results, fields){
+//   if(error) {
+//     console.log(error);
+//   }
+//   console.log(results)
+// });
+
+// connection.end();

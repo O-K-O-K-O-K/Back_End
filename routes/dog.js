@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
 require('dotenv').config();
+const { db } = require('../models/index');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'main page' });
+/* post home page. */
+router.post('/dog', function(req, res, next) {
+  
+
 });
 
 module.exports = router;
