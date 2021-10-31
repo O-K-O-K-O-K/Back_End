@@ -1,15 +1,15 @@
 create table user(
   userId int(20) not null auto_increment,
-  userEmail varchar(45) not null unique,
+  userEmail varchar(45) not null,
   password varchar(255) not null,
-  userNickname varchar(45) not null ,
+  userNickname varchar(45) not null,
   userGender tinyint(1) not null,
   userAge varchar(45) not null,
   userImage text not null,
-  dogId int(20) not null auto_increment,
+  dogId int(20) not null,
   default character set = utf8,
   primary key(userId),
-  foreign key(dogId) REFERENCES dogId(dogId) ON UPDATE CASCADE,
+  foreign key(dogId) REFERENCES dog(dogId) ON UPDATE CASCADE,
   index(userId)
 );
 create table dog(
@@ -37,15 +37,15 @@ create table location(
   index(locationId)
 );
 create table post(
-  postId int(20) not null auto_increment,
-  meetingTime datetime not null,
-  meetingDate date not null,
+  -- postId int(20) not null auto_increment,
+  -- meetingTime datetime not null,
+  -- meetingDate date not null,
   dogCount varchar(50) not null,
   wishDesc text not null,
-  completed tinyint not null,
+  -- completed tinyint not null,
   locationId int(20) not null auto_increment,
   userId int(20) not null auto_increment,
-  created_at datetime not null default now(),
+  -- created_at datetime not null default now(),
   default character set = utf8,
   primary key(postId),
   foreign key(locationId) REFERENCES location(locationId) ON UPDATE CASCADE,
