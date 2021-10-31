@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 require('dotenv').config();
-const { db } = require('../models/index');
+// const { db } = require('../models/index');
 
-/* post home page. */
-router.post('/dog', function(req, res, next) {
-  
+//예시
+router.get('/dog', function(req, res, next) {
+    res.render('index', { title: 'main page' });
 
 });
 
