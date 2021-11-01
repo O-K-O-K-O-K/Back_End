@@ -1,4 +1,4 @@
-const mysql = require('mysql2');
+const mysql = require('mysql');
 
 // exports.db = mysql.createConnection({
 //   host: process.env.DB_HOST,
@@ -33,3 +33,7 @@ module.exports = {
     });
   }
 }
+
+// const dbTest =async () => {
+//   const connection = await db_info.getConnection(async conn => conn);
+// };

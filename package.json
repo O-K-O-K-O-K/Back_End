@@ -3,11 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "nodemon ./bin/www",
     "stop": "taskkill -f -im node.exe"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
@@ -20,6 +21,7 @@
     "morgan": "~1.9.1",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.2",
+    "nodemon": "^2.0.14",
     "pm2": "^5.1.2",
     "swagger-autogen": "^2.12.4",
     "swagger-ui-express": "^4.1.6"

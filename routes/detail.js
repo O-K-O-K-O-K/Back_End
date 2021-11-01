@@ -67,25 +67,24 @@ dotenv.config();
 router.post('/write', async (req, res) => {
   console.log("write post 연결완료!")
   try {
-    const {meeting_time,meeting_date,dog_count,wish_desc,completed,location_id,user_id} = req.body;
+    const {dog_count,wish_desc,completed,location_id,user_id} = req.body;
     console.log(dog_count)
     // const userNickname = req.user.userNickname;
     // const created_at = new Date();
     // const created_at = newDate.toFormat('YYYY-MM-DD HH24:MI:SS');
     const params = [
-      meeting_time,
-      meeting_date,
       dog_count,
       wish_desc,
       completed,
       location_id,
       user_id,
     ]; 
+    console.log(params)
     const query =
-      'INSERT INTO post(meeting_time,meeting_date,dog_count,wish_desc,completed,location_id,user_id) VALUES(?,?,?,?,?,?,?)';
-    console.log(query)
+      `INSERT INTO post(dog_count,wish_desc,completed,location_id,user_id) VALUES(?,?,?,?,?)`;
     await db.query(query, params, (error, rows, fields) => {
       if (error) {
+        console.log(error)
         // logger.error(`Msg: raise Error in createPost => ${error}`);
         return res.status(400).json({
           success: false,
