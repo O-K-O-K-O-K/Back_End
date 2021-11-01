@@ -67,7 +67,7 @@ dotenv.config();
 router.post('/write', async (req, res) => {
   console.log("write post 연결완료!")
   try {
-    const {meeting_time,meeting_date,dog_count,wish_desc,completed,location_id,user_id } = req.body;
+    const {meeting_time,meeting_date,dog_count,wish_desc,completed,location_id,user_id} = req.body;
     console.log(dog_count)
     // const userNickname = req.user.userNickname;
     // const created_at = new Date();
