@@ -3,18 +3,22 @@ const express = require('express');
 const router = express.Router();
 // const auth = require('../middlewares/auth'); 
 // const { db } = require('../models/index');
+const db_config = require('../models/index');
+const db = db_config.init();
+//__dirname; 라는 키워드로 경로에 대한 정보를 제공 굳이 있어야 하나?
+db_config.connect(db);
 const dotenv = require('dotenv');
 dotenv.config();
 
-const mysql = require('mysql');
-const db = mysql.createConnection({
-  host: 'localhost',
-  port : 3000,
-  user: 'root',
-  password: 'test',
-  database: 'dogdogdog',
-});
-db.connect();
+// const mysql = require('mysql');
+// const db = mysql.createConnection({
+//   host: 'localhost',
+//   port : 3000,
+//   user: 'root',
+//   password: 'test',
+//   database: 'dogdogdog',
+// });
+// db.connect();
 
 //가라로 만든 약속등록하기*수정필요
 // router.post('/wirte', async (req, res) => {
@@ -63,22 +67,23 @@ db.connect();
 router.post('/write', async (req, res) => {
   console.log("write post 연결완료!")
   try {
-    const { dogCount, wishDesc, completed, locationId, userId } = req.body;
-    console.log(dogCount)
+    const {meeting_time,meeting_date,dog_count,wish_desc,completed,location_id,user_id } = req.body;
+    console.log(dog_count)
     // const userNickname = req.user.userNickname;
     // const created_at = new Date();
     // const created_at = newDate.toFormat('YYYY-MM-DD HH24:MI:SS');
     const params = [
-      // meetingTime,
-      // meetingDate,
-      dogCount,
-      wishDesc,
-      // completed,
-      locationId,
-      userId,
+      meeting_time,
+      meeting_date,
+      dog_count,
+      wish_desc,
+      completed,
+      location_id,
+      user_id,
     ]; 
     const query =
-      'INSERT INTO post(dogCount, wishDesc,locationId, userId) VALUES(?,?,?,?,?';
+      'INSERT INTO post(meeting_time,meeting_date,dog_count,wish_desc,completed,location_id,user_id) VALUES(?,?,?,?,?,?,?)';
+    console.log(query)
     await db.query(query, params, (error, rows, fields) => {
       if (error) {
         // logger.error(`Msg: raise Error in createPost => ${error}`);
@@ -103,9 +108,11 @@ router.post('/write', async (req, res) => {
 });
 
 //산책 약속 상세 조회하기
-router.get('/:postId', function (req, res, next) {
+router.get('/:post_id', function (req, res, next) {
+  const {post_id} = req.params;
+  console.log("get method 연결완료!")
   try {
-    const query = 'select * from post ;'; //db에서 모든 포스트를 다 가지고 오겠다!
+    const query = `select * from post where post.post_id=${post_id}`; //db에서 모든 포스트를 다 가지고 오겠다!
     db.query(query, (error, rows) => {
       if (error) {
         // logger.error('게시글 조회 중 발생한 DB관련 에러', error);
@@ -116,6 +123,7 @@ router.get('/:postId', function (req, res, next) {
         success: true,
         posts: rows,
       });
+      console.log(rows)
     });
   } catch (err) {
     // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
@@ -123,9 +131,5 @@ router.get('/:postId', function (req, res, next) {
   }
 });
 
-//delete ㅎㅐ야함
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'main page' });
-});
 
 module.exports = router;
