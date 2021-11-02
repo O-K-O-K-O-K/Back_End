@@ -46,7 +46,7 @@ create table `dog`(
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 
--- 자식
+-- 부모
 CREATE TABLE `post` (
   `post_id` int NOT NULL AUTO_INCREMENT,
   `meeting_date` varchar(50) NOT NULL,
@@ -67,8 +67,7 @@ CREATE TABLE `post` (
   ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 
--- 부모
-
+-- 자식
 CREATE TABLE `location` (
   `location_id` int NOT NULL AUTO_INCREMENT,
   `location_category` varchar(45) NOT NULL,
@@ -81,4 +80,6 @@ CREATE TABLE `location` (
   ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 
+-- CREATE TABLE `profile` (
+--   `profile_id` 
 

@@ -3,10 +3,13 @@ const router = express.Router();
 const db_config = require("../models/index");
 const db = db_config.init();
 db_config.connect(db);
-// const dotenv = require('dotenv');
-// dotenv.config();
+// const auth = require('../middlewares/auth');
+const dotenv = require("dotenv");
+dotenv.config();
+const upload = require("../S3/s3");
 
-router.post("/dog", async (req, res, next) => {
+//강아지 정보 등록하기
+router.post("/dog_info", upload.single("dog_image"), async (req, res, next) => {
   try {
     console.log("req.body", req.body);
     const {
@@ -17,11 +20,13 @@ router.post("/dog", async (req, res, next) => {
       dog_age,
       neutral,
       dog_comment,
-      dog_image,
-      user_id
+      // dog_image,
+      user_id,
     } = req.body;
-    // const newDate = new Date();
-    // const postTime = newDate.toFormat("YYYY-MM-DD HH24:MI:SS");
+
+    const dog_image = req.file.location;
+    // const user_id = res.locals.user_id; -> 나중에 user 받아오면 
+
     const params = [
       dog_gender,
       dog_name,
@@ -31,8 +36,10 @@ router.post("/dog", async (req, res, next) => {
       neutral,
       dog_comment,
       dog_image,
-      user_id
+      user_id,
     ];
+
+    console.log(params)
     const query =
       "INSERT INTO dog(dog_gender, dog_name, dog_size, dog_breed, dog_age, neutral, dog_comment, dog_image,user_id) VALUES(?,?,?,?,?,?,?,?,?)";
     // console.log("여기까지 오나 실험", query)
@@ -57,9 +64,9 @@ router.post("/dog", async (req, res, next) => {
   }
 });
 
-// 강아지 정보 조회하기
-// router.get("/dog", function async(req, res, next) {
-//     const query = 'select *, (select count(*) from comment where dog_id = dog.dogId) as  from dog ORDER BY dog_id DESC;';
-// });
+
+router.get('/:dog_id', async(req,res)=> {
+
+})
 
 module.exports = router;

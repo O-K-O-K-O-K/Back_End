@@ -6,7 +6,9 @@ const app = express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
 
-app.use(logger('dev'));
+// app.use(logger('dev'));
+
+//parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -20,11 +22,10 @@ const dogsRouter = require('./routes/dog');
 // const pagesRouter = require('./routes/mypage');
 // const usersRouter = require('./routes/user');
 
-app.use('/users', dogsRouter);
+app.use('/dogs', dogsRouter);
 // app.use('/posts', detailRouter);
 // app.use('/posts', mainRouter);
 // app.use('/users', usersRouter);
-
 
 const cors = require('cors');
 const corsOptions = {
