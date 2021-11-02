@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 -- //dog 부모
+=======
+>>>>>>> sh
 CREATE TABLE `user` (
   `user_id` INT NOT NULL AUTO_INCREMENT,
   `user_email` VARCHAR(45) NOT NULL,
@@ -45,5 +48,9 @@ CREATE TABLE `post` (
   KEY `post_id` (`post_id`),
   FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE
   )
+<<<<<<< HEAD
   ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
+=======
+  ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+>>>>>>> sh
