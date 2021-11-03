@@ -64,9 +64,30 @@ router.post("/dog_info", upload.single("dog_image"), async (req, res, next) => {
   }
 });
 
-
-router.get('/:dog_id', async(req,res)=> {
-
-})
+// 강아지 정보 조회하기
+// router.get('/:dog_id', async(req,res)=> {
+//   const { dog_id } = req.params;
+//   console.log("dog_id가져옴", dog_id)
+  
+//   try {
+//     const query = `select * from (dog left join user on dog.user_id = user.user_id) right join post on dog.user_id = post.user_id where post.post_id=${post_id} `;
+//     db.query(query, (error, rows) => {
+//       if (error) {
+//         console.log(error)
+//         // logger.error('게시글 조회 중 발생한 DB관련 에러', error);
+//         return res.sendStatus(400);
+//       }
+//       // logger.info('게시글을 성공적으로 조회했습니다.');
+//       res.status(200).json({
+//         success: true,
+//         posts: rows,
+//       });
+//       console.log(rows)
+//     });
+//   } catch (err) {
+//     // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
+//     return res.sendStatus(500);
+//   }
+// })
 
 module.exports = router;

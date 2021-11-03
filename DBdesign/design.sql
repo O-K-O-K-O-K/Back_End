@@ -10,7 +10,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`user_id`),
   KEY `user_id` (`user_id`),
   KEY `dog_id` (`dog_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 create table `dog`(
   `dog_id` INT NOT NULL AUTO_INCREMENT,
@@ -26,7 +26,7 @@ create table `dog`(
   PRIMARY KEY(`dog_id`),
   KEY `dog_id` (`dog_id`),
   FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 CREATE TABLE `post` (
   `post_id` int NOT NULL AUTO_INCREMENT,
@@ -44,4 +44,4 @@ CREATE TABLE `post` (
   KEY `post_id` (`post_id`),
   FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE
   )
-  ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+  ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
