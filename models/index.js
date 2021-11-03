@@ -14,12 +14,22 @@ const mysql = require('mysql');
 //     database: 'dog'
 //   });
 
+//정규님거
+// const db_info = {
+//   host: '127.0.0.1',
+//   port: '3306',
+//   user: 'root',
+//   password: '29053696',
+//   database: 'dog'
+// }
+
+//선희님, 유정
 const db_info = {
   host: '127.0.0.1',
   port: '3306',
   user: 'root',
-  password: '29053696',
-  database: 'dog'
+  password: 'test',
+  database: 'dogdogdog'
 }
 
 module.exports = {
