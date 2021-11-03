@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const db_config = require("../models/index");
-const db = db_config.init();
-db_config.connect(db);
+// const db_config = require("../models/index");
+// const db = db_config.init();
+// db_config.connect(db);
 // const auth = require('../middlewares/auth');
 const dotenv = require("dotenv");
 dotenv.config();
 const upload = require("../S3/s3");
+
+const { db } = require("../models/index");
 
 //강아지 정보 등록하기
 router.post("/dog_info", upload.single("dog_image"), async (req, res, next) => {
