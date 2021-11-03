@@ -25,7 +25,7 @@ const usersRouter = require('./routes/user');
 // app.use('/dogs', dogsRouter);
 // app.use('/posts', detailRouter);
 // app.use('/posts', mainRouter);
-// app.use('/users', usersRouter);
+app.use('/users', usersRouter);
 
 
 const cors = require('cors');

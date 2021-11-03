@@ -1,7 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
-// const = require("./userfunction.js");
 const util = require("util");
 const db_config = require("../models/index");
 const db = db_config.init();
@@ -43,27 +42,25 @@ router.post("/login", async (req, res) => {
 
 //회원가입
 router.post("/signUp", async (req, res) => {
-  const { user_email, password,confirm_password, user_nickname, user_gender, user_age, user_image, dog_id } = req.body;
+  const { user_email, password,confirm_password, user_nickname, user_gender, user_age, user_image} = req.body;
   if (!(await emailExist(user_email))) {
-    res.status(401).send({ result: "이메일이 중복같은데요??" });
+    res.status(401).send({ result: "등록된 이메일주소입니다." });
   } else if (!(await nicknameExist(user_nickname))) {
     // 닉네임 중복 검사
-    res.status(401).send({ result: "닉네임이 중복같은데요??" });
+    res.status(401).send({ result: "등론된 닉네임입니다." });
   } else if (!idCheck(user_email)) {
     // id 정규식 검사
-    res.sendStatus(401);
+        res.status(401).send({ result: "이메일형식이 맞지 않습니다." });
   } else if (!pwConfirm(password, confirm_password)) {
     // 비밀번호와 비밀번호 확인이 맞는지 검사
-    res.sendStatus(401);
+        res.status(401).send({ result: "비밀번호를 확인해주세요." });
   } else if (!pwLenCheck(password)) {
     // 비밀번호 최소길이 검사
-    res.sendStatus(401);
-  } else if (!pw_idCheck(user_email, password)) {
-    // 아이디가 비밀번호를 포함하는지 검사
+        res.status(401).send({ result: "비밀번호에 잘못된 정보가있습니다." });
   } else {
-    const dopost = [user_email, password, user_nickname, user_gender, user_age, user_image, dog_id];
+    const dopost = [user_email, password, user_nickname, user_gender, user_age, user_image,];
     const post =
-      "INSERT INTO user (user_email, password, user_nickname, user_gender, user_age, user_image, dog_id) VALUES (?, ? , ?, ?, ?, ?, ?);";
+      "INSERT INTO user (user_email, password, user_nickname, user_gender, user_age, user_image) VALUES (?, ? , ?, ?, ?, ?);";
     db.query(post, dopost, (error, results, fields) => {
       // db.query(쿼리문, 넣을 값, 콜백)
       if (error) {
