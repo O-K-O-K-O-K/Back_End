@@ -7,12 +7,13 @@ const mysql = require('mysql');
 //   database: process.env.DB_DATABASE,
 // });
 
-// exports.db = mysql.createConnection({
-//     host: '127.0.0.1',
-//     user: 'root',
-//     password: 'test',
-//     database: 'dog'
-//   });
+exports.db = mysql.createConnection({
+    host: '127.0.0.1',
+    user: 'root',
+    port: '3306',
+    password: 'test',
+    database: 'dogdogdog'
+  });
 
 //정규님거
 // const db_info = {
@@ -23,26 +24,26 @@ const mysql = require('mysql');
 //   database: 'dog'
 // }
 
-//선희님, 유정
-const db_info = {
-  host: '127.0.0.1',
-  port: '3306',
-  user: 'root',
-  password: 'test',
-  database: 'dogdogdog'
-}
+// 선희님, 유정
+// const db_info = {
+//   host: '127.0.0.1',
+//   port: '3306',
+//   user: 'root',
+//   password: 'test',
+//   database: 'dogdogdog'
+// }
 
-module.exports = {
-  init: function () {
-    return  mysql.createConnection(db_info);
-  },
-  connect: function(conn) {
-    conn.connect(function(err) {
-      if(err) console.error('mysql connection error : '+err);
-      else console.log('mysql is connected successfully!');
-    });
-  }
-}
+// module.exports = {
+//   init: function () {
+//     return  mysql.createConnection(db_info);
+//   },
+//   connect: function(conn) {
+//     conn.connect(function(err) {
+//       if(err) console.error('mysql connection error : '+err);
+//       else console.log('mysql is connected successfully!');
+//     });
+//   }
+// }
 
 // const dbTest =async () => {
 //   const connection = await db_info.getConnection(async conn => conn);

@@ -2,9 +2,13 @@ const express = require('express');
 const multer = require('multer')
 const router = express.Router();
 // const auth = require('../middlewares/auth'); 
-const db_config = require('../models/index');
-const db = db_config.init();
-db_config.connect(db);
+
+// const db_config = require('../models/index');
+// const db = db_config.init();
+// db_config.connect(db);
+
+const { db } = require("../models/index");
+
 const dotenv = require('dotenv');
 dotenv.config();
 // const util = require('util'); //현재시간을 찍어주는 모듈 

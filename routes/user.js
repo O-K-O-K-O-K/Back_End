@@ -3,9 +3,12 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 // const = require("./userfunction.js");
 const util = require("util");
-const db_config = require("../models/index");
-const db = db_config.init();
-db_config.connect(db);
+// const db_config = require("../models/index");
+// const db = db_config.init();
+// db_config.connect(db);
+
+const { db } = require("../models/index");
+
 const dotenv = require("dotenv");
 db.query = util.promisify(db.query);
 
@@ -43,7 +46,7 @@ router.post("/login", async (req, res) => {
 
 //회원가입
 router.post("/signUp", async (req, res) => {
-  const { user_email, password,confirm_password, user_nickname, user_gender, user_age, user_image, dog_id } = req.body;
+  const { user_email, password,confirm_password, user_nickname, user_gender, user_age, user_image} = req.body;
   if (!(await emailExist(user_email))) {
     res.status(401).send({ result: "이메일이 중복같은데요??" });
   } else if (!(await nicknameExist(user_nickname))) {
@@ -61,9 +64,9 @@ router.post("/signUp", async (req, res) => {
   } else if (!pw_idCheck(user_email, password)) {
     // 아이디가 비밀번호를 포함하는지 검사
   } else {
-    const dopost = [user_email, password, user_nickname, user_gender, user_age, user_image, dog_id];
+    const dopost = [user_email, password, user_nickname, user_gender, user_age, user_image];
     const post =
-      "INSERT INTO user (user_email, password, user_nickname, user_gender, user_age, user_image, dog_id) VALUES (?, ? , ?, ?, ?, ?, ?);";
+      "INSERT INTO user (user_email, password, user_nickname, user_gender, user_age, user_image) VALUES (?, ? , ?, ?, ?, ?);";
     db.query(post, dopost, (error, results, fields) => {
       // db.query(쿼리문, 넣을 값, 콜백)
       if (error) {
