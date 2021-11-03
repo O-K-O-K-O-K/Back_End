@@ -54,7 +54,7 @@ router.post("/signUp", async (req, res) => {
     res.status(401).send({ result: "닉네임이 중복같은데요??" });
   } else if (!idCheck(user_email)) {
     // id 정규식 검사
-    res.sendStatus(401);
+    res.status(401)
   } else if (!pwConfirm(password, confirm_password)) {
     // 비밀번호와 비밀번호 확인이 맞는지 검사
     res.sendStatus(401);

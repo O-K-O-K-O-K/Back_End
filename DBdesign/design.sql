@@ -10,22 +10,6 @@ CREATE TABLE `user` (
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
--- create table `dog`(
---   `dog_id` INT NOT NULL AUTO_INCREMENT,
---   `dog_gender` VARCHAR(45) NOT NULL,
---   `dog_name` VARCHAR(45) NOT NULL,
---   `dog_size` VARCHAR(45) NOT NULL,
---   `dog_breed` VARCHAR(45) NOT NULL,
---   `dog_age` VARCHAR(45) NOT NULL,
---   `neutral` VARCHAR(45) NOT NULL, 
---   `dog_comment` VARCHAR(100) NOT NULL,
---   `dog_image` TEXT NOT NULL,
---   `user_id` INT NOT NULL,
---   PRIMARY KEY(`dog_id`),
---   KEY `dog_id` (`dog_id`),
---   FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE
--- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
-
 create table `dog`(
   `dog_id` INT NOT NULL AUTO_INCREMENT,
   `dog_gender` VARCHAR(45) NOT NULL,
@@ -38,8 +22,24 @@ create table `dog`(
   `dog_image` TEXT NOT NULL,
   `user_id` INT NOT NULL,
   PRIMARY KEY(`dog_id`),
-  KEY `dog_id` (`dog_id`)
+  KEY `dog_id` (`dog_id`),
+  FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+-- create table `dog`(
+--   `dog_id` INT NOT NULL AUTO_INCREMENT,
+--   `dog_gender` VARCHAR(45) NOT NULL,
+--   `dog_name` VARCHAR(45) NOT NULL,
+--   `dog_size` VARCHAR(45) NOT NULL,
+--   `dog_breed` VARCHAR(45) NOT NULL,
+--   `dog_age` VARCHAR(45) NOT NULL,
+--   `neutral` VARCHAR(45) NOT NULL, 
+--   `dog_comment` VARCHAR(100) NOT NULL,
+--   `dog_image` TEXT NOT NULL,
+--   `user_id` INT NOT NULL,
+--   PRIMARY KEY(`dog_id`),
+--   KEY `dog_id` (`dog_id`)
+-- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 CREATE TABLE `post` (
   `post_id` int NOT NULL AUTO_INCREMENT,

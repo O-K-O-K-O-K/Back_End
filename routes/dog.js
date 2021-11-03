@@ -25,11 +25,11 @@ router.post("/dog_info", upload.single("dog_image"), async (req, res, next) => {
       neutral,
       dog_comment,
       // dog_image,
-      user_id,
+      // user_id,
     } = req.body;
 
     const dog_image = req.file.location;
-    // const user_id = res.locals.user_id; -> 나중에 user 받아오면 
+    const user_id = res.locals.user_id; //-> 나중에 user 받아오면 
 
     const params = [
       dog_gender,
