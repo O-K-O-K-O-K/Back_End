@@ -1,4 +1,4 @@
-const mysql = require('mysql2');
+const mysql = require('mysql');
 
 // exports.db = mysql.createConnection({
 //   host: process.env.DB_HOST,
@@ -11,15 +11,15 @@ const mysql = require('mysql2');
 //     host: '127.0.0.1',
 //     user: 'root',
 //     password: 'test',
-//     database: 'dogdogdog'
+//     database: 'dog'
 //   });
 
 const db_info = {
   host: '127.0.0.1',
   port: '3306',
   user: 'root',
-  password: 'test',
-  database: 'dogdogdog'
+  password: '29053696',
+  database: 'dog'
 }
 
 module.exports = {
