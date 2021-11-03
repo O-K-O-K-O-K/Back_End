@@ -1,9 +1,8 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
-const uf = require("./userfunction.js");
+// const = require("./userfunction.js");
 const util = require("util");
-const mysql = require("mysql");
 const db_config = require("../models/index");
 const db = db_config.init();
 db_config.connect(db);
@@ -24,12 +23,12 @@ router.post("/login", async (req, res) => {
         {
           user_email: users.user_email,
           user_nickname: users.user_nickname,
-          gender: users.gender,
-          age: users.age,
-          image: users.image,
+          user_gender: users.gender,
+          user_age: users.age,
+          user_image: users.image,
         },
         process.env.SECRET_KEY,
-        { expiresIn: "24h" }
+        { expiresIn: "1h" }
       ); // 토큰에 user_email, nickname을 담아준다.
       // res.cookie("user", token);
       res.json({ token });
@@ -45,21 +44,21 @@ router.post("/login", async (req, res) => {
 //회원가입
 router.post("/signUp", async (req, res) => {
   const { user_email, password,confirm_password, user_nickname, user_gender, user_age, user_image, dog_id } = req.body;
-  if (!(await uf.emailExist(user_email))) {
-    res.status(401).send({ result: "선생님, 이메일이 중복같은데요??" });
-  } else if (!(await uf.nicknameExist(user_nickname))) {
+  if (!(await emailExist(user_email))) {
+    res.status(401).send({ result: "이메일이 중복같은데요??" });
+  } else if (!(await nicknameExist(user_nickname))) {
     // 닉네임 중복 검사
-    res.status(401).send({ result: "선생님, 닉네임이 중복같은데요??" });
-  } else if (!uf.idCheck(user_email)) {
+    res.status(401).send({ result: "닉네임이 중복같은데요??" });
+  } else if (!idCheck(user_email)) {
     // id 정규식 검사
     res.sendStatus(401);
-  } else if (!uf.pwConfirm(password, confirm_password)) {
+  } else if (!pwConfirm(password, confirm_password)) {
     // 비밀번호와 비밀번호 확인이 맞는지 검사
     res.sendStatus(401);
-  } else if (!uf.pwLenCheck(password)) {
+  } else if (!pwLenCheck(password)) {
     // 비밀번호 최소길이 검사
     res.sendStatus(401);
-  } else if (!uf.pw_idCheck(user_email, password)) {
+  } else if (!pw_idCheck(user_email, password)) {
     // 아이디가 비밀번호를 포함하는지 검사
   } else {
     const dopost = [user_email, password, user_nickname, user_gender, user_age, user_image, dog_id];
@@ -77,5 +76,89 @@ router.post("/signUp", async (req, res) => {
     });
   }
 });
+
+function idCheck(id_give) {
+  console.log(id_give);
+  const reg_name =
+    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 이메일 정규식표현
+  if (reg_name.test(id_give) && id_give.length >= 3) {
+    return true;
+  }
+  return false;
+}
+
+function pwConfirm(pw_give, pw2_give) {
+  console.log(pw_give,pw2_give);
+  if (pw_give === pw2_give) {
+    return true;
+  }
+  return false;
+}
+
+function pwLenCheck(pw_give) {
+  console.log(pw_give);
+  if (pw_give.length >= 4) {
+    return true;
+  }
+  return false;
+}
+
+function pw_idCheck(id_give, pw_give) {
+  if (!id_give.includes(pw_give)) {
+    return true;
+  }
+  return false;
+}
+
+// async function emailExist(email_give) {
+//   console.log(email_give);
+//   const post = "SELECT * FROM user WHERE user_email = ?;";
+//   console.log(post);
+//   const results = await db.query(post,[email_give]);
+//   console.log(results)
+//   if (results.length) {
+//     return false;
+//   } else {
+//     return true;
+//   }
+// }
+
+function emailExist(user_email) {
+  return new Promise((resolve, reject) => {
+    const query = 'select user_email from user where user.user_email = ?';
+    const params = [user_email];
+    db.query(query, params, (error, results, fields) => {
+      console.log(results);
+      if (error) {
+        // logger.error(`Msg: raise Error in checkValidationEmail => ${error}`);
+        console.log(1);
+        return resolve(false);
+
+      }
+
+      // 아무 값이 없기 때문에, 중복이 없다. (가능 하다는 얘기)
+      if (results.length == 0) {
+        console.log(2);
+        return resolve(true);
+      }
+
+      // 존재하다면, 이메일 중복으로 인지
+      console.log(3);
+      resolve(false);
+    });
+  });
+}
+
+async function nicknameExist(nick_give) {
+  console.log(nick_give);
+  const post = "SELECT * FROM user WHERE user_nickname = ?;";
+  const results = await db.query(post, [nick_give]);
+  if (results.length) {
+    // Boolean([])  true이다.
+    return false;
+  } else {
+    return true;
+  }
+}
 
 module.exports = router;
