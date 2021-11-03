@@ -1,7 +1,7 @@
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
-const logger = require('morgan');
+// const logger = require('morgan');
 const bodyParser =require('body-parser')
 const app = express();
 const swaggerUi = require("swagger-ui-express");
@@ -18,13 +18,13 @@ require('dotenv').config();
 // app.use(compression());
 
 // const dogsRouter = require('./routes/dog');
-// const detailRouter = require('./routes/detail');
+const detailRouter = require('./routes/detail');
 // const mainRouter = require('./routes/main');
 // const pagesRouter = require('./routes/mypage');
 // const usersRouter = require('./routes/user');
 
-// app.use('/dogs', dogsRouter);
-// app.use('/posts', detailRouter);
+
+app.use('/posts', detailRouter);
 // app.use('/posts', mainRouter);
 // app.use('/users', usersRouter);
 

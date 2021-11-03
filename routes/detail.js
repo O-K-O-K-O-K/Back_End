@@ -1,15 +1,13 @@
 const express = require('express');
 const multer = require('multer')
 const router = express.Router();
-const util = require('util');
 // const auth = require('../middlewares/auth'); 
 const db_config = require('../models/index');
 const db = db_config.init();
 db_config.connect(db);
 const dotenv = require('dotenv');
 dotenv.config();
-const daum = require('daum-map-api');
-const util = require('util'); //현재시간을 찍어주는 모듈 
+// const util = require('util'); //현재시간을 찍어주는 모듈 
 // const { JsonWebTokenError } = require('jsonwebtoken');
 
 
@@ -102,7 +100,7 @@ router.get('/:post_id', function (req, res, next) {
   console.log("user_id는",user_id)
   console.log("get method 연결완료!")
   try {
-    const query = `select * from (dog left join user on dog.user_id = user.user_id) right join post on dog.user_id = post.user_id where post.post_id=${post_id} `;
+    const query = `select * from ((select user.user_nickname, user.user_gender, user.user_age, user.user_image from user) user join dog on user.user_id = dog.user_id) join post on dog.user_id = post.user_id where post.post_id=${post_id}`;
     db.query(query, (error, rows) => {
       if (error) {
         console.log(error)
