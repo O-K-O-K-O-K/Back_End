@@ -37,6 +37,7 @@ const corsOptions = {
   // methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
   // preflightContinue: false,
   credentials: true,
+  // 'Access-Control-Allow-Origin': '*',
   // optionsSuccessStatus: 204,
 };
 app.use(cors(corsOptions));

@@ -49,7 +49,7 @@ router.patch("/:user_id", async (req, res) => {
         user_image : user_image,
     }
 
-    console.log("여기:",escapeQuery);
+    console.log("여기: ",escapeQuery);
 
     const userQuery = `UPDATE user SET ? WHERE user_id = '${user_id}'`;
 

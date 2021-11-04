@@ -12,11 +12,10 @@ const { db } = require("../models/index");
 // 걱정은, 3번 user정보에 4번 도그 정보가 들어갈 우려가 있음. -> 체크 바람
 
 //강아지 정보 등록하기
-router.post("/dog_info", upload.single("dog_image"), async (req, res, next) => {
-  const user_id = 2; 
-  // const user_id = res.locals.user_id;
-
-  console.log("user_id임", user_id)
+router.post("/dog_info", upload.single("dog_image"), auth, async (req, res, next) => {
+  // const user_id = 2; 
+  const user_id =  res.locals.user.user_id;
+  console.log("auth 들어옴: ", user_id)
 
   try {
     console.log("req.body", req.body);
@@ -69,9 +68,6 @@ router.post("/dog_info", upload.single("dog_image"), async (req, res, next) => {
       success: false,
       msg: "try 문에 들어가지 못함",
     });
-  } catch (err) {
-    // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
-    return res.sendStatus(500);
   }
 });
 

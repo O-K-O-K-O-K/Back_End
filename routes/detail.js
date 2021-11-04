@@ -104,9 +104,14 @@ router.get('/:post_id', function (req, res, next) {
   console.log("get method 연결완료!")
   try {
     const query = 
-    `SELECT * FROM dog 
-    JOIN post ON post.user_id = dog.user_id 
-    JOIN user ON user.user_id = dog.user_id
+    `SELECT dog.dog_id, dog.dog_gender, dog.dog_name, dog.dog_size, dog.dog_breed, dog.dog_age, dog.neutral, dog.dog_comment, dog.dog_image,
+    post.user_id, post.post_id, post.meeting_date, post.wish_desc, post.created_at, post.completed, post.location_category, post.longitude, post.latitude, post.location_address,
+    user.user_nickname, user.user_gender, user.user_age, user.user_image
+    from post
+    join dog
+    on post.user_id = dog.user_id
+    join user
+    on user.user_id = dog.user_id
     WHERE post.post_id =${post_id}`;
     db.query(query, (error, rows) => {
       if (error) {
