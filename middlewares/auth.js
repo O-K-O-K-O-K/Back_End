@@ -11,11 +11,11 @@ module.exports = async (req, res, next) => {
   try {
     // 로그인된 유저
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    const email = decoded.email;
-    const user = await User.findOne({
-      where: { email },
+    const user_email = decoded.user_email;
+    const user_id = await User.findOne({
+      where: { user_email },
     });
-    res.locals.user = user.id;
+    res.locals.user = user.user_id;
     next();
   } catch (err) {
     next(err);

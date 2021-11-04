@@ -44,6 +44,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
+
 //회원가입
 router.post("/signUp", async (req, res) => {
   const { user_email, password,confirm_password, user_nickname, user_gender, user_age, user_image} = req.body;
