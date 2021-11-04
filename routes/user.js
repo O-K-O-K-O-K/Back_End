@@ -1,6 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
+const setRounds = 10;
 const router = express.Router();
 const util = require("util");
 // const db_config = require("../models/index");
@@ -14,7 +15,6 @@ db.query = util.promisify(db.query);
 
 // 로그인
 router.post("/login", async (req, res) => {
-  console.log("로그인 접속 ok")
 try{
   const { user_email, password } = req.body;
   const query =  `SELECT * FROM user WHERE user_email = ${user_email}`;
@@ -42,7 +42,7 @@ try{
     errMessage: '로그인 정보가 일치하지 않습니다.'
     });
   }
-    // DB에서 nickname, email을 가져온다. 토큰에 넣기 위함.
+    // DB에서 nickname, email을 가져온다. 토큰에 넣기 위함.  ?????????????????????
     const user_nickname = data.rows.user_nickname;
     const email = data.rows.user_email;
     const user_id = data.rows.user_id;
@@ -79,15 +79,56 @@ try{
 //JWT 토큰 생성
 function create_jwt_token(user_nickname, user_email) {
 return jwt.sign({ user_nickname, user_email }, process.env.SECRET_KEY, {
-  expiresIn: '24h',    //리쉬레시 시간
+  expiresIn: '1h',    //리프레쉬 시간 24h -> 1h
 });
 }
 
 
+// // 비밀번호 암호화(암호화)
+// const salt = bcrypt.genSaltSync(setRounds);
+// const hashedPassword = bcrypt.hashSync(password, salt);
+
+// const userParams = [user_email, hashedPassword, user_nickname];
+// const userQuery =
+//   'INSERT INTO user(user_email, userPw, userNickname) VALUES(?,?,?)';
+
+//   // 비밀번호 일치 여부 알려주는 함수
+// function checkMatchingPassword(userPw, userPwCheck) {
+//   if (userPw === userPwCheck) {
+//     return true;
+//   }
+//   return false;
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //회원가입
 router.post("/signUp", async (req, res) => {
-  console.log("회원가입 연결 완료")
-  const { user_email, password,confirm_password, user_nickname, user_gender, user_age, user_image} = req.body;
+  const { user_email, password,confirm_password, user_nickname, user_gender, user_age, user_image} = req.body;  //confirm_password 확인하기!
   if (!await emailExist(user_email)) {
     res.status(401).send({ result: "이메일이 중복같은데요??" });
   } else if (!await nicknameExist(user_nickname)) {
@@ -155,19 +196,6 @@ function pw_idCheck(id_give, pw_give) {
   }
   return false;
 }
-
-// async function emailExist(email_give) {
-//   console.log(email_give);
-//   const post = "SELECT * FROM user WHERE user_email = ?;";
-//   console.log(post);
-//   const results = await db.query(post,[email_give]);
-//   console.log(results)
-//   if (results.length) {
-//     return false;
-//   } else {
-//     return true;
-//   }
-// }
 
 function emailExist(user_email) {
   return new Promise((resolve, reject) => {
