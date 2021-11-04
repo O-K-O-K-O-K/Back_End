@@ -1,7 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const bcrypt = require('bcrypt');
 const router = express.Router();
-// const = require("./userfunction.js");
 const util = require("util");
 // const db_config = require("../models/index");
 // const db = db_config.init();
@@ -44,7 +44,7 @@ try{
   }
     // DB에서 nickname, email을 가져온다. 토큰에 넣기 위함.
     const user_nickname = data.rows.user_nickname;
-    const user_email = data.rows.user_email;
+    const email = data.rows.user_email;
     const user_id = data.rows.user_id;
     const hashed_password = data.rows.password;
 
@@ -79,44 +79,18 @@ try{
 //JWT 토큰 생성
 function create_jwt_token(user_nickname, user_email) {
 return jwt.sign({ user_nickname, user_email }, process.env.SECRET_KEY, {
-  expiresIn: '24h',
+  expiresIn: '24h',    //리쉬레시 시간
 });
 }
 
-
-//   users = results[0];
-//   if (users) {
-//     // 유저가 존재한다면? (이미 가입했다면)
-//     if (users.password === password) {
-//       const token = jwt.sign(
-//         {
-//           user_email: users.user_email,
-//           user_nickname: users.user_nickname,
-//           user_gender: users.gender,
-//           user_age: users.age,
-//           user_image: users.image,
-//         },
-//         process.env.SECRET_KEY,
-//         { expiresIn: "1h" }
-//       ); // 토큰에 user_email, nickname을 담아준다.
-//       // res.cookie("user", token);
-//       res.json({ token });
-//     } else {
-//       res.status(400).send({});
-//     }
-//   } else {
-//     // 유저가 없다면? (가입하지 않았다면)
-//     res.status(400).send({});
-//   }
-// });
 
 //회원가입
 router.post("/signUp", async (req, res) => {
   console.log("회원가입 연결 완료")
   const { user_email, password,confirm_password, user_nickname, user_gender, user_age, user_image} = req.body;
-  if (!(await emailExist(user_email))) {
+  if (!await emailExist(user_email)) {
     res.status(401).send({ result: "이메일이 중복같은데요??" });
-  } else if (!(await nicknameExist(user_nickname))) {
+  } else if (!await nicknameExist(user_nickname)) {
     // 닉네임 중복 검사
     res.status(401).send({ result: "닉네임이 중복같은데요??" });
   } else if (!idCheck(user_email)) {
@@ -146,6 +120,8 @@ router.post("/signUp", async (req, res) => {
     });
   }
 });
+
+
 
 function idCheck(id_give) {
   console.log(id_give);

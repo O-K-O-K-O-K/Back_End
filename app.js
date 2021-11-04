@@ -19,14 +19,12 @@ require('dotenv').config();
 
 // app.set('views', path.join(__dirname, 'views'));
 
-const dogsRouter = require('./routes/dog');
-const detailRouter = require('./routes/detail');
-// const pagesRouter = require('./routes/mypage');
+// const dogsRouter = require('./routes/dog');
+// const detailRouter = require('./routes/detail');
 const usersRouter = require('./routes/user');
 
-app.use('/dogs', dogsRouter);
-app.use('/posts', detailRouter);
-// app.use('/users', pagesRouter);
+// app.use('/dogs', dogsRouter);
+// app.use('/posts', detailRouter);
 app.use('/users', usersRouter);
 
 
