@@ -4,14 +4,20 @@ const express = require('express');
 const app = express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
+const path = require('path');
 
 // app.use(logger('dev'));
 
 //parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.static('public'));
+
 require('dotenv').config();
 // app.use(compression());
+
+app.set('views', path.join(__dirname, 'views'));
+
 
 const dogsRouter = require('./routes/dog');
 const detailRouter = require('./routes/detail');
@@ -20,7 +26,7 @@ const usersRouter = require('./routes/user');
 
 app.use('/dogs', dogsRouter);
 app.use('/posts', detailRouter);
-// app.use('/posts', pagesRouter);
+// app.use('/users', pagesRouter);
 app.use('/users', usersRouter);
 
 
@@ -30,6 +36,7 @@ const corsOptions = {
   origin: '*', // 전체 허용
   methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
   preflightContinue: false,
+  
   credentials: true,
   optionsSuccessStatus: 204,
 };

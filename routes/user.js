@@ -5,7 +5,6 @@ const util = require("util");
 // const db_config = require("../models/index");
 // const db = db_config.init();
 // db_config.connect(db);
-
 const { db } = require("../models/index");
 
 const dotenv = require("dotenv");
@@ -131,6 +130,7 @@ function emailExist(user_email) {
       console.log(results);
       if (error) {
         // logger.error(`Msg: raise Error in checkValidationEmail => ${error}`);
+        console.log("이메일 중복확인 에러는",error)
         console.log(1);
         return resolve(false);
 

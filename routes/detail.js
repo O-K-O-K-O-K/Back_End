@@ -101,10 +101,9 @@ router.post('/write', async (req, res) => {
 router.get('/:post_id', function (req, res, next) {
   const {post_id} = req.params;
   const user_id = 1 // const user_id = req.user.user_id;
-  console.log("user_id는",user_id)
   console.log("get method 연결완료!")
   try {
-    const query = `select * from ((select user.user_nickname, user.user_gender, user.user_age, user.user_image from user) user join dog on user.user_id = dog.user_id) join post on dog.user_id = post.user_id where post.post_id=${post_id}`;
+    const query = `select user, dog, post from ((select user.user_nickname, user.user_gender, user.user_age, user.user_image from user) user join dog on user.user_id = dog.user_id) join post on dog.user_id = post.user_id where post.post_id=${post_id}`;
     db.query(query, (error, rows) => {
       if (error) {
         console.log(error)
