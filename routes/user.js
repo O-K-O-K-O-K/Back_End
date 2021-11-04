@@ -109,7 +109,10 @@ return jwt.sign({ user_nickname, user_email }, process.env.SECRET_KEY, {
 //     res.status(400).send({});
 //   }
 // });
+<<<<<<< HEAD
 //하하
+=======
+>>>>>>> a4632f2b0cca858a4260bcacb4308c1ef15a7f7a
 
 //회원가입
 router.post("/signUp", async (req, res) => {
