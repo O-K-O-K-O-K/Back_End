@@ -73,7 +73,7 @@ router.post("/dog_info", upload.single("dog_image"), async (req, res, next) => {
   } catch (err) {
     return res.status(500).json({
       success: false,
-      msg: "걍 실패",
+      msg: "try 문에 들어가지 못함",
     });
   }
 });
