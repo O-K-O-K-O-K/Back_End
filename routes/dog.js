@@ -19,7 +19,7 @@ const { db } = require("../models/index");
 
 //강아지 정보 등록하기
 router.post("/dog_info", upload.single("dog_image"), async (req, res, next) => {
-  const user_id = 1; 
+  const user_id = 2; 
   // const user_id = res.locals.user_id;
 
   console.log("user_id임", user_id)
@@ -104,4 +104,51 @@ router.get("/:dog_id", async (req, res) => {
   }
 });
 
+
+router.patch('/:dog_id', upload.single("dog_image"), async (req, res) => {
+  const { dog_id } = req.params;
+  const user_id = 1; // const user_id = req.user.user_id;
+
+  console.log("reqbody:", req.body)
+  const {
+    dog_gender,
+    dog_name,
+    dog_size,
+    dog_breed,
+    dog_age,
+    neutral,
+    dog_comment,
+  } = req.body;
+
+  const dog_image = req.file.location;
+
+  const escapeQuery = {
+    dog_gender : dog_gender,
+    dog_name : dog_name,
+    dog_size : dog_size,
+    dog_breed : dog_breed,
+    dog_age : dog_age,
+    neutral : neutral,
+    dog_comment : dog_comment,
+    dog_image : dog_image,
+  };
+
+  console.log(escapeQuery)
+  const query = `UPDATE dog SET ? WHERE dog_id = ${dog_id} and user_id = '${user_id}'`;
+
+  await db.query(query, escapeQuery, (error, rows, fields) => {
+    if(error){
+      return res.status(400).json({
+        success: false,
+        error,
+        msg : "실패임",
+      });
+    } else{
+      return res.status(200).json({
+        success:true,
+        dogs: rows,
+      });
+    }
+  })
+});
 module.exports = router;

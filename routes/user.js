@@ -44,7 +44,7 @@ try{
   }
     // DB에서 nickname, email을 가져온다. 토큰에 넣기 위함.
     const user_nickname = data.rows.user_nickname;
-    const user_email = data.rows.user_email;
+    user_email = data.rows.user_email;
     const user_id = data.rows.user_id;
     const hashed_password = data.rows.password;
 
