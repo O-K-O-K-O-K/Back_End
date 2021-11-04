@@ -4,12 +4,7 @@ const bcrypt = require('bcrypt');
 const setRounds = 10;
 const router = express.Router();
 const util = require("util");
-// const db_config = require("../models/index");
-// const db = db_config.init();
-// db_config.connect(db);
-
 const { db } = require("../models/index");
-
 const dotenv = require("dotenv");
 db.query = util.promisify(db.query);
 
@@ -34,7 +29,7 @@ router.post("/login", async (req, res) => {
           image: users.user_image,
         },
         process.env.SECRET_KEY,
-        { expiresIn: "24h" }   //// 추후 1시간으로 변경 예정
+        { expiresIn: "1h" }   //// 추후 1시간으로 변경 예정
       );
       res.cookie('user', token);
       res.json({ token });
@@ -51,7 +46,6 @@ router.post("/login", async (req, res) => {
 //회원가입
 router.post("/signUp", async (req, res) => {
   const { user_email, password,confirm_password, user_nickname, user_gender, user_age, user_image} = req.body;  //confirm_password 확인하기!
-  const hash = await bcrypt.hash(password, 10);
   if (!await nicknameExist(user_nickname)) {
     // 닉네임 중복 검사
     res.status(401).send({ result: "닉네임이 존재합니다." });
@@ -67,10 +61,12 @@ router.post("/signUp", async (req, res) => {
   } else if (!pw_idCheck(user_email, password)) {
     // 아이디가 비밀번호를 포함하는지 검사
   } else {
-    const dopost = [user_email, password, user_nickname, user_gender, user_age, user_image];
+    const salt = await bcrypt.genSaltSync(setRounds);
+    const hashPassword = bcrypt.hashSync(password, salt);
+    const userParams = [user_email, hashPassword, user_nickname, user_gender, user_age, user_image];
     const post =
       "INSERT INTO user (user_email, password, user_nickname, user_gender, user_age, user_image) VALUES (?, ? , ?, ?, ?, ?);";
-    db.query(post, dopost, (error, results, fields) => {
+    db.query(post, userParams, (error, results, fields) => {
       // db.query(쿼리문, 넣을 값, 콜백)
       if (error) {
         res.status(401).send(error);
@@ -92,7 +88,6 @@ router.post("/users/checkDup", async  (req, res) => {
     res.status(200).send({ result: "정상적인 이메일입니다."})
   }
 });
-
 
 function idCheck(id_give) {
   console.log(id_give);
@@ -160,8 +155,6 @@ async function nicknameExist(nick_give) {
     return true;
   }
 }
-
-
 
 module.exports = router;
 
