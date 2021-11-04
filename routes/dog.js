@@ -75,6 +75,9 @@ router.post("/dog_info", upload.single("dog_image"), async (req, res, next) => {
       success: false,
       msg: "try 문에 들어가지 못함",
     });
+  } catch (err) {
+    // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
+    return res.sendStatus(500);
   }
 });
 
