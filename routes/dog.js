@@ -1,15 +1,9 @@
 const express = require("express");
 const router = express.Router();
-
-// const db_config = require("../models/index");
-// const db = db_config.init();
-// db_config.connect(db);
-
 const auth = require('../middlewares/auth');
 const dotenv = require("dotenv");
 dotenv.config();
 const upload = require("../S3/s3");
-
 const { db } = require("../models/index");
 
 //예외 처리 - 유저가 signUp은 하는대, dog 정보를 입력하지 않고 나가는 경우.
@@ -85,7 +79,7 @@ router.get("/:dog_id", async (req, res) => {
   try {
     const query = `select * from dog left join user on dog.dog_id = user.user_id where dog.dog_id= "${dog_id}";`
 
-    db.query(query, (error, rows) => {
+    await db.query(query, (error, rows) => {
       if (error) {
         console.log(error);
         // logger.error('게시글 조회 중 발생한 DB관련 에러', error);
