@@ -1,7 +1,8 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const bcrypt = require('bcrypt');
+const setRounds = 10;
 const router = express.Router();
-// const = require("./userfunction.js");
 const util = require("util");
 // const db_config = require("../models/index");
 // const db = db_config.init();
@@ -12,111 +13,45 @@ const { db } = require("../models/index");
 const dotenv = require("dotenv");
 db.query = util.promisify(db.query);
 
-// 로그인
+//로그인
 router.post("/login", async (req, res) => {
-  console.log("로그인 접속 ok")
-try{
   const { user_email, password } = req.body;
-  const query =  `SELECT * FROM user WHERE user_email = ${user_email}`;
-  const results = await db.query(query, [user_email], (error, rows, fields) => {
-    if (error) {
-      // logger.error(`Msg: raise Error in isMatchEmailToPwd => ${error}`);
-      return res.status(400).json({
-        success: false,
-        errMessage: '400 에러 로그인중 오류가 발생 하였습니다!.'
-      });
+  let users;
+  const post = "SELECT * FROM user WHERE user_email = ?";
+  const results = await db.query(post, [user_email]);
+  users = results[0];
+
+  if (users) {
+    // 유저가 존재한다면? (이미 가입했다면)
+    if (users.password === password) {
+      const token = jwt.sign(
+        {
+          user_id: users.user_id,
+          user_email: users.user_email,
+          user_nickname: users.user_nickname,
+          gender: users.user_gender,
+          age: users.user_age,
+          image: users.user_image,
+        },
+        process.env.SECRET_KEY,
+        { expiresIn: "24h" }   //// 추후 1시간으로 변경 예정
+      );
+      res.json({ token });
+    } else {
+      res.status(400).send({result: "비밀번호를 확인해주세요." });
     }
-    // query문의 결과가 1개 이상이면서 비밀번호가 일치할 때,
-    if (rows.length >= 1 && bcrypt.compareSync(password, rows[0].password)) {
-      return resolve({
-        success: true,
-        rows: rows[0],
-        Message: '로그인이 성공적으로 되었습니다.'
-      });
-    }
-    return resolve({ success: false });
-  })
-  if (!results.results) {
-  return res.status(401).json({
-    success: false,
-    errMessage: '로그인 정보가 일치하지 않습니다.'
-    });
+  } else {
+    // 유저가 없다면? (가입하지 않았다면)
+    res.status(400).send({result: "이메일을 확인해주세요." });
   }
-    // DB에서 nickname, email을 가져온다. 토큰에 넣기 위함.
-    const user_nickname = data.rows.user_nickname;
-    const user_email = data.rows.user_email;
-    const user_id = data.rows.user_id;
-    const hashed_password = data.rows.password;
-
-    if (!bcrypt.compareSync(user_password, hashed_password)) {
-      // logger.error('비밀번호가 일치하지 않습니다.');
-      return res.status(401).json({
-        success: false,
-        errMessage: '비밀번호가 일치하지 않습니다.'
-      });
-    }
-
-  // 토큰 생성
-  const token = create_jwt_token(user_nickname, user_email);
-  // logger.info('로그인에 성공했습니다.');
-  res.status(201).json({
-    success: true,
-    token,
-    user_email: user_email,
-    user_nickname: user_nickname,
-    user_id: user_id,
-    Message: '로그인에 성공했습니다.'
-  });
-} catch (err) {
-  logger.error('로그인 기능 중 에러가 발생: ', err);
-  res.status(500).json({
-    success: false,
-    errMessage: '로그인 기능 중 에러가 발생하였습니다.'
-  });
-}
 });
-
-//JWT 토큰 생성
-function create_jwt_token(user_nickname, user_email) {
-return jwt.sign({ user_nickname, user_email }, process.env.SECRET_KEY, {
-  expiresIn: '24h',
-});
-}
-
-
-//   users = results[0];
-//   if (users) {
-//     // 유저가 존재한다면? (이미 가입했다면)
-//     if (users.password === password) {
-//       const token = jwt.sign(
-//         {
-//           user_email: users.user_email,
-//           user_nickname: users.user_nickname,
-//           user_gender: users.gender,
-//           user_age: users.age,
-//           user_image: users.image,
-//         },
-//         process.env.SECRET_KEY,
-//         { expiresIn: "1h" }
-//       ); // 토큰에 user_email, nickname을 담아준다.
-//       // res.cookie("user", token);
-//       res.json({ token });
-//     } else {
-//       res.status(400).send({});
-//     }
-//   } else {
-//     // 유저가 없다면? (가입하지 않았다면)
-//     res.status(400).send({});
-//   }
-// });
 
 //회원가입
 router.post("/signUp", async (req, res) => {
-  console.log("회원가입 연결 완료")
-  const { user_email, password,confirm_password, user_nickname, user_gender, user_age, user_image} = req.body;
-  if (!(await emailExist(user_email))) {
+  const { user_email, password,confirm_password, user_nickname, user_gender, user_age, user_image} = req.body;  //confirm_password 확인하기!
+  if (!await emailExist(user_email)) {
     res.status(401).send({ result: "이메일이 중복같은데요??" });
-  } else if (!(await nicknameExist(user_nickname))) {
+  } else if (!await nicknameExist(user_nickname)) {
     // 닉네임 중복 검사
     res.status(401).send({ result: "닉네임이 중복같은데요??" });
   } else if (!idCheck(user_email)) {
@@ -146,6 +81,8 @@ router.post("/signUp", async (req, res) => {
     });
   }
 });
+
+
 
 function idCheck(id_give) {
   console.log(id_give);
@@ -179,19 +116,6 @@ function pw_idCheck(id_give, pw_give) {
   }
   return false;
 }
-
-// async function emailExist(email_give) {
-//   console.log(email_give);
-//   const post = "SELECT * FROM user WHERE user_email = ?;";
-//   console.log(post);
-//   const results = await db.query(post,[email_give]);
-//   console.log(results)
-//   if (results.length) {
-//     return false;
-//   } else {
-//     return true;
-//   }
-// }
 
 function emailExist(user_email) {
   return new Promise((resolve, reject) => {
@@ -232,4 +156,7 @@ async function nicknameExist(nick_give) {
   }
 }
 
+
+
 module.exports = router;
+

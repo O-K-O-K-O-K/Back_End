@@ -5,7 +5,7 @@ const app = express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
 const path = require('path');
-
+const authMiddleware = require("./middlewares/auth")
 // app.use(logger('dev'));
 
 //parser
@@ -19,18 +19,16 @@ require('dotenv').config();
 
 // app.set('views', path.join(__dirname, 'views'));
 
-const dogsRouter = require('./routes/dog');
-const detailRouter = require('./routes/detail');
-// const pagesRouter = require('./routes/mypage');
+// const dogsRouter = require('./routes/dog');
+// const detailRouter = require('./routes/detail');
 const usersRouter = require('./routes/user');
 
-app.use('/dogs', dogsRouter);
-app.use('/posts', detailRouter);
-// app.use('/users', pagesRouter);
+// app.use('/dogs', dogsRouter);
+// app.use('/posts', detailRouter);
 app.use('/users', usersRouter);
 
-
 const cors = require('cors');
+const auth = require('./middlewares/auth');
 const corsOptions = {
   //cors 설정
   origin: '*', // 전체 허용
@@ -44,6 +42,7 @@ app.use(cors(corsOptions));
 
 //swagger
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
 
 
 // // catch 404 and forward to error handler
