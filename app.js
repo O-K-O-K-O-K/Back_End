@@ -19,12 +19,14 @@ require('dotenv').config();
 
 // app.set('views', path.join(__dirname, 'views'));
 
-// const dogsRouter = require('./routes/dog');
-// const detailRouter = require('./routes/detail');
+const dogsRouter = require('./routes/dog');
+const detailRouter = require('./routes/detail');
+const pagesRouter = require('./routes/mypage');
 const usersRouter = require('./routes/user');
 
-// app.use('/dogs', dogsRouter);
-// app.use('/posts', detailRouter);
+app.use('/dogs', dogsRouter);
+app.use('/posts', detailRouter);
+app.use('/users', pagesRouter);
 app.use('/users', usersRouter);
 
 const cors = require('cors');
@@ -35,6 +37,7 @@ const corsOptions = {
   // methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
   // preflightContinue: false,
   credentials: true,
+  // 'Access-Control-Allow-Origin': '*',
   // optionsSuccessStatus: 204,
 };
 app.use(cors(corsOptions));

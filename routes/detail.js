@@ -103,7 +103,16 @@ router.get('/:post_id', function (req, res, next) {
   const user_id = 1 // const user_id = req.user.user_id;
   console.log("get method 연결완료!")
   try {
-    const query = `select user, dog, post from ((select user.user_nickname, user.user_gender, user.user_age, user.user_image from user) user join dog on user.user_id = dog.user_id) join post on dog.user_id = post.user_id where post.post_id=${post_id}`;
+    const query = 
+    `SELECT dog.dog_id, dog.dog_gender, dog.dog_name, dog.dog_size, dog.dog_breed, dog.dog_age, dog.neutral, dog.dog_comment, dog.dog_image,
+    post.user_id, post.post_id, post.meeting_date, post.wish_desc, post.created_at, post.completed, post.location_category, post.longitude, post.latitude, post.location_address,
+    user.user_nickname, user.user_gender, user.user_age, user.user_image
+    from post
+    join dog
+    on post.user_id = dog.user_id
+    join user
+    on user.user_id = dog.user_id
+    WHERE post.post_id =${post_id}`;
     db.query(query, (error, rows) => {
       if (error) {
         console.log(error)
@@ -115,7 +124,7 @@ router.get('/:post_id', function (req, res, next) {
         success: true,
         posts: rows,
       });
-      console.log(rows)
+      console.log("rows는", rows)
     });
   } catch (err) {
     // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);

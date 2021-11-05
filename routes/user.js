@@ -157,4 +157,3 @@ async function nicknameExist(nick_give) {
 }
 
 module.exports = router;
-

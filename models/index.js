@@ -12,9 +12,17 @@ exports.db = mysql.createConnection({
     host: '127.0.0.1',
     user: 'root',
     port: '3306',
-    password: '29053696',
-    database: 'dog'
+    password: 'test',
+    database: 'dogdogdog'
   });
+
+// exports.db = mysql.createConnection({
+//     host: '127.0.0.1',
+//     user: 'root',
+//     port: '3306',
+//     password: '29053696',
+//     database: 'dog'
+//   });
 
 
 // module.exports = {
