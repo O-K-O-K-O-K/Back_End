@@ -94,24 +94,17 @@ router.get('/:post_id',auth, function (req, res, next) {
 //메인 조회하기
 router.get('/', function (req, res, next) {
   console.log("get method 연결완료!")
-  const selected_category = 'undefined'
-  // const {selected_category} =req.body;
-  // const user_id = 1
+  let selected_category ="dog_age";
+  // let {selected_category} =req.body
+  const [filter, subfilter] = selected_category.split("_");
+  console.log(filter)
   try {
-    if (selected_category=='undefined') {
     const query = 
-    `SELECT dog.dog_id, dog.dog_gender, dog.dog_name, dog.dog_size, dog.dog_breed, dog.dog_age, dog.neutral, dog.dog_comment, dog.dog_image from dog
-     join post
-    on post.user_id = dog.user_id`;
-  }
-    else if (!selected_category.length==0) {
-      const query = 
-    `SELECT dog.dog_id, dog.dog_gender, dog.dog_name, dog.dog_size, dog.dog_breed, dog.dog_age, dog.neutral, dog.dog_comment, dog.dog_image from dog
-     join post
-    on post.user_id = dog.user_id
-    WHERE WHERE post.post_id =${selected_category}`
-    ;
-  }
+    `SELECT dog.dog_id, dog.dog_gender, dog.dog_name, dog.dog_size, dog.dog_breed, dog.dog_age, dog.neutral, dog.dog_comment, dog.dog_image, dog.user_id,
+    post.user_id, post.post_id, post.meeting_date, post.completed, post.location_category    
+    from dog
+    join post
+    on dog.user_id=post.user_id`
     db.query(query, (error, rows) => {
       if (error) {
         console.log(error)
@@ -123,13 +116,12 @@ router.get('/', function (req, res, next) {
         success: true,
         posts: rows,
       });
-      console.log("rows는", rows)
+      console.log("rows는", rows[0])
     });
   } catch (err) {
     // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
     return res.sendStatus(500);
   }
-
 });
 
 //산책 게시물 수정하기
