@@ -11,12 +11,16 @@ const upload = require("../S3/s3");  // 여기
 
 //로그인
 router.post("/login", async (req, res) => {
+  console.log("req.body", req.body)
   const { user_email, password } = req.body;
   let users;
   const post = "SELECT * FROM user WHERE user_email = ?";
+  console.log("여기1", post)
   const results = await db.query(post, [user_email]);
   users = results[0];
+  console.log("여기2",users)
   const hash = results[0].password;
+
   if (users) {
     // 유저가 존재한다면? (이미 가입했다면)
     if (bcrypt.compareSync(password, hash)) {
