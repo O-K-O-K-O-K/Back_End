@@ -94,8 +94,12 @@ router.get('/:post_id', auth, function (req, res, next) {
 //메인 조회하기
 router.get('/', function (req, res, next) {
   console.log("get method 연결완료!")
-  const {dog_gender, dog_age, location_category, completed} = req.body;
-  const dog_size = "ㅎㅎ"
+  // const {dog_gender, dog_age, location_category, completed} = req.body;
+  const dog_size = "undefined"
+  const dog_gender = "undefined"
+  const dog_age = "undefined"
+  const location_category ="서울숲"
+  const completed = 0
   console.log(dog_size, dog_gender, dog_age, location_category, completed)
 
   if (location_category == undefined) {
@@ -112,14 +116,12 @@ router.get('/', function (req, res, next) {
     JOIN dog
     ON dog.user_id=post.user_id
     WHERE
-    (CASE
-    when (!dog_size == undefined) then dog.dog_size = ${dog_size} 
-    when (!dog_gender == undefined) then dog.dog_gender = ${dog_gender} 
-    when (!dog_age == undefined) then dog.dog_age = ${dog_age}  
-    when (!location_category == undefined) then post.location_category =${location_category} 
-    when (!completed == undefined) then post.completed =${completed}
-    END)
-    `
+    dog.dog_size = '${dog_size}' OR
+    dog.dog_gender = '${dog_gender}' OR
+    dog.dog_age = '${dog_age}' OR
+    post.location_category = '${location_category}' OR
+    post.completed = '${completed}'
+    `;
     db.query(query, (error, rows) => {
       if (error) {
         console.log(error)

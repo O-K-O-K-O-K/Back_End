@@ -6,7 +6,7 @@ const doc = {
     version: '1.0.0',
     description: 'API of 왈왈왈',
   },
-  host: '3.35.233.239(선희님 host) or localhost:3000',
+  host: 'localhost:3000',
   basePath: '/',
   securityDefinitions: {
     bearerAuth: {

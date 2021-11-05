@@ -24,7 +24,9 @@
     "nodemon": "^2.0.14",
     "path": "^0.12.7",
     "pm2": "^5.1.2",
+    "swagger": "^0.7.5",
     "swagger-autogen": "^2.12.4",
+    "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.1.6"
   }
 }
