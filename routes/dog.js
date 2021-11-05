@@ -1,15 +1,9 @@
 const express = require("express");
 const router = express.Router();
-
-// const db_config = require("../models/index");
-// const db = db_config.init();
-// db_config.connect(db);
-
 const auth = require('../middlewares/auth');
 const dotenv = require("dotenv");
 dotenv.config();
 const upload = require("../S3/s3");
-
 const { db } = require("../models/index");
 
 //예외 처리 - 유저가 signUp은 하는대, dog 정보를 입력하지 않고 나가는 경우.
@@ -18,11 +12,10 @@ const { db } = require("../models/index");
 // 걱정은, 3번 user정보에 4번 도그 정보가 들어갈 우려가 있음. -> 체크 바람
 
 //강아지 정보 등록하기
-router.post("/dog_info", upload.single("dog_image"), async (req, res, next) => {
-  const user_id = 1; 
-  // const user_id = res.locals.user_id;
-
-  console.log("user_id임", user_id)
+router.post("/dog_info", upload.single("dog_image"), auth, async (req, res, next) => {
+  // const user_id = 2; 
+  const user_id =  res.locals.user.user_id;
+  console.log("auth 들어옴: ", user_id)
 
   try {
     console.log("req.body", req.body);
@@ -79,13 +72,13 @@ router.post("/dog_info", upload.single("dog_image"), async (req, res, next) => {
 });
 
 // 마이 프로필에서 dog 정보 get 하는 것
-router.get("/:dog_id", async (req, res) => {
-  const { dog_id } = req.params;
+router.get("/", async (req, res) => {
+  const user_id =  res.locals.user.user_id;
 
   try {
     const query = `select * from dog left join user on dog.dog_id = user.user_id where dog.dog_id= "${dog_id}";`
 
-    db.query(query, (error, rows) => {
+    await db.query(query, (error, rows) => {
       if (error) {
         console.log(error);
         // logger.error('게시글 조회 중 발생한 DB관련 에러', error);
@@ -102,6 +95,54 @@ router.get("/:dog_id", async (req, res) => {
     // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
     return res.sendStatus(500);
   }
+});
+
+
+router.patch('/', upload.single("dog_image"), async (req, res) => {
+  const { dog_id } = req.params;
+  const user_id = 1; // const user_id = req.user.user_id;
+
+  console.log("reqbody:", req.body)
+  const {
+    dog_gender,
+    dog_name,
+    dog_size,
+    dog_breed,
+    dog_age,
+    neutral,
+    dog_comment,
+  } = req.body;
+
+  const dog_image = req.file.location;
+
+  const escapeQuery = {
+    dog_gender : dog_gender,
+    dog_name : dog_name,
+    dog_size : dog_size,
+    dog_breed : dog_breed,
+    dog_age : dog_age,
+    neutral : neutral,
+    dog_comment : dog_comment,
+    dog_image : dog_image,
+  };
+
+  console.log(escapeQuery)
+  const query = `UPDATE dog SET ? WHERE dog_id = ${dog_id} and user_id = '${user_id}'`;
+
+  await db.query(query, escapeQuery, (error, rows, fields) => {
+    if(error){
+      return res.status(400).json({
+        success: false,
+        error,
+        msg : "실패임",
+      });
+    } else{
+      return res.status(200).json({
+        success:true,
+        dogs: rows,
+      });
+    }
+  })
 });
 
 module.exports = router;

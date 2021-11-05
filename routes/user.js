@@ -7,6 +7,7 @@ const util = require("util");
 const { db } = require("../models/index");
 const dotenv = require("dotenv");
 db.query = util.promisify(db.query);
+const upload = require("../S3/s3");  // 여기
 
 //로그인
 router.post("/login", async (req, res) => {
@@ -41,9 +42,10 @@ router.post("/login", async (req, res) => {
   }
 });
 
-//회원가입
-router.post("/signUp", async (req, res) => {
-  const { user_email, password, confirm_password, user_nickname, user_gender, user_age, user_image} = req.body;  //confirm_password 확인하기!
+//회원가입  여기 미들웨어(upload.single("user_image)
+router.post("/signUp", upload.single("user_image"), async (req, res) => {
+  const { user_email, password, confirm_password, user_nickname, user_gender, user_age} = req.body;
+  const user_image = req.file.location;   //여기 따로 지정
   if (!await nicknameExist(user_nickname)) {
     // 닉네임 중복 검사
     res.status(401).send({ result: "닉네임이 존재합니다." });
