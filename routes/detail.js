@@ -10,8 +10,8 @@ dotenv.config();
 // const { JsonWebTokenError } = require('jsonwebtoken');
 
 
-//산책 약속페이지
-router.post('/write',auth, async (req, res) => {
+//산책 약속페이지 등록하기
+router.post('/write', auth, async (req, res) => {
   console.log("write post 연결완료!")
   const completed = false;
   const user_id = res.locals.user.user_id;
@@ -57,7 +57,7 @@ router.post('/write',auth, async (req, res) => {
 
 
 //산책 약속 상세 조회하기
-router.get('/:post_id',auth, function (req, res, next) {
+router.get('/:post_id', auth, function (req, res, next) {
   const {post_id} = req.params;
   const user_id = res.locals.user.user_id;
   console.log("get method 연결완료!")
@@ -161,7 +161,7 @@ router.patch('/:postId',auth, async (req, res) => {
 });
 
 // 게시글 삭제
-router.delete('/:postId',auth, async (req, res) => {
+router.delete('/:postId', auth, async (req, res) => {
   const  post_id  = req.params.postId;
   const user_id = res.locals.user.user_id;
   const query = `DELETE from post where post_id = ${post_id} and user_id = '${user_id}'`;
