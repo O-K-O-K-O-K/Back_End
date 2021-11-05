@@ -13,7 +13,6 @@ const { db } = require("../models/index");
 
 //강아지 정보 등록하기
 router.post("/dog_info", upload.single("dog_image"), auth, async (req, res, next) => {
-  // const user_id = 2; 
   const user_id =  res.locals.user.user_id;
   console.log("auth 들어옴: ", user_id)
 
@@ -72,11 +71,13 @@ router.post("/dog_info", upload.single("dog_image"), auth, async (req, res, next
 });
 
 // 마이 프로필에서 dog 정보 get 하는 것
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   const user_id =  res.locals.user.user_id;
 
   try {
-    const query = `select * from dog left join user on dog.dog_id = user.user_id where dog.dog_id= "${dog_id}";`
+    const query = 
+    `select dog.dog_id, dog.dog_gender, dog.dog_name, dog.dog_size, dog.dog_breed, dog.dog_age, dog.neutral, dog.dog_comment, dog.dog_image, dog.user_id 
+    from dog left join user on dog.user_id = user.user_id where dog.user_id= "${user_id}";`
 
     await db.query(query, (error, rows) => {
       if (error) {
@@ -98,9 +99,8 @@ router.get("/", async (req, res) => {
 });
 
 
-router.patch('/', upload.single("dog_image"), async (req, res) => {
-  const { dog_id } = req.params;
-  const user_id = 1; // const user_id = req.user.user_id;
+router.patch('/', upload.single("dog_image"), auth, async (req, res) => {
+  const user_id =  res.locals.user.user_id;
 
   console.log("reqbody:", req.body)
   const {
@@ -127,7 +127,7 @@ router.patch('/', upload.single("dog_image"), async (req, res) => {
   };
 
   console.log(escapeQuery)
-  const query = `UPDATE dog SET ? WHERE dog_id = ${dog_id} and user_id = '${user_id}'`;
+  const query = `UPDATE dog SET ? WHERE dog.user_id = '${user_id}'`;
 
   await db.query(query, escapeQuery, (error, rows, fields) => {
     if(error){

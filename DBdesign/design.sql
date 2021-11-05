@@ -5,7 +5,7 @@ CREATE TABLE `user` (
   `user_nickname` VARCHAR(45) NOT NULL,
   `user_gender` VARCHAR(45) NOT NULL,
   `user_age` VARCHAR(45) NOT NULL,
-  `user_image` TEXT,
+  `user_image` TEXT NOT NULL,
   PRIMARY KEY (`user_id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
