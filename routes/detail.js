@@ -106,9 +106,20 @@ router.get('/', function (req, res, next) {
   // console.log(filter) //all 을 했을때 안쓰게 하는 방법!
   try {
     const query = 
-    `SELECT dog.dog_id, dog.dog_gender, dog.dog_name, dog.dog_size, dog.dog_breed, dog.dog_age, dog.neutral, dog.dog_comment, dog.dog_image, dog.user_id, 
+    `SELECT dog.dog_id, dog.dog_gender, dog.dog_name, dog.dog_size, dog.dog_breed, dog.dog_age, dog.neutral, dog.dog_comment, dog.dog_image, dog.user_id,
     post.user_id, post.post_id, post.meeting_date, post.completed, post.location_category  
-    FROM post JOIN dog ON dog.user_id=post.user_id`
+    FROM post
+    JOIN dog
+    ON dog.user_id=post.user_id
+    WHERE
+    (CASE
+    when (!dog_size == undefined) then dog.dog_size = ${dog_size} 
+    when (!dog_gender == undefined) then dog.dog_gender = ${dog_gender} 
+    when (!dog_age == undefined) then dog.dog_age = ${dog_age}  
+    when (!location_category == undefined) then post.location_category =${location_category} 
+    when (!completed == undefined) then post.completed =${completed}
+    END)
+    `
     db.query(query, (error, rows) => {
       if (error) {
         console.log(error)
