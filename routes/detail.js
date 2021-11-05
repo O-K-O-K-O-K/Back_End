@@ -10,11 +10,11 @@ dotenv.config();
 // const { JsonWebTokenError } = require('jsonwebtoken');
 
 
-//산책 약속페이지
+//산책 약속페이지 등록하기
 router.post('/write', auth, async (req, res) => {
   console.log("write post 연결완료!")
   const completed = false;
-  const user_id =  res.locals.user.user_id; //제가 추가했습니다 -유정
+  const user_id = res.locals.user.user_id; //제가 추가했습니다 -유정
 
   try {
     const {meeting_date,wish_desc,location_category,longitude,latitude,location_address} = req.body;
@@ -133,7 +133,9 @@ router.get('/', function (req, res, next) {
 //산책 게시물 수정하기
 router.patch('/:postId',auth, async (req, res) => {
   const post_id = req.params.postId;
-  const user_id = 1 // const user_id = req.user.user_id;
+  // const user_id = 1 // const user_id = req.user.user_id;
+  const user_id = res.locals.user.user_id; //제가 추가했습니다 -유정
+
   const { location_category, meeting_date, wish_desc,longitude,latitude,location_address,completed} = req.body;
   const escapeQuery = {
     location_category: location_category,
@@ -163,9 +165,12 @@ router.patch('/:postId',auth, async (req, res) => {
 });
 
 // 게시글 삭제
-router.delete('/:postId',auth, async (req, res) => {
+router.delete('/:postId', auth, async (req, res) => {
   const  post_id  = req.params.postId;
-  const user_id = 1 // const user_id = req.user.user_id;
+  // const user_id = 1 // const user_id = req.user.user_id;
+
+  const user_id = res.locals.user.user_id; //제가 추가했습니다 -유정
+
   const query = `DELETE from post where post_id = ${post_id} and user_id = '${user_id}'`;
   try {
     await db.query(query, (error, rows, fields) => {
