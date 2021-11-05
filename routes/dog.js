@@ -72,8 +72,8 @@ router.post("/dog_info", upload.single("dog_image"), auth, async (req, res, next
 });
 
 // 마이 프로필에서 dog 정보 get 하는 것
-router.get("/:dog_id", async (req, res) => {
-  const { dog_id } = req.params;
+router.get("/", async (req, res) => {
+  const user_id =  res.locals.user.user_id;
 
   try {
     const query = `select * from dog left join user on dog.dog_id = user.user_id where dog.dog_id= "${dog_id}";`
@@ -98,7 +98,9 @@ router.get("/:dog_id", async (req, res) => {
 });
 
 
-router.patch('/:dog_id', upload.single("dog_image"), async (req, res) => {
+
+router.patch('/', upload.single("dog_image"), async (req, res) => {
+
   const { dog_id } = req.params;
   const user_id = 1; // const user_id = req.user.user_id;
 
@@ -144,4 +146,6 @@ router.patch('/:dog_id', upload.single("dog_image"), async (req, res) => {
     }
   })
 });
+
 module.exports = router;
+

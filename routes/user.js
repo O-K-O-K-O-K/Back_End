@@ -4,14 +4,10 @@ const bcrypt = require('bcrypt');
 const setRounds = 10;
 const router = express.Router();
 const util = require("util");
-// const db_config = require("../models/index");
-// const db = db_config.init();
-// db_config.connect(db);
-
 const { db } = require("../models/index");
-
 const dotenv = require("dotenv");
 db.query = util.promisify(db.query);
+const upload = require("../S3/s3");  // 여기
 
 //로그인
 router.post("/login", async (req, res) => {
@@ -20,10 +16,10 @@ router.post("/login", async (req, res) => {
   const post = "SELECT * FROM user WHERE user_email = ?";
   const results = await db.query(post, [user_email]);
   users = results[0];
-
+  const hash = results[0].password;
   if (users) {
     // 유저가 존재한다면? (이미 가입했다면)
-    if (users.password === password) {
+    if (bcrypt.compareSync(password, hash)) {
       const token = jwt.sign(
         {
           user_id: users.user_id,
@@ -46,14 +42,13 @@ router.post("/login", async (req, res) => {
   }
 });
 
-//회원가입
-router.post("/signUp", async (req, res) => {
-  const { user_email, password,confirm_password, user_nickname, user_gender, user_age, user_image} = req.body;  //confirm_password 확인하기!
-  if (!await emailExist(user_email)) {
-    res.status(401).send({ result: "이메일이 중복같은데요??" });
-  } else if (!await nicknameExist(user_nickname)) {
+//회원가입  여기 미들웨어(upload.single("user_image)
+router.post("/signUp", upload.single("user_image"), async (req, res) => {
+  const { user_email, password, confirm_password, user_nickname, user_gender, user_age} = req.body;
+  const user_image = req.file.location;   //여기 따로 지정
+  if (!await nicknameExist(user_nickname)) {
     // 닉네임 중복 검사
-    res.status(401).send({ result: "닉네임이 중복같은데요??" });
+    res.status(401).send({ result: "닉네임이 존재합니다." });
   } else if (!idCheck(user_email)) {
     // id 정규식 검사
     res.sendStatus(401);
@@ -66,10 +61,12 @@ router.post("/signUp", async (req, res) => {
   } else if (!pw_idCheck(user_email, password)) {
     // 아이디가 비밀번호를 포함하는지 검사
   } else {
-    const dopost = [user_email, password, user_nickname, user_gender, user_age, user_image];
+    const salt = await bcrypt.genSaltSync(setRounds);
+    const hashPassword = bcrypt.hashSync(password, salt);
+    const userParams = [user_email, hashPassword, user_nickname, user_gender, user_age, user_image];
     const post =
       "INSERT INTO user (user_email, password, user_nickname, user_gender, user_age, user_image) VALUES (?, ? , ?, ?, ?, ?);";
-    db.query(post, dopost, (error, results, fields) => {
+    db.query(post, userParams, (error, results, fields) => {
       // db.query(쿼리문, 넣을 값, 콜백)
       if (error) {
         res.status(401).send(error);
@@ -82,7 +79,15 @@ router.post("/signUp", async (req, res) => {
   }
 });
 
-
+//이메일 중복확인
+router.post("/users/checkDup", async  (req, res) => {
+  const { user_email} = req.body;
+  if (!await emailExist(user_email)) {
+    res.status(401).send({ result: "이메일이 존재합니다." });
+  } else {
+    res.status(200).send({ result: "정상적인 이메일입니다."})
+  }
+});
 
 function idCheck(id_give) {
   console.log(id_give);
@@ -126,26 +131,21 @@ function emailExist(user_email) {
       if (error) {
         // logger.error(`Msg: raise Error in checkValidationEmail => ${error}`);
         console.log(error)
-        console.log(1);
         return resolve(false);
-
       }
 
       // 아무 값이 없기 때문에, 중복이 없다. (가능 하다는 얘기)
       if (results.length == 0) {
-        console.log(2);
         return resolve(true);
       }
 
       // 존재하다면, 이메일 중복으로 인지
-      console.log(3);
       resolve(false);
     });
   });
 }
 
 async function nicknameExist(nick_give) {
-  console.log(nick_give);
   const post = "SELECT * FROM user WHERE user_nickname = ?;";
   const results = await db.query(post, [nick_give]);
   if (results.length) {
@@ -155,7 +155,5 @@ async function nicknameExist(nick_give) {
     return true;
   }
 }
-
-
 
 module.exports = router;
