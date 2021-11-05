@@ -15,10 +15,10 @@ router.post("/login", async (req, res) => {
   const post = "SELECT * FROM user WHERE user_email = ?";
   const results = await db.query(post, [user_email]);
   users = results[0];
-
+  const hash = results[0].password;
   if (users) {
     // 유저가 존재한다면? (이미 가입했다면)
-    if (users.password === password) {
+    if (bcrypt.compareSync(password, hash)) {
       const token = jwt.sign(
         {
           user_id: users.user_id,
@@ -29,11 +29,9 @@ router.post("/login", async (req, res) => {
           image: users.user_image,
         },
         process.env.SECRET_KEY,
-        { expiresIn: "1h" }   //// 추후 1시간으로 변경 예정
+        { expiresIn: "24h" }   //// 추후 1시간으로 변경 예정
       );
-      res.cookie('user', token);
-      res.json({ token });
-
+      res.send({ token });
     } else {
       res.status(400).send({result: "비밀번호를 확인해주세요." });
     }
@@ -45,15 +43,14 @@ router.post("/login", async (req, res) => {
 
 //회원가입
 router.post("/signUp", async (req, res) => {
-  const { user_email, password,confirm_password, user_nickname, user_gender, user_age, user_image} = req.body;  //confirm_password 확인하기!
-  const hashedPw = db.users.password;
+  const { user_email, password, confirm_password, user_nickname, user_gender, user_age, user_image} = req.body;  //confirm_password 확인하기!
   if (!await nicknameExist(user_nickname)) {
     // 닉네임 중복 검사
     res.status(401).send({ result: "닉네임이 존재합니다." });
   } else if (!idCheck(user_email)) {
     // id 정규식 검사
     res.sendStatus(401);
-  } else if (!bcrypt.compareSync(password, hashedPw)) {
+  } else if (!pwConfirm(password, confirm_password)) {
     // 비밀번호와 비밀번호 확인이 맞는지 검사
     res.sendStatus(401);
   } else if (!pwLenCheck(password)) {
