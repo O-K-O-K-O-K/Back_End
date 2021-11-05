@@ -81,9 +81,9 @@ router.get('/:post_id',auth, function (req, res, next) {
       // logger.info('게시글을 성공적으로 조회했습니다.');
       res.status(200).json({
         success: true,
-        posts: rows,
+        posts: rows[0],
       });
-      console.log("rows는", rows)
+      console.log("rows는", rows[0])
     });
   } catch (err) {
     // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
@@ -95,16 +95,21 @@ router.get('/:post_id',auth, function (req, res, next) {
 router.get('/', function (req, res, next) {
   console.log("get method 연결완료!")
   let selected_category ="dog_age";
+  const {dog_size, dog_gender, dog_age, location_category, completed} = req.body;
+  console.log(dog_size, dog_gender, dog_age, location_category, completed)
+  if (!dog_size == undefined) {
+    console.log(1)
+  } else (console.log(2))
   // let {selected_category} =req.body
-  const [filter, subfilter] = selected_category.split("_");
-  console.log(filter)
+  // const [filter, subfilter] = selected_category.split("_");
+  // console.log(filter)
   try {
     const query = 
     `SELECT dog.dog_id, dog.dog_gender, dog.dog_name, dog.dog_size, dog.dog_breed, dog.dog_age, dog.neutral, dog.dog_comment, dog.dog_image, dog.user_id,
     post.user_id, post.post_id, post.meeting_date, post.completed, post.location_category    
-    from dog
-    join post
-    on dog.user_id=post.user_id`
+    FROM dog
+    JOIN post
+    ON dog.user_id=post.user_id`
     db.query(query, (error, rows) => {
       if (error) {
         console.log(error)
@@ -114,7 +119,7 @@ router.get('/', function (req, res, next) {
       // logger.info('게시글을 성공적으로 조회했습니다.');
       res.status(200).json({
         success: true,
-        posts: rows,
+        posts: rows[0],
       });
       console.log("rows는", rows[0])
     });
