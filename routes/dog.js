@@ -98,9 +98,7 @@ router.get("/", async (req, res) => {
 });
 
 
-
 router.patch('/', upload.single("dog_image"), async (req, res) => {
-
   const { dog_id } = req.params;
   const user_id = 1; // const user_id = req.user.user_id;
 

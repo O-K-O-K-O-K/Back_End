@@ -32,7 +32,7 @@ router.post("/login", async (req, res) => {
         process.env.SECRET_KEY,
         { expiresIn: "24h" }   //// 추후 1시간으로 변경 예정
       );
-      res.send({ token });
+      res.json({ token });
     } else {
       res.status(400).send({result: "비밀번호를 확인해주세요." });
     }
