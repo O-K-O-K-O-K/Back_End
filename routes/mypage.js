@@ -76,9 +76,9 @@ router.patch("/me", upload.single("user_image"), auth, async (req, res) => {
 
 
 //내가 쓴 글 조회하기 (마이페이지에서) 황유정
-// router.get('/:user_id', function (req, res, next) {
+// router.get('/mypage', function (req, res, next) {
 //   try {
-//     const { user_id } = req.params;
+//     const user_id =  res.locals.user.user_id;
 
 //     const userQuery = `select user.user_nickname, user.user_gender, user.user_age, user.user_image from user where user.user_id="${user_id}";`;
 //     await db.query(userQuery, async (err, user) => {
@@ -98,6 +98,5 @@ router.patch("/me", upload.single("user_image"), auth, async (req, res) => {
 //     });
 //   }
 // });
-
 
 module.exports = router;
