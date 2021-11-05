@@ -94,12 +94,7 @@ router.get('/:post_id', auth, function (req, res, next) {
 //메인 조회하기
 router.get('/', function (req, res, next) {
   console.log("get method 연결완료!")
-  // const {dog_gender, dog_age, location_category, completed} = req.body;
-  const dog_size = "undefined"
-  const dog_gender = "undefined"
-  const dog_age = "undefined"
-  const location_category ="서울숲"
-  const completed = 0
+  const {dog_size,dog_gender, dog_age, location_category, completed} = req.body;
   console.log(dog_size, dog_gender, dog_age, location_category, completed)
 
   if (location_category == undefined) {
