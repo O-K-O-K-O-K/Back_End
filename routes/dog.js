@@ -5,12 +5,17 @@ const dotenv = require("dotenv");
 dotenv.config();
 const upload = require("../S3/s3");
 const { db } = require("../models/index");
+const cors = require('cors');
 
 //예외 처리 - 유저가 signUp은 하는대, dog 정보를 입력하지 않고 나가는 경우.
 // 3번 user를 signUp를 했는데, 도그 정보 입력 안함
 // 4번 user를 사인업 햇는데, 이 때 도그 정보 입력함
 // 걱정은, 3번 user정보에 4번 도그 정보가 들어갈 우려가 있음. -> 체크 바람
 
+// 기획 변경 의견 : 처음 회원가입을 할 때, user 정보만 받고, 로그인을 하고 나서, dog 정보를 기입하게 한다. 
+//(kakao 로그인을 할 때도 더 편할 것 같다.왜냐하면 kakao로그인은 강아지 정보가 없기 때문에)
+
+//강아지 정보 등록하기
 //강아지 정보 등록하기
 router.post("/dog_info", upload.single("dog_image"), async (req, res, next) => {
   // const user_id =  res.locals.user.user_id;
