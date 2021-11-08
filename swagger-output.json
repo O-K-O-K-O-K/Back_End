@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "description": "API of 왈왈왈"
   },
-  "host": "3.35.233.239(선희님 host) or localhost:3000",
+  "host": "localhost:3000",
   "basePath": "/",
   "tags": [],
   "schemes": [
@@ -23,20 +23,194 @@
   "consumes": [],
   "produces": [],
   "paths": {
-    "/users/": {
-      "get": {
-        "tags": [],
-        "description": "",
-        "parameters": [],
-        "responses": {}
+    "/dogs/dog_info": {
+      "post": {
+        "description": "로그인 한 유저가 강아지를 등록하는 API",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "DOGS"
+        ],
+        "name": "강아지 등록",
+        "summary": "로그인한 유저의 강아지 정보를 추가한다.",
+        "consumes": "multipart/form-data",
+        "parameters": [
+          {
+            "name": "req.body",
+            "in": "formData",
+            "required": true,
+            "type": "file",
+            "description": "dog_image"
+          },
+          {
+            "name": "req.body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dog_gender": {
+                  "type": "String",
+                  "description": "강아지 성별"
+                },
+                "dog_name": {
+                  "type": "String",
+                  "description": "강아지 이름"
+                },
+                "dog_size": {
+                  "type": "String",
+                  "description": "강아지 크기"
+                },
+                "dog_breed": {
+                  "type": "String",
+                  "description": "강아지 종"
+                },
+                "dog_age": {
+                  "type": "String",
+                  "description": "강아지 나이"
+                },
+                "neutral": {
+                  "type": "String",
+                  "description": "중성화 여부"
+                },
+                "dog_comment": {
+                  "type": "String",
+                  "description": "강아지에 대한 한 줄 소개"
+                }
+              },
+              "example": {
+                "dog_gender": "남",
+                "dog_name": "가을이",
+                "dog_size": "중형견",
+                "dog_breed": "비숑",
+                "dog_age": "8세 이상",
+                "neutral": "true",
+                "dog_comment": "짖지 않아요"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "db에 강아지 등록 성공"
+          },
+          "400": {
+            "description": "db에 저장하기 실패"
+          },
+          "500": {
+            "description": "로그인이 필요합니다."
+          }
+        }
       }
     },
-    "/": {
+    "/dogs/": {
       "get": {
-        "tags": [],
-        "description": "",
+        "description": "로그인 한 유저의 강아지를 조회하는 API",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "DOGS"
+        ],
+        "name": "강아지 정보 조회",
+        "summary": "로그인한 유저의 강아지 정보를 조회",
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "success: true"
+          },
+          "400": {
+            "description": "success: false"
+          },
+          "500": {
+            "description": "로그인이 필요합니다."
+          }
+        }
+      },
+      "put": {
+        "description": "로그인한 유저의 강아지 정보를 수정하는 API",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "DOGS"
+        ],
+        "name": "강아지 정보 수정",
+        "summary": "로그인한 유저의 강아지 정보를 수정",
+        "parameters": [
+          {
+            "name": "req.body",
+            "in": "formData",
+            "required": true,
+            "type": "file",
+            "description": "dog_image"
+          },
+          {
+            "name": "req.body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dog_gender": {
+                  "type": "String",
+                  "description": "강아지 성별"
+                },
+                "dog_name": {
+                  "type": "String",
+                  "description": "강아지 이름"
+                },
+                "dog_size": {
+                  "type": "String",
+                  "description": "강아지 크기"
+                },
+                "dog_breed": {
+                  "type": "String",
+                  "description": "강아지 종"
+                },
+                "dog_age": {
+                  "type": "String",
+                  "description": "강아지 나이"
+                },
+                "neutral": {
+                  "type": "String",
+                  "description": "중성화 여부"
+                },
+                "dog_comment": {
+                  "type": "String",
+                  "description": "강아지에 대한 한 줄 소개"
+                }
+              },
+              "example": {
+                "dog_gender": "남",
+                "dog_name": "가을이",
+                "dog_size": "중형견",
+                "dog_breed": "비숑",
+                "dog_age": "8세 이상",
+                "neutral": "true",
+                "dog_comment": "짖지 않아요"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "수정이 완료되었습니다."
+          },
+          "400": {
+            "description": "수정에 실패하였습니다."
+          },
+          "500": {
+            "description": "로그인이 필요합니다."
+          }
+        }
       }
     }
   },

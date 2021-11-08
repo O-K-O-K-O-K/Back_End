@@ -6,10 +6,7 @@ dotenv.config();
 const upload = require("../S3/s3");
 const { db } = require("../models/index");
 
-//예외 처리 - 유저가 signUp은 하는대, dog 정보를 입력하지 않고 나가는 경우.
-// 3번 user를 signUp를 했는데, 도그 정보 입력 안함
-// 4번 user를 사인업 햇는데, 이 때 도그 정보 입력함
-// 걱정은, 3번 user정보에 4번 도그 정보가 들어갈 우려가 있음. -> 체크 바람
+const ctrlDogs = require('../controllers/dogs/dog.ctrl');
 
 //강아지 정보 등록하기
 router.post("/dog_info", upload.single("dog_image"), auth, async (req, res, next) => {
@@ -146,4 +143,3 @@ router.patch('/', upload.single("dog_image"), auth, async (req, res) => {
 });
 
 module.exports = router;
-
