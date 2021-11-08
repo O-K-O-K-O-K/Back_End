@@ -17,8 +17,9 @@ const cors = require('cors');
 
 //강아지 정보 등록하기
 //강아지 정보 등록하기
-router.post("/dog_info", upload.single("dog_image"), auth, async (req, res, next) => {
-  const user_id =  res.locals.user.user_id;
+router.post("/dog_info", upload.single("dog_image"), async (req, res, next) => {
+  // const user_id =  res.locals.user.user_id;
+  const user_id = 1
   console.log("auth 들어옴: ", user_id)
 
   try {

@@ -3,7 +3,11 @@ const express = require('express');
 // const logger = require('morgan');
 const app = express();
 const swaggerUi = require("swagger-ui-express");
+const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerFile = require("./swagger-output");
+
+// const webSocket = require('/socket');
+
 const path = require('path');
 // const authMiddleware = require("./middlewares/auth")
 // app.use(logger('dev'));

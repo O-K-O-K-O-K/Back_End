@@ -8,18 +8,15 @@ const { db } = require("../models/index");
 const dotenv = require("dotenv");
 db.query = util.promisify(db.query);
 const upload = require("../S3/s3");  // 여기
-const cors = require('cors');
+
 
 //로그인
 router.post("/login", async (req, res) => {
-  console.log("req.body", req.body)
   const { user_email, password } = req.body;
   let users;
   const post = `SELECT * FROM user WHERE user_email = ?`;
-  console.log("여기1", post)
   const results = await db.query(post, [user_email]);
   users = results[0];
-  console.log("여기2",users)
   const hash = results[0].password;
 
   if (users) {
@@ -35,8 +32,9 @@ router.post("/login", async (req, res) => {
           image: users.user_image,
         },
         process.env.SECRET_KEY,
-        { expiresIn: "24h" }   //// 추후 1시간으로 변경 예정
+        { expiresIn: "24h" }   //// 추후 6시간으로 변경 예정
       );
+      // res.cookie('user', token);  쿠키로 받길 원한다면
       res.json({ token });
     } else {
       res.status(400).send({result: "비밀번호를 확인해주세요." });
@@ -65,14 +63,13 @@ router.post("/signUp", upload.single("user_image"), async (req, res) => {
     res.sendStatus(401);
   } else if (!pw_idCheck(user_email, password)) {
     // 아이디가 비밀번호를 포함하는지 검사
-    res.sendStatus(401);
+    res.status(401).send({ result: "비밀번호 형식이 올바르지않습니다." });
   } else {
     const salt = await bcrypt.genSaltSync(setRounds);
     const hashPassword = bcrypt.hashSync(password, salt);
     const userParams = [user_email, hashPassword, user_nickname, user_gender, user_age, user_image];
     const post =
       "INSERT INTO user (user_email, password, user_nickname, user_gender, user_age, user_image) VALUES (?, ? , ?, ?, ?, ?);";
-
     db.query(post, userParams, (error, results, fields) => {
       // db.query(쿼리문, 넣을 값, 콜백)
       if (error) {
@@ -86,9 +83,10 @@ router.post("/signUp", upload.single("user_image"), async (req, res) => {
   }
 });
 
-//이메일 중복확인
-router.post("/checkDup", async (req, res) => {
-  const { user_email} = req.body;
+
+//이메일 중복확인 
+router.post("/checkDup", async  (req, res) => {
+  const { user_email } = req.body;
   if (!await emailExist(user_email)) {
     res.status(401).send({ result: "이메일이 존재합니다." });
   } else {
@@ -96,10 +94,11 @@ router.post("/checkDup", async (req, res) => {
   }
 });
 
+
 function idCheck(id_give) {
   console.log(id_give);
   const reg_name =
-    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 이메일 정규식표현
+    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 이메일 정규식표현 추후 프론트와 협의
   if (reg_name.test(id_give) && id_give.length >= 3) {
     return true;
   }
@@ -131,7 +130,7 @@ function pw_idCheck(id_give, pw_give) {
 
 function emailExist(user_email) {
   return new Promise((resolve, reject) => {
-    const query = 'select user_email from user where user.user_email = ?';
+    const query = `select user_email from user where user.user_email = ?`;
     const params = [user_email];
     db.query(query, params, (error, results, fields) => {
       console.log(results);
@@ -162,6 +161,5 @@ async function nicknameExist(nick_give) {
     return true;
   }
 }
-
 
 module.exports = router;

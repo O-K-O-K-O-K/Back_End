@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
 const util = require("util");
 const { db } = require("../models/index");
-
+const dotenv = require("dotenv");
+require('dotenv').config();
 db.query = util.promisify(db.query);
 
 module.exports = async (req, res, next) => {
