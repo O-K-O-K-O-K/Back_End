@@ -10,6 +10,8 @@
   "dependencies": {
     "aws-sdk": "^2.1018.0",
     "bcrypt": "^5.0.1",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "date-utils": "^1.2.21",
     "debug": "~2.6.9",
@@ -25,10 +27,12 @@
     "nodemon": "^2.0.14",
     "path": "^0.12.7",
     "pm2": "^5.1.2",
+    "pug": "^3.0.2",
     "swagger": "^0.7.5",
     "swagger-autogen": "^2.12.4",
     "swagger-jsdoc": "^6.1.0",
-    "swagger-ui-express": "^4.1.6"
+    "swagger-ui-express": "^4.1.6",
+    "ws": "^8.2.3"
   },
   "main": "app.js",
   "devDependencies": {

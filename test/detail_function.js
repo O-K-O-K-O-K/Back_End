@@ -6,15 +6,15 @@
 // };
 
 //산책 약속 작성 
-// router.post('/write', auth, add_post); 
-// //산책 약속 상세 조회
-// router.get('/:post_id', auth, get_one_post);
-// //메인 조회
-// router.get('/', get_all_posts)  
-// //산책 게시물 수정하기
-// router.patch('/:postId',auth, modify_post);
-// // 산책 게시물 삭제하기
-// router.delete('/:postId', auth, delete_post);
+router.post('/write', auth, add_post); 
+//산책 약속 상세 조회
+router.get('/:post_id', auth, get_one_post);
+//메인 조회
+router.get('/', get_all_posts)  
+//산책 게시물 수정하기
+router.patch('/:postId',auth, modify_post);
+// 산책 게시물 삭제하기
+router.delete('/:postId', auth, delete_post);
 
 //테스트
 function add(a, r) {
@@ -27,6 +27,7 @@ try {
     console.log("write post 연결완료!")
     const completed = false;
     // const user_id = res.locals.user.user_id;
+    const user_id = 1;
 
       const {meeting_date,wish_desc,location_category,longitude,latitude,location_address} = req.body;
       const params= [
