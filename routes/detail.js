@@ -72,6 +72,7 @@ router.get('/:post_id', auth, function (req, res, next) {
     join user
     on user.user_id = dog.user_id
     WHERE post.post_id =${post_id}`;
+    //select * from post UNION select * from dog;
     db.query(query, (error, rows) => {
       if (error) {
         console.log(error)
@@ -94,12 +95,14 @@ router.get('/:post_id', auth, function (req, res, next) {
 //메인 조회하기
 router.get('/', function (req, res, next) {
   console.log("get method 연결완료!")
-  const {dog_size,dog_gender, dog_age, location_category, completed} = req.body;
+  const {dog_size, dog_age, completed} = req.body;
+  const location_category ="올림픽공원"
+  const dog_gender= "남남"
   console.log(dog_size, dog_gender, dog_age, location_category, completed)
 
-  if (location_category == undefined) {
-    console.log(1)
-  } else (console.log(2))
+  // if (location_category == undefined) {
+  //   console.log(1)
+  // } else (console.log(2))
   // let {selected_category} =req.body
   // const [filter, subfilter] = selected_category.split("_");
   // console.log(filter) //all 을 했을때 안쓰게 하는 방법!
@@ -110,13 +113,9 @@ router.get('/', function (req, res, next) {
     FROM post
     JOIN dog
     ON dog.user_id=post.user_id
-    WHERE
-    dog.dog_size = '${dog_size}' OR
-    dog.dog_gender = '${dog_gender}' OR
-    dog.dog_age = '${dog_age}' OR
-    post.location_category = '${location_category}' OR
-    post.completed = '${completed}'
-    `;
+    WHERE 1=1
+    IF (!dog.dog_size='undefined') THEN (dog.dog_size = '${dog_size}');
+    END IF`;
     db.query(query, (error, rows) => {
       if (error) {
         console.log(error)
@@ -138,7 +137,7 @@ router.get('/', function (req, res, next) {
 
 //산책 게시물 수정하기
 router.patch('/:postId',auth, async (req, res) => {
-  const post_id = req.params.postId;
+  const post_id = req.params.post_id;
   const user_id = res.locals.user.user_id;
   const { location_category, meeting_date, wish_desc,longitude,latitude,location_address,completed} = req.body;
   const escapeQuery = {

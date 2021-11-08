@@ -12,8 +12,9 @@ const { db } = require("../models/index");
 // 걱정은, 3번 user정보에 4번 도그 정보가 들어갈 우려가 있음. -> 체크 바람
 
 //강아지 정보 등록하기
-router.post("/dog_info", upload.single("dog_image"), auth, async (req, res, next) => {
-  const user_id =  res.locals.user.user_id;
+router.post("/dog_info", upload.single("dog_image"), async (req, res, next) => {
+  // const user_id =  res.locals.user.user_id;
+  const user_id = 1
   console.log("auth 들어옴: ", user_id)
 
   try {

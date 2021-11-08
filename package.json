@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "stop": "taskkill -f -im node.exe"
+    "stop": "taskkill -f -im node.exe",
+    "test": "jest"
   },
   "dependencies": {
     "aws-sdk": "^2.1018.0",
@@ -28,5 +29,21 @@
     "swagger-autogen": "^2.12.4",
     "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.1.6"
-  }
+  },
+  "main": "app.js",
+  "devDependencies": {
+    "jest": "^27.3.1",
+    "mocha": "^2.5.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/O-K-O-K-O-K/Back_End.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/O-K-O-K-O-K/Back_End/issues"
+  },
+  "homepage": "https://github.com/O-K-O-K-O-K/Back_End#readme",
+  "description": ""
 }
