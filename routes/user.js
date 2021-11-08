@@ -35,7 +35,8 @@ router.post("/login", async (req, res) => {
         { expiresIn: "24h" }   //// 추후 6시간으로 변경 예정
       );
       // res.cookie('user', token);  쿠키로 받길 원한다면
-      res.json({ token });
+      res.json({ token, user: users.user_id });
+      console.log("유저아이디 가라:",users.user_id)
     } else {
       res.status(400).send({result: "비밀번호를 확인해주세요." });
     }
@@ -86,7 +87,7 @@ router.post("/signUp", upload.single("user_image"), async (req, res) => {
 
 //이메일 중복확인 
 router.post("/checkDup", async  (req, res) => {
-  const { user_email } = req.body;
+  const { user_email} = req.body;
   if (!await emailExist(user_email)) {
     res.status(401).send({ result: "이메일이 존재합니다." });
   } else {

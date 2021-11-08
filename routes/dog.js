@@ -5,12 +5,18 @@ const dotenv = require("dotenv");
 dotenv.config();
 const upload = require("../S3/s3");
 const { db } = require("../models/index");
+const cors = require('cors');
 
 const ctrlDogs = require('../controllers/dogs/dog.ctrl');
 
+// 기획 변경 의견 : 처음 회원가입을 할 때, user 정보만 받고, 로그인을 하고 나서, dog 정보를 기입하게 한다. 
+//(kakao 로그인을 할 때도 더 편할 것 같다.왜냐하면 kakao로그인은 강아지 정보가 없기 때문에)
+
 //강아지 정보 등록하기
-router.post("/dog_info", upload.single("dog_image"), auth, async (req, res, next) => {
-  const user_id =  res.locals.user.user_id;
+//강아지 정보 등록하기
+router.post("/dog_info", upload.single("dog_image"), async (req, res, next) => {
+  // const user_id =  res.locals.user.user_id;
+  const user_id = 1
   console.log("auth 들어옴: ", user_id)
 
   try {

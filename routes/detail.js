@@ -93,8 +93,7 @@ router.get('/:post_id', auth, function (req, res, next) {
 //메인 조회하기
 router.get('/', function (req, res, next) {
   console.log("get method 연결완료!")
-  const {dog_gender, dog_age, location_category, completed} = req.body;
-  const dog_size = "ㅎㅎ"
+  const {dog_size,dog_gender, dog_age, location_category, completed} = req.body;
   console.log(dog_size, dog_gender, dog_age, location_category, completed)
 
   if (location_category == undefined) {
@@ -105,9 +104,18 @@ router.get('/', function (req, res, next) {
   // console.log(filter) //all 을 했을때 안쓰게 하는 방법!
   try {
     const query = 
-    `SELECT dog.dog_id, dog.dog_gender, dog.dog_name, dog.dog_size, dog.dog_breed, dog.dog_age, dog.neutral, dog.dog_comment, dog.dog_image, dog.user_id, 
+    `SELECT dog.dog_id, dog.dog_gender, dog.dog_name, dog.dog_size, dog.dog_breed, dog.dog_age, dog.neutral, dog.dog_comment, dog.dog_image, dog.user_id,
     post.user_id, post.post_id, post.meeting_date, post.completed, post.location_category  
-    FROM post JOIN dog ON dog.user_id=post.user_id`
+    FROM post
+    JOIN dog
+    ON dog.user_id=post.user_id
+    WHERE
+    dog.dog_size = '${dog_size}' OR
+    dog.dog_gender = '${dog_gender}' OR
+    dog.dog_age = '${dog_age}' OR
+    post.location_category = '${location_category}' OR
+    post.completed = '${completed}'
+    `;
     db.query(query, (error, rows) => {
       if (error) {
         console.log(error)
