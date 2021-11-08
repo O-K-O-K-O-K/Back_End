@@ -168,9 +168,13 @@ router.patch('/:postId',auth, async (req, res) => {
   });
 });
 
-router.patch('completion/:postId', auth, async (req, res) => {
+//유저가 마감 하기 
+router.patch('/completion/:postId', auth, async (req, res) => {
+  console.log("마감여부 접속 완료 ")
   try {
   const post_id = req.params.postId;
+  const user_email = res.locals.user.user_email;
+  console.log("user_email",user_email)
   const user_id = res.locals.user.user_id;
   const {completed} = req.body;
   const escapeQuery = {
@@ -179,14 +183,14 @@ router.patch('completion/:postId', auth, async (req, res) => {
   const query = `UPDATE post SET ? WHERE post_id = ${post_id} and user_id = '${user_id}'`;
   await db.query(query, escapeQuery, (error,rows,fields) => {
     if (error) {
-      console.log(error)
+      console.log("에러는", error)
       // logger.error('게시글 수정 중 발생한 DB관련 에러: ', error);
       return res.status(400).json({
         success: false,
         error,
       });
     } else {
-      return res.status.json ({
+      return res.status(200).json({
         success: true,
       })
     }
@@ -198,24 +202,12 @@ router.patch('completion/:postId', auth, async (req, res) => {
 
 } )
 
-router.get("/dog_exist", auth, async (req, res) => {
-  const user_id = res.locals.user.user_id;
-
-  const dog = `SELECT * FROM dog WHERE dog.user_id ="${user_id}"`;
-  const results = await db.query(dog);
-  console.log("results:", results)
-
-  if (results.length) {
-    res.send(true);
-  } else {
-    res.send(false);
-  }
-});
 
 // 게시글 삭제
 router.delete('/:postId', auth, async (req, res) => {
   const  post_id  = req.params.postId;
   const user_id = res.locals.user.user_id;
+
   const query = `DELETE from post where post_id = ${post_id} and user_id = '${user_id}'`;
   try {
     await db.query(query, (error, rows, fields) => {
