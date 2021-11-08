@@ -55,6 +55,45 @@ router.post('/write', auth, async (req, res) => {
     }
   })
 
+//장소 저장하기
+router.post('/write/location', auth, async (req, res) => {
+  console.log("write post 연결완료!")
+  const user_id = res.locals.user.user_id;
+  try {
+    const {longitude,latitude,location_address,location_address} = req.body;
+    const params= [
+      longitude,
+      latitude,
+      location_address,
+      location_address
+    ];  
+    const query =
+    'INSERT INTO location (location_address, longitude,latitude,location_address,user_id) VALUES(?,?,?,?)';
+      await db.query(query, params, (error, rows, fields) => {
+        console.log("row는",rows)
+        if (error) {
+          console.log(error)
+          // logger.error(`Msg: raise Error in createPost => ${error}`);
+          return res.status(400).json({
+            success: false,
+            errMessage: '400 에러 게시중 오류가 발생 하였습니다!.'
+          });
+        }
+        // logger.info(`${userNickname}님, 게시글 등록이 완료되었습니다.`);
+        return res.status(201).json({
+          success: true,
+          Message: '게시글이 성공적으로 포스팅 되었습니다!.'
+        });
+      });
+    } catch (err) {
+      // logger.error('게시글 작성 중 발생한 에러: ', err);
+      console.log(err)
+      return res.status(500).json({
+        success: false,
+        errMessage: '500 에러 게시중 오류가 발생 하였습니다!.'
+      });     
+    }
+  })
 
 //산책 약속 상세 조회하기
 router.get('/:post_id', auth, function (req, res, next) {
@@ -199,9 +238,43 @@ router.patch('/completion/:postId', auth, async (req, res) => {
   // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
   return res.sendStatus(500);
 }
+})
 
-} )
-
+//장소 수정 하기 
+router.patch('/location/:postId', auth, async (req, res) => {
+  console.log("장소 수정하기 접속 완료 ")
+  try {
+  const post_id = req.params.postId;
+  const user_email = res.locals.user.user_email;
+  console.log("user_email",user_email)
+  const user_id = res.locals.user.user_id;
+  const {longitude,latitude,location_address,location_address} = req.body;
+  const escapeQuery = {
+    longitude:longitude,
+    latitude:latitude,
+    location_address:location_address,
+    location_address:location_address
+  }
+  const query = `UPDATE location SET ? WHERE location.post_id = ${post_id} and user_id = '${user_id}'`;
+  await db.query(query, escapeQuery, (error,rows,fields) => {
+    if (error) {
+      console.log("에러는", error)
+      // logger.error('게시글 수정 중 발생한 DB관련 에러: ', error);
+      return res.status(400).json({
+        success: false,
+        error,
+      });
+    } else {
+      return res.status(200).json({
+        success: true,
+      })
+    }
+  })
+} catch (err) {
+  // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
+  return res.sendStatus(500);
+}
+})
 
 // 게시글 삭제
 router.delete('/:postId', auth, async (req, res) => {
