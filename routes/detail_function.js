@@ -16,7 +16,11 @@
 // // 산책 게시물 삭제하기
 // router.delete('/:postId', auth, delete_post);
 
-  
+//테스트
+function add(a, r) {
+  return a + r
+}
+
 //산책 약속 작성하기 함수 
 async function add_post(req,res) {
 try {  
@@ -205,4 +209,4 @@ try {
     }
   };
 
-  module.exports = { add_post, get_one_post, get_all_posts, modify_post,delete_post };
+  module.exports = { add, add_post, get_one_post, get_all_posts, modify_post,delete_post };
