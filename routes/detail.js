@@ -168,6 +168,50 @@ router.patch('/:postId',auth, async (req, res) => {
   });
 });
 
+router.patch('completion/:postId', auth, async (req, res) => {
+  try {
+  const post_id = req.params.postId;
+  const user_id = res.locals.user.user_id;
+  const {completed} = req.body;
+  const escapeQuery = {
+    completed:completed
+  }
+  const query = `UPDATE post SET ? WHERE post_id = ${post_id} and user_id = '${user_id}'`;
+  await db.query(query, escapeQuery, (error,rows,fields) => {
+    if (error) {
+      console.log(error)
+      // logger.error('게시글 수정 중 발생한 DB관련 에러: ', error);
+      return res.status(400).json({
+        success: false,
+        error,
+      });
+    } else {
+      return res.status.json ({
+        success: true,
+      })
+    }
+  })
+} catch (err) {
+  // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
+  return res.sendStatus(500);
+}
+
+} )
+
+router.get("/dog_exist", auth, async (req, res) => {
+  const user_id = res.locals.user.user_id;
+
+  const dog = `SELECT * FROM dog WHERE dog.user_id ="${user_id}"`;
+  const results = await db.query(dog);
+  console.log("results:", results)
+
+  if (results.length) {
+    res.send(true);
+  } else {
+    res.send(false);
+  }
+});
+
 // 게시글 삭제
 router.delete('/:postId', auth, async (req, res) => {
   const  post_id  = req.params.postId;
