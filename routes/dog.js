@@ -7,8 +7,6 @@ const upload = require("../S3/s3");
 const { db } = require("../models/index");
 const cors = require('cors');
 
-const ctrlDogs = require('../controllers/dogs/dog.ctrl');
-
 // 기획 변경 의견 : 처음 회원가입을 할 때, user 정보만 받고, 로그인을 하고 나서, dog 정보를 기입하게 한다. 
 //(kakao 로그인을 할 때도 더 편할 것 같다.왜냐하면 kakao로그인은 강아지 정보가 없기 때문에)
 

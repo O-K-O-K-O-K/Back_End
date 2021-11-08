@@ -6,6 +6,7 @@ const router = express.Router();
 const util = require("util");
 const { db } = require("../models/index");
 const dotenv = require("dotenv");
+dotenv.config();
 db.query = util.promisify(db.query);
 const upload = require("../S3/s3");  // 여기
 
