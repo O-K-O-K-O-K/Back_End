@@ -22,7 +22,7 @@ exports.db = mysql.createConnection({
     port: '3306',
     password: '29053696',
     database: 'dog'
-  });
+});
 
 
 // module.exports = {

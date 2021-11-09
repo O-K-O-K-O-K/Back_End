@@ -22,15 +22,15 @@ module.exports = async (req, res, next) => {
     if (token) {
       const decoded = jwt.verify(token, process.env.SECRET_KEY);
       let users;
-      const post = `SELECT * FROM user WHERE user_email = ?`;
-      const results = await db.query(post, [decoded.user_email]); // 에러 날수도 있음.
+      const post = `SELECT * FROM user WHERE userEmail = ?`;
+      const results = await db.query(post, [decoded.userEmail]); // 에러 날수도 있음.
       users = {
-        user_id: results[0]["user_id"],
-        user_email: results[0]["user_email"],
-        user_nickname: results[0]["user_nickname"],
-        user_gender: results[0]["user_gender"],
-        user_age: results[0]["user_age"],
-        user_image: results[0]["user_image"],
+        userId: results[0]["userId"],
+        userEmail: results[0]["userEmail"],
+        userNickname: results[0]["userNickname"],
+        userGender: results[0]["userGender"],
+        userAge: results[0]["userAge"],
+        userImage: results[0]["userImage"],
       };
       res.locals.user = users;
       console.log("로컬 유저는?", res.locals.user);

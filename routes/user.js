@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const setRounds = 10;
 const router = express.Router();
 const util = require("util");
+const passport = require('passport');
+const KakaoStrategy = require('passport-kakao').Strategy;
 const { db } = require("../models/index");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -11,12 +13,13 @@ db.query = util.promisify(db.query);
 const upload = require("../S3/s3");  // 여기
 
 
+
 //로그인
 router.post("/login", async (req, res) => {
-  const { user_email, password } = req.body;
+  const { userEmail, password } = req.body;
   let users;
-  const post = `SELECT * FROM user WHERE user_email = ?`;
-  const results = await db.query(post, [user_email]);
+  const post = `SELECT * FROM user WHERE userEmail = ?`;
+  const results = await db.query(post, [userEmail]);
   users = results[0];
   const hash = results[0].password;
 
@@ -25,19 +28,19 @@ router.post("/login", async (req, res) => {
     if (bcrypt.compareSync(password, hash)) {
       const token = jwt.sign(
         {
-          user_id: users.user_id,
-          user_email: users.user_email,
-          user_nickname: users.user_nickname,
-          gender: users.user_gender,
-          age: users.user_age,
-          image: users.user_image,
+          userId: users.userId,
+          userEmail: users.userEmail,
+          userNickname: users.userNickname,
+          gender: users.userGender,
+          age: users.userAge,
+          image: users.userImage,
         },
         process.env.SECRET_KEY,
-        { expiresIn: "24h" }   //// 추후 6시간으로 변경 예정
+        { expiresIn: "24h" } 
       );
-      // res.cookie('user', token);  쿠키로 받길 원한다면
-      res.json({ token, user: users.user_id });
-      console.log("유저아이디 가라:",users.user_id)
+      // res.cookie('user', token);  쿠키!
+      res.json({ token, user: users.userId });
+      console.log("유저아이디:",users.userId)
     } else {
       res.status(400).send({result: "비밀번호를 확인해주세요." });
     }
@@ -47,31 +50,31 @@ router.post("/login", async (req, res) => {
   }
 });
 
-//회원가입  여기 미들웨어(upload.single("user_image)
-router.post("/signUp", upload.single("user_image"), async (req, res) => {
-  const { user_email, password, confirm_password, user_nickname, user_gender, user_age} = req.body;
-  const user_image = req.file.location;   //여기 따로 지정
-  if (!await nicknameExist(user_nickname)) {
+//회원가입  여기 미들웨어(upload.single("userImage)
+router.post("/signUp", upload.single("userImage"), async (req, res) => {
+  const { userEmail, password, confirmPassword, userNickname, userGender, userAge,userLocation} = req.body;
+  const userImage = req.file.location;   //여기 따로 지정
+  if (!await nicknameExist(userNickname)) {
     // 닉네임 중복 검사
     res.status(401).send({ result: "닉네임이 존재합니다." });
-  } else if (!idCheck(user_email)) {
+  } else if (!idCheck(userEmail)) {
     // id 정규식 검사
     res.sendStatus(401);
-  } else if (!pwConfirm(password, confirm_password)) {
+  } else if (!pwConfirm(password, confirmPassword)) {
     // 비밀번호와 비밀번호 확인이 맞는지 검사
     res.sendStatus(401);
   } else if (!pwLenCheck(password)) {
     // 비밀번호 최소길이 검사
     res.sendStatus(401);
-  } else if (!pw_idCheck(user_email, password)) {
+  } else if (!pw_idCheck(userEmail, password)) {
     // 아이디가 비밀번호를 포함하는지 검사
     res.status(401).send({ result: "비밀번호 형식이 올바르지않습니다." });
   } else {
     const salt = await bcrypt.genSaltSync(setRounds);
     const hashPassword = bcrypt.hashSync(password, salt);
-    const userParams = [user_email, hashPassword, user_nickname, user_gender, user_age, user_image];
+    const userParams = [userEmail, hashPassword, userNickname, userGender, userAge, userImage,userLocation];
     const post =
-      "INSERT INTO user (user_email, password, user_nickname, user_gender, user_age, user_image) VALUES (?, ? , ?, ?, ?, ?);";
+      "INSERT INTO user (userEmail, password, userNickname, userGender, userAge, userImage, userLocation) VALUES (?, ?, ? , ?, ?, ?, ?);";
     db.query(post, userParams, (error, results, fields) => {
       // db.query(쿼리문, 넣을 값, 콜백)
       if (error) {
@@ -88,8 +91,8 @@ router.post("/signUp", upload.single("user_image"), async (req, res) => {
 
 //이메일 중복확인 
 router.post("/checkDup", async  (req, res) => {
-  const { user_email} = req.body;
-  if (!await emailExist(user_email)) {
+  const { userEmail} = req.body;
+  if (!await emailExist(userEmail)) {
     res.status(401).send({ result: "이메일이 존재합니다." });
   } else {
     res.status(200).send({ result: "정상적인 이메일입니다."})
@@ -97,43 +100,43 @@ router.post("/checkDup", async  (req, res) => {
 });
 
 
-function idCheck(id_give) {
-  console.log(id_give);
+function idCheck(idGive) {
+  console.log(idGive);
   const reg_name =
     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 이메일 정규식표현 추후 프론트와 협의
-  if (reg_name.test(id_give) && id_give.length >= 3) {
+  if (reg_name.test(idGive) && idGive.length >= 3) {
     return true;
   }
   return false;
 }
 
-function pwConfirm(pw_give, pw2_give) {
-  console.log(pw_give,pw2_give);
-  if (pw_give === pw2_give) {
+function pwConfirm(pwGive, pw2Give) {
+  console.log(pwGive,pw2Give);
+  if (pwGive === pw2Give) {
     return true;
   }
   return false;
 }
 
-function pwLenCheck(pw_give) {
-  console.log(pw_give);
-  if (pw_give.length >= 4) {
+function pwLenCheck(pwGive) {
+  console.log(pwGive);
+  if (pwGive.length >= 4) {
     return true;
   }
   return false;
 }
 
-function pw_idCheck(id_give, pw_give) {
-  if (!id_give.includes(pw_give)) {
+function pw_idCheck(idGive, pwGive) {
+  if (!idGive.includes(pwGive)) {
     return true;
   }
   return false;
 }
 
-function emailExist(user_email) {
+function emailExist(userEmail) {
   return new Promise((resolve, reject) => {
-    const query = `select user_email from user where user.user_email = ?`;
-    const params = [user_email];
+    const query = `select userEmail from user where user.userEmail = ?`;
+    const params = [userEmail];
     db.query(query, params, (error, results, fields) => {
       console.log(results);
       if (error) {
@@ -153,9 +156,9 @@ function emailExist(user_email) {
   });
 }
 
-async function nicknameExist(nick_give) {
-  const post = `SELECT * FROM user WHERE user_nickname = ?;`;
-  const results = await db.query(post, [nick_give]);
+async function nicknameExist(nickGive) {
+  const post = `SELECT * FROM user WHERE userNickname = ?;`;
+  const results = await db.query(post, [nickGive]);
   if (results.length) {
     // Boolean([])  true이다.
     return false;
@@ -163,6 +166,21 @@ async function nicknameExist(nick_give) {
     return true;
   }
 }
+
+//카카오 로그인
+
+
+module.exports = (passport) => {
+  passport.use('kakao', new KakaoStrategy({
+    clientID: '856ec0be1a62b01007353103f2cbc64d',
+    callbackURL: '/auth/login',
+  }, async (accessToken, refreshToken, profile, done) => {
+    console.log(profile);
+    console.log(accessToken);
+    console.log(refreshToken);
+  }))
+}
+
 
 module.exports = router;
 
