@@ -1,75 +1,96 @@
 CREATE TABLE `user` (
-  `user_id` INT NOT NULL AUTO_INCREMENT,
-  `user_email` VARCHAR(45) NOT NULL,
+  `userId` INT NOT NULL AUTO_INCREMENT,
+  `userEmail` VARCHAR(45) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `user_nickname` VARCHAR(45) NOT NULL,
-  `user_gender` VARCHAR(45) NOT NULL,
-  `user_age` VARCHAR(45) NOT NULL,
-  `user_image` TEXT NOT NULL,
-  PRIMARY KEY (`user_id`),
-  KEY `user_id` (`user_id`)
+  `userNickname` VARCHAR(45) NOT NULL,
+  `userGender` VARCHAR(45) NOT NULL,
+  `userAge` VARCHAR(45) NOT NULL,
+  `userImage` TEXT NOT NULL,
+  `userLocation` varchar(45) NOT NULL,
+  PRIMARY KEY (`userId`),
+  KEY `userId` (`userId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 create table `dog`(
-  `dog_id` INT NOT NULL AUTO_INCREMENT,
-  `dog_gender` VARCHAR(45) NOT NULL,
-  `dog_name` VARCHAR(45) NOT NULL,
-  `dog_size` VARCHAR(45) NOT NULL,
-  `dog_breed` VARCHAR(45) NOT NULL,
-  `dog_age` VARCHAR(45) NOT NULL,
+  `dogId` INT NOT NULL AUTO_INCREMENT,
+  `dogGender` VARCHAR(45) NOT NULL,
+  `dogName` VARCHAR(45) NOT NULL,
+  `dogSize` VARCHAR(45) NOT NULL,
+  `dogBreed` VARCHAR(45) NOT NULL,
+  `dogAge` VARCHAR(45) NOT NULL,
   `neutral` VARCHAR(45) NOT NULL, 
-  `dog_comment` VARCHAR(100) NOT NULL,
-  `dog_image` TEXT NOT NULL,
-  `user_id` INT NOT NULL,
-  PRIMARY KEY(`dog_id`),
-  KEY `dog_id` (`dog_id`),
-  FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE
+  `dogComment` VARCHAR(100) NOT NULL,
+  `dogImage` TEXT NOT NULL,
+  `userId` INT NOT NULL,
+  PRIMARY KEY(`dogId`),
+  KEY `dogId` (`dogId`),
+  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 CREATE TABLE `post` (
-  `post_id` int NOT NULL AUTO_INCREMENT,
-  `meeting_date` varchar(50) NOT NULL,
-  `wish_desc` text NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `postId` INT NOT NULL AUTO_INCREMENT,
+  `meetingDate` varchar(50) NOT NULL,
+  `wishDesc` TEXT NOT NULL,
+  `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `completed` tinyint NOT NULL,
-  `location_category` varchar(45) NOT NULL,
-  `longitude` varchar(45) NOT NULL,
-  `latitude` varchar(45) NOT NULL,
-  `location_address` varchar(100) NOT NULL,
-  `user_id` int NOT NULL,
-  PRIMARY KEY (`post_id`),
-  KEY `user_id` (`user_id`),
-  KEY `post_id` (`post_id`),
-  FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE
+  `locationCategory` varchar(45) NOT NULL,
+  `startLongitude` varchar(45) NOT NULL,
+  `startLatitude` varchar(45) NOT NULL,
+  `startLocationAddress` varchar(100) NOT NULL,
+  `endLongitude` varchar(45) NOT NULL,
+  `endLatitude` varchar(45) NOT NULL,
+  `endLocationAddress` varchar(100) NOT NULL,
+  `totalDistance` varchar(45) NOT NULL,
+  `dogCount` INT NOT NULL,
+  `startTime` VARCHAR(45) NOT NULL,
+  `endTime` VARCHAR(45) NOT NULL,
+  `userId` INT NOT NULL,
+  PRIMARY KEY (`postId`),
+  KEY `userId` (`userId`),
+  KEY `postId` (`postId`),
+  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
   )
   ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 
-CREATE TABLE `location` (
-  `location_id` int NOT NULL AUTO_INCREMENT,
-  `location_category` varchar(45) NOT NULL,
-  `longitude` varchar(45) NOT NULL,
-  `latitude` varchar(45) NOT NULL,
-  `location_address` varchar(100) NOT NULL,
-  `user_id` int NOT NULL,
-  PRIMARY KEY (`location_id`),
-  KEY `user_id` (`user_id`),
-  FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE
+  CREATE TABLE `dogSta` (
+  `dogPostId` INT NOT NULL AUTO_INCREMENT,
+  `dogPostImage` TEXT NOT NULL,
+  `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `dogPostDesc` VARCHAR(45) NOT NULL,
+  `userId` INT NOT NULL,
+  PRIMARY KEY (`dogPostId`),
+  KEY `dogPostId` (`dogPostId`),
+  KEY `userId` (`userId`),
+  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
   )
   ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 
-  create table `category`(
-  `category_id` INT NOT NULL,
-  `dog_id` INT NOT NULL,
-  `user_id` INT NOT NULL,
-  `post_id` INT NOT NULL,
-  PRIMARY KEY(`category_id`),
-  KEY `category_id` (`category_id`),
-  FOREIGN KEY (`dog_id`) REFERENCES `dog` (`dog_id`) ON UPDATE CASCADE
-  FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE
-  FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+--   CREATE TABLE `kakaoUser` (
+--   `kakaoUserId` INT NOT NULL AUTO_INCREMENT,
+--   `userEmail` VARCHAR(45) NOT NULL,
+--   `password` varchar(255) NOT NULL,
+--   `userNickname` VARCHAR(45) NOT NULL,
+--   `userGender` VARCHAR(45) NOT NULL,
+--   `userAge` VARCHAR(45) NOT NULL,
+--   `userImage` TEXT NOT NULL,
+--   `userLocation` varchar(45) NOT NULL,
+--   PRIMARY KEY (`userId`),
+--   KEY `userId` (`userId`)
+-- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
+
+--   create table `category`(
+--   `categoryId` INT NOT NULL,
+--   `dogId` INT NOT NULL,
+--   `userId` INT NOT NULL,
+--   `postId` INT NOT NULL,
+--   PRIMARY KEY(`categoryId`),
+--   KEY `categoryId` (`categoryId`),
+--   FOREIGN KEY (`dogId`) REFERENCES `dog` (`dogId`) ON UPDATE CASCADE
+--   FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
+--   FOREIGN KEY (`postId`) REFERENCES `post` (`postId`) ON UPDATE CASCADE
+-- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 

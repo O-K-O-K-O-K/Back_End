@@ -5,6 +5,7 @@ const auth = require('../middlewares/auth');
 const { db } = require("../models/index");
 
 const dotenv = require('dotenv');
+const { ConnectContactLens } = require('aws-sdk');
 dotenv.config();
 // const util = require('util'); //현재시간을 찍어주는 모듈 
 // const { JsonWebTokenError } = require('jsonwebtoken');
@@ -14,21 +15,28 @@ dotenv.config();
 router.post('/write', auth, async (req, res) => {
   console.log("write post 연결완료!")
   const completed = false;
-  const user_id = res.locals.user.user_id;
+  const userId = res.locals.user.userId;
   try {
-    const {meeting_date,wish_desc,location_category,longitude,latitude,location_address} = req.body;
+    const {meetingDate,wishDesc,locationCategory, dogCount,startTime,endTime,startLongitude,startLatitude,startLocationAddress,endLongitude,endLatitude,endLocationAddress,totalDistance} = req.body;
     const params= [
-      meeting_date,
-      wish_desc,
+      meetingDate,
+      wishDesc,
       completed,
-      location_category,
-      longitude,
-      latitude,
-      location_address,
-      user_id
+      locationCategory,
+      dogCount,
+      startTime,
+      endTime,
+      startLongitude,
+      startLatitude,
+      startLocationAddress,
+      endLongitude,
+      endLatitude,
+      endLocationAddress,
+      totalDistance,
+      userId
     ];  
     const query =
-    'INSERT INTO post (meeting_date,wish_desc,completed,location_category,longitude,latitude,location_address,user_id) VALUES(?,?,?,?,?,?,?,?)';
+    'INSERT INTO post (meetingDate,wishDesc,locationCategory,completed,dogCount,startTime,endTime,startLongitude,startLatitude,startLocationAddress,endLongitude,endLatitude,endLocationAddress,totalDistance,userId) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
       await db.query(query, params, (error, rows, fields) => {
         console.log("row는",rows)
         if (error) {
@@ -47,7 +55,6 @@ router.post('/write', auth, async (req, res) => {
       });
     } catch (err) {
       // logger.error('게시글 작성 중 발생한 에러: ', err);
-      console.log(err)
       return res.status(500).json({
         success: false,
         errMessage: '500 에러 게시중 오류가 발생 하였습니다!.'
@@ -55,62 +62,23 @@ router.post('/write', auth, async (req, res) => {
     }
   })
 
-//장소 저장하기
-router.post('/write/location', auth, async (req, res) => {
-  console.log("write post 연결완료!")
-  const user_id = res.locals.user.user_id;
-  try {
-    const {longitude,latitude,location_address,location_address} = req.body;
-    const params= [
-      longitude,
-      latitude,
-      location_address,
-      location_address
-    ];  
-    const query =
-    'INSERT INTO location (location_address, longitude,latitude,location_address,user_id) VALUES(?,?,?,?)';
-      await db.query(query, params, (error, rows, fields) => {
-        console.log("row는",rows)
-        if (error) {
-          console.log(error)
-          // logger.error(`Msg: raise Error in createPost => ${error}`);
-          return res.status(400).json({
-            success: false,
-            errMessage: '400 에러 게시중 오류가 발생 하였습니다!.'
-          });
-        }
-        // logger.info(`${userNickname}님, 게시글 등록이 완료되었습니다.`);
-        return res.status(201).json({
-          success: true,
-          Message: '게시글이 성공적으로 포스팅 되었습니다!.'
-        });
-      });
-    } catch (err) {
-      // logger.error('게시글 작성 중 발생한 에러: ', err);
-      console.log(err)
-      return res.status(500).json({
-        success: false,
-        errMessage: '500 에러 게시중 오류가 발생 하였습니다!.'
-      });     
-    }
-  })
 
 //산책 약속 상세 조회하기
-router.get('/:post_id', auth, function (req, res, next) {
-  const {post_id} = req.params;
-  const user_id = res.locals.user.user_id;
+router.get('/:postId', auth, function (req, res, next) {
+  const {postId} = req.params;
+  const userId = res.locals.user.userId;
   console.log("get method 연결완료!")
   try {
     const query = 
-    `SELECT dog.dog_id, dog.dog_gender, dog.dog_name, dog.dog_size, dog.dog_breed, dog.dog_age, dog.neutral, dog.dog_comment, dog.dog_image,
-    post.user_id, post.post_id, post.meeting_date, post.wish_desc, post.created_at, post.completed, post.location_category, post.longitude, post.latitude, post.location_address,
-    user.user_nickname, user.user_gender, user.user_age, user.user_image
+    `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage,
+    post.userId, post.postId, post.meetingDate, post.wishDesc, post.locationCategory, post.dogCount, post.createdAt, post.completed, post.startTime, post.endTime, post.startLongitude, post.startLatitude, post.startLcationAddress, post.endLongitude, post.endLatitude, post.endLocationAddress,post.totalDistance, 
+    user.userNickname, user.userGender, user.userAge, user.userImage,user.userId
     from post
     join dog
-    on post.user_id = dog.user_id
+    on post.userId = dog.userId
     join user
-    on user.user_id = dog.user_id
-    WHERE post.post_id =${post_id}`;
+    on user.userId = dog.userId
+    WHERE post.postId =${postId}`;
     db.query(query, (error, rows) => {
       if (error) {
         console.log(error)
@@ -133,10 +101,10 @@ router.get('/:post_id', auth, function (req, res, next) {
 //메인 조회하기
 router.get('/', function (req, res, next) {
   console.log("get method 연결완료!")
-  const {dog_size,dog_gender, dog_age, location_category, completed} = req.body;
-  console.log(dog_size, dog_gender, dog_age, location_category, completed)
+  const {dogSize,dogGender, dogAge, locationCategory, completed} = req.body;
+  console.log(dogSize, dogGender, dogAge, locationCategory, completed)
 
-  if (location_category == undefined) {
+  if (locationCategory == undefined) {
     console.log(1)
   } else (console.log(2))
   // let {selected_category} =req.body
@@ -144,16 +112,16 @@ router.get('/', function (req, res, next) {
   // console.log(filter) //all 을 했을때 안쓰게 하는 방법!
   try {
     const query = 
-    `SELECT dog.dog_id, dog.dog_gender, dog.dog_name, dog.dog_size, dog.dog_breed, dog.dog_age, dog.neutral, dog.dog_comment, dog.dog_image, dog.user_id,
-    post.user_id, post.post_id, post.meeting_date, post.completed, post.location_category  
+    `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
+    post.userId, post.post_id, post.meetingDate, post.completed, post.locationCategory  
     FROM post
     JOIN dog
-    ON dog.user_id=post.user_id
+    ON dog.userId=post.userId
     WHERE
-    dog.dog_size = '${dog_size}' OR
-    dog.dog_gender = '${dog_gender}' OR
-    dog.dog_age = '${dog_age}' OR
-    post.location_category = '${location_category}' OR
+    dog.dog_size = '${dogSize}' OR
+    dog.dogGender = '${dogGender}' OR
+    dog.dog_age = '${dogAge}' OR
+    post.locationCategory = '${locationCategory}' OR
     post.completed = '${completed}'
     `;
     db.query(query, (error, rows) => {
@@ -177,20 +145,28 @@ router.get('/', function (req, res, next) {
 
 //산책 게시물 수정하기
 router.patch('/:postId',auth, async (req, res) => {
-  const post_id = req.params.postId;
-  const user_id = res.locals.user.user_id;
-  const { location_category, meeting_date, wish_desc,longitude,latitude,location_address,completed} = req.body;
+  const postId = req.params.postId;
+  const userId = res.locals.user.userId;
+  const { locationCategory, meetingDate, wishDesc, dogCount, startLongitude, startLatitude, endLongitude, endLatitude,startLocationAddress,endLocationAddress,completed,totalDistance,startTime,endTime} = req.body;
   const escapeQuery = {
-    location_category: location_category,
-    meeting_date: meeting_date,
-    wish_desc: wish_desc,
-    longitude:longitude,
-    latitude:latitude,
-    location_address:location_address,
+    locationCategory: locationCategory,
+    meetingDate: meetingDate,
+    wishDesc: wishDesc,
+    startLongitude:startLongitude,
+    startLatitude:startLatitude,
+    startLocationAddress:startLocationAddress,
+    endLongitude:endLongitude,
+    endLatitude:endLatitude,
+    endLocationAddress:endLocationAddress,
+    dogCount:dogCount,
+    totalDistance:totalDistance,
+    startTime:startTime,
+    endTime:endTime,
     completed:completed,
   };
-  const query = `UPDATE post SET ? WHERE post_id = ${post_id} and user_id = '${user_id}'`;
+  const query = `UPDATE post SET ? WHERE postId = ${postId} and userId = '${userId}'`;
   await db.query(query, escapeQuery, (error, rows, fields) => {
+    console.log(rows)
     if (error) {
       console.log(error)
       // logger.error('게시글 수정 중 발생한 DB관련 에러: ', error);
@@ -199,9 +175,11 @@ router.patch('/:postId',auth, async (req, res) => {
         error,
       });
     } else {
+      console.log("rows",rows)
       // logger.info('게시글을 성공적으로 수정하였습니다.');
       return res.status(200).json({
         success: true,
+        posts: rows,
       });
     }
   });
@@ -211,15 +189,15 @@ router.patch('/:postId',auth, async (req, res) => {
 router.patch('/completion/:postId', auth, async (req, res) => {
   console.log("마감여부 접속 완료 ")
   try {
-  const post_id = req.params.postId;
-  const user_email = res.locals.user.user_email;
-  console.log("user_email",user_email)
-  const user_id = res.locals.user.user_id;
+  const postId = req.params.postId;
+  const userEmail = res.locals.user.userEmail;
+  console.log("user_email",userEmail)
+  const userId = res.locals.user.userId;
   const {completed} = req.body;
   const escapeQuery = {
     completed:completed
   }
-  const query = `UPDATE post SET ? WHERE post_id = ${post_id} and user_id = '${user_id}'`;
+  const query = `UPDATE post SET ? WHERE postId = ${postId} and userId = '${userId}'`;
   await db.query(query, escapeQuery, (error,rows,fields) => {
     if (error) {
       console.log("에러는", error)
@@ -240,48 +218,13 @@ router.patch('/completion/:postId', auth, async (req, res) => {
 }
 })
 
-//장소 수정 하기 
-router.patch('/location/:postId', auth, async (req, res) => {
-  console.log("장소 수정하기 접속 완료 ")
-  try {
-  const post_id = req.params.postId;
-  const user_email = res.locals.user.user_email;
-  console.log("user_email",user_email)
-  const user_id = res.locals.user.user_id;
-  const {longitude,latitude,location_address,location_address} = req.body;
-  const escapeQuery = {
-    longitude:longitude,
-    latitude:latitude,
-    location_address:location_address,
-    location_address:location_address
-  }
-  const query = `UPDATE location SET ? WHERE location.post_id = ${post_id} and user_id = '${user_id}'`;
-  await db.query(query, escapeQuery, (error,rows,fields) => {
-    if (error) {
-      console.log("에러는", error)
-      // logger.error('게시글 수정 중 발생한 DB관련 에러: ', error);
-      return res.status(400).json({
-        success: false,
-        error,
-      });
-    } else {
-      return res.status(200).json({
-        success: true,
-      })
-    }
-  })
-} catch (err) {
-  // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
-  return res.sendStatus(500);
-}
-})
 
 // 게시글 삭제
 router.delete('/:postId', auth, async (req, res) => {
-  const  post_id  = req.params.postId;
-  const user_id = res.locals.user.user_id;
+  const  postId  = req.params.postId;
+  const userId = res.locals.user.userId;
 
-  const query = `DELETE from post where post_id = ${post_id} and user_id = '${user_id}'`;
+  const query = `DELETE from post where postId = ${postId} and userId = '${userId}'`;
   try {
     await db.query(query, (error, rows, fields) => {
       if (error) {

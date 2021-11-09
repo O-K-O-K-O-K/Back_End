@@ -1,10 +1,13 @@
 const createError = require('http-errors');
 const express = require('express');
+// const socketIo = require("socket.io")
+
 // const logger = require('morgan');
 const app = express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerFile = require("./swagger-output");
+
 
 // const webSocket = require('/socket');
 
@@ -32,6 +35,7 @@ app.use('/dogs', dogsRouter);
 app.use('/posts', detailRouter);
 app.use('/users', pagesRouter);
 app.use('/users', usersRouter);
+app.get("/",(_,res) => res.render("home"));
 
 const cors = require('cors');
 const auth = require('./middlewares/auth');
@@ -47,8 +51,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 
+
 //swagger
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
 
 
 
@@ -66,4 +72,6 @@ app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 //   res.render('error');
 // });
 
+
+ //handlelisten 어디에 있나?
 module.exports = app;
