@@ -1,5 +1,7 @@
 const createError = require('http-errors');
 const express = require('express');
+// const socketIo = require("socket.io")
+
 // const logger = require('morgan');
 const app = express();
 const swaggerUi = require("swagger-ui-express");
@@ -26,7 +28,6 @@ app.use(express.static('public'));
 require('dotenv').config();
 
 // app.use(compression());
-
 // app.set('views', path.join(__dirname, 'views'));
 
 const dogsRouter = require('./routes/dog');
@@ -38,8 +39,10 @@ app.use('/dogs', dogsRouter);
 app.use('/posts', detailRouter);
 app.use('/users', pagesRouter);
 app.use('/users', usersRouter);
+app.get("/",(_,res) => res.render("home"));
 
 const auth = require('./middlewares/auth');
+
 
 //swagger
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
@@ -57,5 +60,6 @@ app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 //   res.status(err.status || 500);
 //   res.render('error');
 // });
+
 
 module.exports = app;

@@ -66,7 +66,6 @@ CREATE TABLE `post` (
   )
   ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
-
   create table `category`(
   `categoryId` INT NOT NULL,
   `dogId` INT NOT NULL,

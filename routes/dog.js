@@ -99,7 +99,7 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-
+//수정하기
 router.patch('/', upload.single("dog_image"), auth, async (req, res) => {
   const user_id =  res.locals.user.user_id;
 
