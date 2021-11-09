@@ -10,6 +10,17 @@ CREATE TABLE `user` (
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
+CREATE TABLE `kakao` (
+  `kakao_id` INT NOT NULL AUTO_INCREMENT,
+  `kakao_email` VARCHAR(45) NOT NULL,
+  `kakao_nickname` VARCHAR(45) NOT NULL,
+  `kakao_gender` VARCHAR(45) NOT NULL,
+  `kakao_age` VARCHAR(45) NOT NULL,
+  `kakao_image` TEXT NOT NULL,
+  PRIMARY KEY (`kakao_id`),
+  KEY `kakao_id` (`kakao_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
 create table `dog`(
   `dog_id` INT NOT NULL AUTO_INCREMENT,
   `dog_gender` VARCHAR(45) NOT NULL,
