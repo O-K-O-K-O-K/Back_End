@@ -7,48 +7,51 @@ const upload = require("../S3/s3");
 const { db } = require("../models/index");
 const cors = require('cors');
 
+//예외 처리 - 유저가 signUp은 하는대, dog 정보를 입력하지 않고 나가는 경우.
+// 3번 user를 signUp를 했는데, 도그 정보 입력 안함
+// 4번 user를 사인업 햇는데, 이 때 도그 정보 입력함
+// 걱정은, 3번 user정보에 4번 도그 정보가 들어갈 우려가 있음. -> 체크 바람
+
 // 기획 변경 의견 : 처음 회원가입을 할 때, user 정보만 받고, 로그인을 하고 나서, dog 정보를 기입하게 한다. 
 //(kakao 로그인을 할 때도 더 편할 것 같다.왜냐하면 kakao로그인은 강아지 정보가 없기 때문에)
 
 //강아지 정보 등록하기
-//강아지 정보 등록하기
-router.post("/dog_info", upload.single("dog_image"), async (req, res, next) => {
-  // const user_id =  res.locals.user.user_id;
-  const user_id = 1
-  console.log("auth 들어옴: ", user_id)
+router.post("/dog_info", upload.single("dogImage"), auth, async (req, res, next) => {
+  const userId =  res.locals.user.userId;
+  console.log("auth 들어옴: ", userId)
 
   try {
     console.log("req.body", req.body);
     const {
-      dog_gender,
-      dog_name,
-      dog_size,
-      dog_breed,
-      dog_age,
+      dogGender,
+      dogName,
+      dogSize,
+      dogBreed,
+      dogAge,
       neutral,
-      dog_comment,
-      // dog_image,
-      // user_id,
+      dogComment,
+      // dogImage,
+      // userId,
     } = req.body;
 
-    const dog_image = req.file.location;
-    // const user_id = res.user.user_id; //-> 나중에 user 받아오면
+    const dogImage = req.file.location;
+    console.log("dogImage:", dogImage)
 
     const params = [
-      dog_gender,
-      dog_name,
-      dog_size,
-      dog_breed,
-      dog_age,
+      dogGender,
+      dogName,
+      dogSize,
+      dogBreed,
+      dogAge,
       neutral,
-      dog_comment,
-      dog_image,
-      user_id,
+      dogComment,
+      dogImage,
+      userId,
     ];
 
     console.log(params);
     const query =
-      "INSERT INTO dog(dog_gender, dog_name, dog_size, dog_breed, dog_age, neutral, dog_comment, dog_image,user_id) VALUES(?,?,?,?,?,?,?,?,?)";
+      "INSERT INTO dog(dogGender, dogName, dogSize, dogBreed, dogAge, neutral, dogComment, dogImage, userId) VALUES(?,?,?,?,?,?,?,?,?)";
     // console.log("여기까지 오나 실험", query)
 
     await db.query(query, params, (error, rows, fields) => {
@@ -66,19 +69,19 @@ router.post("/dog_info", upload.single("dog_image"), async (req, res, next) => {
   } catch (err) {
     return res.status(500).json({
       success: false,
-      msg: "try 문에 들어가지 못함",
+      msg: "로그인 하세요",
     });
   }
 });
 
 // 마이 프로필에서 dog 정보 get 하는 것
 router.get("/", auth, async (req, res) => {
-  const user_id =  res.locals.user.user_id;
+  const userId =  res.locals.user.userId;
 
   try {
     const query = 
-    `select dog.dog_id, dog.dog_gender, dog.dog_name, dog.dog_size, dog.dog_breed, dog.dog_age, dog.neutral, dog.dog_comment, dog.dog_image, dog.user_id 
-    from dog left join user on dog.user_id = user.user_id where dog.user_id= "${user_id}";`
+    `select dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId 
+    from dog left join user on dog.userId = user.userId where dog.userId= "${userId}";`
 
     await db.query(query, (error, rows) => {
       if (error) {
@@ -99,36 +102,38 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-//수정하기
-router.patch('/', upload.single("dog_image"), auth, async (req, res) => {
-  const user_id =  res.locals.user.user_id;
+
+// 강아지 정보 수정하기
+router.patch('/', upload.single("dogImage"), auth, async (req, res) => {
+  const userId =  res.locals.user.userId;
 
   console.log("reqbody:", req.body)
   const {
-    dog_gender,
-    dog_name,
-    dog_size,
-    dog_breed,
-    dog_age,
+    dogGender,
+    dogName,
+    dogSize,
+    dogBreed,
+    dogAge,
     neutral,
-    dog_comment,
+    dogComment,
   } = req.body;
 
-  const dog_image = req.file.location;
+  const dogImage = req.file.location;
+  // console.log("이미지 타입:",typeof(dogImage));
 
   const escapeQuery = {
-    dog_gender : dog_gender,
-    dog_name : dog_name,
-    dog_size : dog_size,
-    dog_breed : dog_breed,
-    dog_age : dog_age,
+    dogGender : dogGender,
+    dogName : dogName,
+    dogSize : dogSize,
+    dogBreed : dogBreed,
+    dogAge : dogAge,
     neutral : neutral,
-    dog_comment : dog_comment,
-    dog_image : dog_image,
+    dogComment : dogComment,
+    dogImage : dogImage,
   };
 
   console.log(escapeQuery)
-  const query = `UPDATE dog SET ? WHERE dog.user_id = '${user_id}'`;
+  const query = `UPDATE dog SET ? WHERE dog.userId = '${userId}'`;
 
   await db.query(query, escapeQuery, (error, rows, fields) => {
     if(error){
@@ -145,5 +150,7 @@ router.patch('/', upload.single("dog_image"), auth, async (req, res) => {
     }
   })
 });
+
+
 
 module.exports = router;

@@ -23,7 +23,7 @@
   "consumes": [],
   "produces": [],
   "paths": {
-    "/dogs/dog_info": {
+    "/dogs/dogInfo": {
       "post": {
         "description": "로그인 한 유저가 강아지를 등록하는 API",
         "security": [
@@ -52,23 +52,23 @@
             "schema": {
               "type": "object",
               "properties": {
-                "dog_gender": {
+                "dogGender": {
                   "type": "String",
                   "description": "강아지 성별"
                 },
-                "dog_name": {
+                "dogName": {
                   "type": "String",
                   "description": "강아지 이름"
                 },
-                "dog_size": {
+                "dogSize": {
                   "type": "String",
                   "description": "강아지 크기"
                 },
-                "dog_breed": {
+                "dogBreed": {
                   "type": "String",
                   "description": "강아지 종"
                 },
-                "dog_age": {
+                "dogAge": {
                   "type": "String",
                   "description": "강아지 나이"
                 },
@@ -76,19 +76,19 @@
                   "type": "String",
                   "description": "중성화 여부"
                 },
-                "dog_comment": {
+                "dogComment": {
                   "type": "String",
                   "description": "강아지에 대한 한 줄 소개"
                 }
               },
               "example": {
-                "dog_gender": "남",
-                "dog_name": "가을이",
-                "dog_size": "중형견",
-                "dog_breed": "비숑",
-                "dog_age": "8세 이상",
+                "dogGender": "남",
+                "dogName": "가을이",
+                "dogSize": "중형견",
+                "dogBreed": "비숑",
+                "dogAge": "8세 이상",
                 "neutral": "true",
-                "dog_comment": "짖지 않아요"
+                "dogComment": "짖지 않아요"
               }
             }
           }
@@ -159,23 +159,23 @@
             "schema": {
               "type": "object",
               "properties": {
-                "dog_gender": {
+                "dogGender": {
                   "type": "String",
                   "description": "강아지 성별"
                 },
-                "dog_name": {
+                "dogName": {
                   "type": "String",
                   "description": "강아지 이름"
                 },
-                "dog_size": {
+                "dogSize": {
                   "type": "String",
                   "description": "강아지 크기"
                 },
-                "dog_breed": {
+                "dogBreed": {
                   "type": "String",
                   "description": "강아지 종"
                 },
-                "dog_age": {
+                "dogAge": {
                   "type": "String",
                   "description": "강아지 나이"
                 },
@@ -183,19 +183,19 @@
                   "type": "String",
                   "description": "중성화 여부"
                 },
-                "dog_comment": {
+                "dogComment": {
                   "type": "String",
                   "description": "강아지에 대한 한 줄 소개"
                 }
               },
               "example": {
-                "dog_gender": "남",
-                "dog_name": "가을이",
-                "dog_size": "중형견",
-                "dog_breed": "비숑",
-                "dog_age": "8세 이상",
+                "dogGender": "남",
+                "dogName": "가을이",
+                "dogSize": "중형견",
+                "dogBreed": "비숑",
+                "dogAge": "8세 이상",
                 "neutral": "true",
-                "dog_comment": "짖지 않아요"
+                "dogComment": "짖지 않아요"
               }
             }
           }
