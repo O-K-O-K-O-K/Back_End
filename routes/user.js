@@ -10,7 +10,6 @@ dotenv.config();
 db.query = util.promisify(db.query);
 const upload = require("../S3/s3");  // 여기
 
-
 //로그인
 router.post("/login", async (req, res) => {
   const { user_email, password } = req.body;
@@ -36,7 +35,7 @@ router.post("/login", async (req, res) => {
         { expiresIn: "24h" }   //// 추후 6시간으로 변경 예정
       );
       // res.cookie('user', token);  쿠키로 받길 원한다면
-      res.json({ token, user: users.user_id });
+      res.json({ token});
       console.log("유저아이디 가라:",users.user_id)
     } else {
       res.status(400).send({result: "비밀번호를 확인해주세요." });
@@ -49,7 +48,7 @@ router.post("/login", async (req, res) => {
 
 //회원가입  여기 미들웨어(upload.single("user_image)
 router.post("/signUp", upload.single("user_image"), async (req, res) => {
-  const { user_email, password, confirm_password, user_nickname, user_gender, user_age} = req.body;
+  const { user_email, password, confirm_password, user_nickname, user_gender, user_age, user_location} = req.body;
   const user_image = req.file.location;   //여기 따로 지정
   if (!await nicknameExist(user_nickname)) {
     // 닉네임 중복 검사
@@ -69,9 +68,9 @@ router.post("/signUp", upload.single("user_image"), async (req, res) => {
   } else {
     const salt = await bcrypt.genSaltSync(setRounds);
     const hashPassword = bcrypt.hashSync(password, salt);
-    const userParams = [user_email, hashPassword, user_nickname, user_gender, user_age, user_image];
+    const userParams = [user_email, hashPassword, user_nickname, user_gender, user_age, user_image, user_location];
     const post =
-      "INSERT INTO user (user_email, password, user_nickname, user_gender, user_age, user_image) VALUES (?, ? , ?, ?, ?, ?);";
+      "INSERT INTO user (user_email, password, user_nickname, user_gender, user_age, user_image, user_location) VALUES (?, ? , ?, ?, ?, ?, ?);";
     db.query(post, userParams, (error, results, fields) => {
       // db.query(쿼리문, 넣을 값, 콜백)
       if (error) {
