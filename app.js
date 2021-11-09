@@ -28,7 +28,6 @@ app.use(express.static('public'));
 require('dotenv').config();
 
 // app.use(compression());
-
 // app.set('views', path.join(__dirname, 'views'));
 
 const dogsRouter = require('./routes/dog');
@@ -63,5 +62,4 @@ app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 // });
 
 
- //handlelisten 어디에 있나?
 module.exports = app;
