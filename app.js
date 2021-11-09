@@ -5,15 +5,20 @@ const express = require('express');
 // const logger = require('morgan');
 const app = express();
 const swaggerUi = require("swagger-ui-express");
-const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerFile = require("./swagger-output");
-
-
-// const webSocket = require('/socket');
-
 const path = require('path');
-// const authMiddleware = require("./middlewares/auth")
+// const authMiddleware = require("./middlewares/auth");
 // app.use(logger('dev'));
+
+const cors = require('cors');
+const corsOptions = {
+  origin: "*", 
+  // methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
+  // preflightContinue: false,
+  credentials: true,
+  // optionsSuccessStatus: 204,
+};
+app.use(cors(corsOptions));
 
 //parser
 app.use(express.json());
@@ -37,26 +42,11 @@ app.use('/users', pagesRouter);
 app.use('/users', usersRouter);
 app.get("/",(_,res) => res.render("home"));
 
-const cors = require('cors');
 const auth = require('./middlewares/auth');
-const corsOptions = {
-  //cors 설정
-  origin: '*', // 전체 허용
-  // methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
-  // preflightContinue: false,
-  credentials: true,
-  // 'Access-Control-Allow-Origin': '*',
-  // optionsSuccessStatus: 204,
-};
-app.use(cors(corsOptions));
-
 
 
 //swagger
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
-
-
-
 
 // // catch 404 and forward to error handler
 // app.use(function(req, res, next) {

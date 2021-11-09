@@ -3,7 +3,6 @@ const multer = require('multer')
 const router = express.Router();
 const auth = require('../middlewares/auth'); 
 const { db } = require("../models/index");
-
 const dotenv = require('dotenv');
 const { ConnectContactLens } = require('aws-sdk');
 dotenv.config();
