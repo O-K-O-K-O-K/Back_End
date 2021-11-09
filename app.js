@@ -39,7 +39,7 @@ app.use('/dogs', dogsRouter);
 app.use('/posts', detailRouter);
 app.use('/users', pagesRouter);
 app.use('/users', usersRouter);
-app.get("/",(_,res) => res.render("home"));
+
 
 const auth = require('./middlewares/auth');
 
