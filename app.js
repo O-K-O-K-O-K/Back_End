@@ -1,12 +1,14 @@
 const createError = require('http-errors');
 const express = require('express');
 // const socketIo = require("socket.io")
-
 // const logger = require('morgan');
 const app = express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
 const path = require('path');
+
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 // const authMiddleware = require("./middlewares/auth");
 // app.use(logger('dev'));
 
@@ -34,11 +36,13 @@ const dogsRouter = require('./routes/dog');
 const detailRouter = require('./routes/detail');
 const pagesRouter = require('./routes/mypage');
 const usersRouter = require('./routes/user');
+const kakaosRouter = require('./routes/kakao');
 
 app.use('/dogs', dogsRouter);
 app.use('/posts', detailRouter);
 app.use('/users', pagesRouter);
 app.use('/users', usersRouter);
+app.use('/kakaos', kakaosRouter);
 app.get("/",(_,res) => res.render("home"));
 
 const auth = require('./middlewares/auth');
