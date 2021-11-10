@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const { db } = require("../models/index");
 
-// 내가 쓴 글 조회하기 황유정, auth 뺌
+// 내가 쓴 글 조회하기, auth 뺌
 router.get("/myPost/:userId", async (req, res) => {
   console.log("myPage 여기까지 옴");
   const { userId } = req.params;
