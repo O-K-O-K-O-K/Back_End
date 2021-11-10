@@ -16,9 +16,10 @@ const cors = require('cors');
 //(kakao 로그인을 할 때도 더 편할 것 같다.왜냐하면 kakao로그인은 강아지 정보가 없기 때문에)
 
 //강아지 정보 등록하기
-router.post("/dog_info", upload.single("dogImage"), auth, async (req, res, next) => {
+router.post("/dogInfo", upload.single("dogImage"), auth, async (req, res, next) => {
   const userId =  res.locals.user.userId;
   console.log("auth 들어옴: ", userId)
+  console.log("req.file ",req.file)
 
   try {
     console.log("req.body", req.body);
@@ -35,6 +36,7 @@ router.post("/dog_info", upload.single("dogImage"), auth, async (req, res, next)
     } = req.body;
 
     const dogImage = req.file.location;
+    
     console.log("dogImage:", dogImage)
 
     const params = [

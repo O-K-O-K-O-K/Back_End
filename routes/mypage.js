@@ -64,50 +64,53 @@ router.get("/me", auth, async (req, res) => {
 });
 
 // 내 정보 수정하기
-router.patch("/me", upload.single("userImage"), auth, async (req, res) => {
-  // null 값일 때, 강아지 원래 사진 보내주기
+// router.patch("/me", upload.single("userImage"), auth, async (req, res) => {
 
-  try {
-    const userId = res.locals.user.userId;
-    console.log("req.body:", req.body);
-    const { userNickname, userGender, userAge, userLocation} = req.body;
+//   try {
+//     const userId = res.locals.user.userId;
+//     console.log("req.body:", req.body);
+//     const { userNickname, userGender, userAge, userLocation, userImage} = req.body;
 
-    const userImage = req.file.location;
-    // console.log("이미지 타입:",typeof(userImage));
+//     // const userImage = req.file.location;
+//     const obj = JSON.parse(JSON.stringify(req.body));
+//     console.log("obj: ", obj)
+//     // console.log("이미지 타입:",typeof(userImage));
 
-    const escapeQuery = {
-      userNickname: userNickname,
-      userGender: userGender,
-      userAge: userAge,
-      userLocation: userLocation,
-      userImage: userImage,
-    };
+//     const escapeQuery = {
+//       userNickname: userNickname,
+//       userGender: userGender,
+//       userAge: userAge,
+//       userLocation: userLocation,
+//       userImage: userImage,
+//     };
 
-    console.log("여기: ", escapeQuery);
+//     console.log("여기: ", escapeQuery);
 
-    const userQuery = `UPDATE user SET ? WHERE user.userId = '${userId}'`;
+//     const userQuery = `UPDATE user SET ? WHERE user.userId = '${userId}'`;
 
-    await db.query(userQuery, escapeQuery, async (err, user) => {
-      if (err) {
-        return res.status(400).json({
-          success: false,
-        });
-      }
-      return res.status(200).json({
-        success: true,
-        msg: "user 정보 수정 성공!",
-        user,
-      });
-    });
-  } catch (err) {
-    res.status(400).json({
-      success: false,
-    });
-  }
-});
+//     await db.query(userQuery, escapeQuery, async (err, user) => {
+//       if (err) {
+//         return res.status(400).json({
+//           success: false,
+//         });
+//       }
+//       return res.status(200).json({
+//         success: true,
+//         msg: "user 정보 수정 성공!",
+//         user,
+//       });
+//     });
+//   } catch (err) {
+//     res.status(500).json({
+//       success: false,
+//       msg: "로그인 하세요"
+//     });
+//   }
+// });
 
 // 내가 쓴 글 조회하기 황유정
-router.get("/myPage", async (req, res) => {
+// auth 빼면 어떻게 할건지
+router.get("/myPage", auth, async (req, res) => {
   console.log("myPage 여기까지 옴");
   const userId = res.locals.user.userId;
 
@@ -123,7 +126,7 @@ router.get("/myPage", async (req, res) => {
     //강아지와 유저 정보를 보내준다.
     const query = `select dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
     user.userId, user.userNickname, user.userGender, user.userAge, user.userImage, user.userLocation 
-    from dog left join user on dog.userId = user.userId where dog.userId= "${userId}";`
+    from dog left join user on dog.userId = user.userId where dog.userId= "${userId}";`;
 
     await db.query(query, (error, rows) => {
       if (error) {
@@ -161,65 +164,102 @@ router.get("/myPage", async (req, res) => {
 });
 
 
-// 내 정보 수정하기
-// 먼저 이미지를 불러온 후, 수정하기
-// router.patch("/me", upload.single("userImage"), auth, async (req, res) => {
-//   try {
-//     const userId = res.locals.user.userId;
+//내 정보 수정하기 
+router.patch("/me", upload.single("userImage"), auth, async (req, res) => {
+  try {
+    const userId = res.locals.user.userId;
 
-//     const { userNickname, userGender, userAge, userImage } = req.body;
+    let { userNickname, userGender, userAge, userImage, userLocation } = req.body;
 
-//     console.log("userImage", userImage); //userImage가 없으면, undefined로 뜬다.
-//     console.log("이미지 타입:", typeof(userImage));
 
-//     //
-//     if (!userImage) {
-//       //user의 이미지를 가져온다.
-//       let i;
-//       const userDb = `SELECT user.userImage FROM user WHERE user.userId= "${userId}"`;
-//       const thisIsImage = await db.query(userDb);
-//       i = thisIsImage[0];
+    console.log("userImage: ", userImage); //userImage가 없으면, undefined로 뜬다.
+    console.log("이미지 타입:", typeof userImage);
 
-//       console.log("이게 이미지다", i);
+    if (userImage = " ") {
 
-//       // res.status(200).json({i});
-//     }
-//     // else{
-      
-//     // }
+      let i;
+      const userDb = `SELECT user.userImage FROM user WHERE user.userId= "${userId}"`;
+      const thisIsImage = await db.query(userDb);
+      i = thisIsImage[0].userImage;
+  
+      console.log("이게 이미지다", i);
+  
+      // const obj = JSON.parse(JSON.stringify(i));
+      const obj = Object.values(JSON.parse(JSON.stringify(i)));
+      console.log("obj: ", obj)
+  
+      //user의 이미지를 가져온다.
+      // let i;
+      // const userDb = `SELECT user.userImage FROM user WHERE user.userId= "${userId}"`;
+      // const thisIsImage = await db.query(userDb);
+      // i = thisIsImage[0];
 
-//     // console.log("req.body:", req.body);
-//     // const { userNickname, userGender, userAge} = req.body;
-//    // const userImage = req.file.location;
-//     // const userImage = thisIsImage;
+      // console.log("이게 이미지다", i);
 
-//     const escapeQuery = {
-//       userNickname: userNickname,
-//       userGender: userGender,
-//       userAge: userAge,
-//       userImage: userImage,
-//     };
-//     // console.log("여기: ", escapeQuery);
+      const escapeQuery = {
+        userNickname: userNickname,
+        userGender: userGender,
+        userAge: userAge,
+        userImage: i,
+        userLocation: userLocation
+      };
+      console.log("이미지 타입:", typeof userImage);
 
-//     const userQuery = `UPDATE user SET ? WHERE user.userId = '${userId}'`;
+      console.log("여기: ", escapeQuery);
 
-//     await db.query(userQuery, escapeQuery, async (err, user) => {
-//       if (err) {
-//         return res.status(400).json({
-//           success: false,
-//         });
-//       }
-//       return res.status(200).json({
-//         success: true,
-//         msg: "user 정보 수정 성공!",
-//         user,
-//       });
-//     });
-//   } catch (err) {
-//     res.status(400).json({
-//       success: false,
-//     });
-//   }
-// });
+      const userQuery = `UPDATE user SET ? WHERE user.userId = '${userId}'`;
+
+      await db.query(userQuery, escapeQuery, async (err, user) => {
+        if (err) {
+          return res.status(400).json({
+            success: false,
+          });
+        }
+        return res.status(200).json({
+          success: true,
+          msg: "user 정보 수정 성공!",
+          user,
+        });
+      });
+
+    } else {
+
+      userImage = req.file.location;
+      console.log("else문의 userImage:", userImage)
+
+      const escapeQuery = {
+        userNickname: userNickname,
+        userGender: userGender,
+        userAge: userAge,
+        userImage: userImage,
+        userLocation: userLocation
+      };
+      console.log("이미지 타입:", typeof userImage);
+
+      console.log("여기: ", escapeQuery);
+
+      const userQuery = `UPDATE user SET ? WHERE user.userId = '${userId}'`;
+
+      await db.query(userQuery, escapeQuery, async (err, user) => {
+        if (err) {
+          return res.status(400).json({
+            success: false,
+          });
+        }
+        return res.status(200).json({
+          success: true,
+          msg: "user 정보 수정 성공!",
+          user,
+        });
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+    });
+  }
+});
+
+
 
 module.exports = router;

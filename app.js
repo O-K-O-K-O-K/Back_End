@@ -1,7 +1,6 @@
 const createError = require('http-errors');
 const express = require('express');
 // const socketIo = require("socket.io")
-
 // const logger = require('morgan');
 const app = express();
 const swaggerUi = require("swagger-ui-express");
@@ -23,6 +22,9 @@ app.use(cors(corsOptions));
 //parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+// app.use(bodyParser.json())
+// app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(express.static('public'));
 
 require('dotenv').config();
@@ -34,11 +36,13 @@ const dogsRouter = require('./routes/dog');
 const detailRouter = require('./routes/detail');
 const pagesRouter = require('./routes/mypage');
 const usersRouter = require('./routes/user');
+const dogstaRouter = require('./routes/dogsta')
 
 app.use('/dogs', dogsRouter);
 app.use('/posts', detailRouter);
 app.use('/users', pagesRouter);
 app.use('/users', usersRouter);
+app.use('/dogsta', dogstaRouter);
 app.get("/",(_,res) => res.render("home"));
 
 const auth = require('./middlewares/auth');
