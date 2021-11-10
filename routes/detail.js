@@ -6,6 +6,9 @@ const { db } = require("../models/index");
 const dotenv = require('dotenv');
 const { ConnectContactLens } = require('aws-sdk');
 dotenv.config();
+// const util = require('util'); //현재시간을 찍어주는 모듈 
+// const { JsonWebTokenError } = require('jsonwebtoken');
+
 
 //산책 약속페이지 등록하기
 router.post('/write', auth, async (req, res) => {
@@ -95,33 +98,39 @@ router.get('/:postId', auth, function (req, res, next) {
 });
 
 
-//메인 조회하기 - 필터!!입니다!!
+//메인 조회하기 - 필터포함!
 router.get('/', function (req, res, next) {
-  
   let conditions = [];
   let where
-
   console.log("get method 연결완료!")
-  const dogSize = "소형견";
-  const dogGender = '남';
-  const {dogAge, locationCategory, completed} = req.body;
+  // const dogSize = "소형견";
+  // const dogGender = '남';
+  const {dogSize, dogGender, dogAge, locationCategory, completed} = req.body;
   console.log(dogSize, dogGender, dogAge, locationCategory, completed)
 
+  //카테고리 필터 
   if(dogSize !== 'undefined'){
     conditions.push(`dogSize = '${dogSize}'`);
   }
-
   if(dogGender !== 'undefined'){
     conditions.push(`dogGender = '${dogGender}'`);
   }
-
+  if(dogAge !== 'undefined'){
+    conditions.push(`dogAge = '${dogAge}'`);
+  }
+  if(locationCategory !== 'undefined'){
+    conditions.push(`locationCategory = '${locationCategory}'`);
+  }
+  if(completed !== 'undefined'){
+    conditions.push(`completed = '${completed}'`);
+  }
   where = conditions.join(' AND ' );
-
   console.log('where', where);
 
-  if (locationCategory == undefined) {
-    console.log(1)
-  } else (console.log(2))
+  //if절 test 추후 삭제 필요
+  // if (locationCategory == undefined) {
+  //   console.log(1)
+  // } else (console.log(2))
   // let {selected_category} =req.body
   // const [filter, subfilter] = selected_category.split("_");
   // console.log(filter) //all 을 했을때 안쓰게 하는 방법!
@@ -144,22 +153,7 @@ router.get('/', function (req, res, next) {
     // AND post.completed = '${completed}'
     // `;
 
-
     // //2번 쿼리
-    // `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
-    // post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  
-    // FROM post
-    // JOIN dog
-    // ON dog.userId=post.userId
-    // WHERE
-    // dog.dogSize = '${dogSize}' OR
-    // dog.dogGender = '${dogGender}' OR
-    // dog.dogAge = '${dogAge}' OR
-    // post.locationCategory = '${locationCategory}' OR
-    // post.completed = '${completed}'
-    // `
-
-    // //3번 쿼리
     // const query = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
     // post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  
     // FROM post
@@ -187,27 +181,16 @@ router.get('/', function (req, res, next) {
     ON dog.userId=post.userId
     WHERE ` + where 
 
-    const query2 = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
-    post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  
-    FROM post
-    JOIN dog
-    ON dog.userId=post.userId
-    WHERE `
+    // const query2 = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
+    // post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  
+    // FROM post
+    // JOIN dog
+    // ON dog.userId=post.userId
+    // WHERE `
 
     console.log('query', typeof query);
-    console.log('query', typeof query2);
+    // console.log('query', typeof query2);
 
-
-        //   when (dogSize != '')
-    //     // then dog.dogSize = '${dogSize}'
-    //   when (dogSize != '' )
-    //     then dog.dogGender = '${dogGender}'
-    //   when (dogAge != '')
-    //     then dog.dogAge = '${dogAge}'
-    //   when (locationCategory != '')
-    //     then post.locationCategory = '${locationCategory}'
-    //   when (completed != '')
-    //     then post.completed = '${completed}'
     console.log('5');
 
     db.query(query, (error, rows) => {
