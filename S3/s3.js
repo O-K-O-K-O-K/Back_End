@@ -1,10 +1,8 @@
 const AWS = require("aws-sdk");
-// AWS.config.loadFromPath(__dirname + '/awsconfig.json');
 const path = require("path");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
-const sharp = require("sharp");
-
+const sharp = require("sharp"); //새로 추가
 // const awsLoadPath = path.join(__dirname, "../S3/awsconfig.json");
 // AWS.config.loadFromPath(awsLoadPath);
 // let s3 = new AWS.S3();
