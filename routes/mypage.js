@@ -108,8 +108,7 @@ router.get("/me", auth, async (req, res) => {
 //   }
 // });
 
-// 내가 쓴 글 조회하기 황유정
-// auth 빼면 어떻게 할건지
+// 내가 쓴 글 조회하기 황유정, auth 뺌
 router.get("/myPage", auth, async (req, res) => {
   console.log("myPage 여기까지 옴");
   const userId = res.locals.user.userId;
