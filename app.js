@@ -34,15 +34,18 @@ require('dotenv').config();
 
 const dogsRouter = require('./routes/dog');
 const detailRouter = require('./routes/detail');
-const pagesRouter = require('./routes/mypage');
+const infoRouter = require('./routes/userInfo');
 const usersRouter = require('./routes/user');
 const dogstaRouter = require('./routes/dogsta')
+const pagesRouter = require('./routes/mypage')
 
 app.use('/dogs', dogsRouter);
 app.use('/posts', detailRouter);
-app.use('/users', pagesRouter);
+app.use('/users', infoRouter);
 app.use('/users', usersRouter);
 app.use('/dogsta', dogstaRouter);
+app.use('/mypage', pagesRouter);
+
 app.get("/",(_,res) => res.render("home"));
 
 const auth = require('./middlewares/auth');
