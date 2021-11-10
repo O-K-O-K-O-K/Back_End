@@ -81,14 +81,21 @@ CREATE TABLE `post` (
 -- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 
-  create table `category`(
-  `categoryId` INT NOT NULL,
-  `dogId` INT NOT NULL,
+CREATE TABLE `chat` (
+  `chatId` int(11) NOT NULL,
   `userId` INT NOT NULL,
-  `postId` INT NOT NULL,
-  PRIMARY KEY(`categoryId`),
-  KEY `categoryId` (`categoryId`),
-  FOREIGN KEY (`dogId`) REFERENCES `dog` (`dogId`) ON UPDATE CASCADE
-  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
-  FOREIGN KEY (`postId`) REFERENCES `post` (`postId`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+  `message` text NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY(`chatId`),
+  KEY `chatId` (`chatId`),
+  FOREIGN KEY (`user.Id`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `conversation` (
+  `conversationId` int(11) NOT NULL,
+  `userId` INT NOT NULL,
+  `theotherId`INT NOT NULL,
+  PRIMARY KEY(`conversationId`),
+  KEY `conversationId` (`conversationId`),
+  FOREIGN KEY (`user.Id`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

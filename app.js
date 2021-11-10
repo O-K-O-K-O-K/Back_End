@@ -34,9 +34,12 @@ const dogsRouter = require('./routes/dog');
 const detailRouter = require('./routes/detail');
 const pagesRouter = require('./routes/mypage');
 const usersRouter = require('./routes/user');
+const chatRouter = require('./routes/chat')
+
 
 app.use('/dogs', dogsRouter);
 app.use('/posts', detailRouter);
+app.use('/posts', chatRouter);
 app.use('/users', pagesRouter);
 app.use('/users', usersRouter);
 

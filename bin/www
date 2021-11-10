@@ -8,12 +8,19 @@
  const debug = require('debug')('clone-coding:server');
  const socketio = require('socket.io');
  const http = require('http');
+ const { db } = require("../models/index");
+//  const cors = require("cors");
+
+//  app.use(cors());
+ 
 
  const {addUser, removeUser, getUser, getUsersInRoom} =require('../users.js');
  const WebSocket = require('ws')
  const server = http.createServer(app);
  const port = normalizePort(process.env.PORT || '3000');
- const router = require('../router')
+ const router = require('../router');
+const { connection } = require('mongoose');
+const { isObject } = require('util');
 //  const socket = new WebSocket(`ws://${window.location.host}`)
  app.set('port', port);
 //  const logger = require('../config/logger');
@@ -22,18 +29,81 @@
 
 const io = socketio(server);
 
-io.on('connection', (socket) => {
-  socket.on('join', ({name,room}, callback) => {
-    const {error,user} = addUser({id:socket.id,name,room});
+//사용자 인증 소켓
+// io.use(function(socket,next) {
+//   console.log(socket.handshake.auth.token) 
+//   next();
+// });
+//연결확인
+// io.on ('connection', function (con) {
+//   console.log(con.id)
 
-    if(error) return callback(error);
+// })
+//대화내용 가져오기
+// const showChat = async () => {
+//   try {
+//     const {room} = req.body // 수정필요! 
+//     const userNickname = res.locals.user.userNickname; //미들웨어 auth 를 지나야함
+//     const query = `SELECT chat.message, chat.room, chat.createdAt, chat.readStatus, user.userNickname
+//     from chat 
+//     join user
+//     on chat.userId = user.userId
+//     WHERE chat.room = ${room}`
+//     db.query(query, (error, rows) => {
+//       if(error) {
+//         console.log(error)
+//         return res.sendStatus(400);
+//       }
+//       res.status(200).json({
+//         success:true,
+//         message: rows, //수정필요
+//       })
+//     })
+//   } catch (err) {
+//     return res.sendStatus(500);
+//   }
+// }
+// const currentOn =[]
+// const currentOnUserInfo =[]
 
-    socket.join(user.room);
-  });
-  socket.on('disconnect', () => {
-    console.log('a user had left')
-  })
-});
+// io.on('connection', (socket) => {
+  
+  // socket.on('join', ({userNickname,room}, callback) => {
+  // const {error,user} = addUser({id:socket.id,userNickname,room});
+  //   if(error) return callback(error);
+
+  //   socket.emit('message', {user: 'admin', text: `${user.name}, welcome to the room ${user.room}`});
+  //   socket.broadcast.to(user.room).emit('message',{user:'amdin', text:`${user.name}, has joined`});
+  //   socket.join(user.room);
+
+  //   io.to(user.room).emit('roomData', {room:user.room, users:getUsersInRoom(user.room)})
+  //   callback();
+  // });
+
+  
+  // socket.on('sendMessage',(message,callback) => {
+  //   const user = getUser(socket.id)
+  //   connection.query("INSERT INTO chat (room,userNickname,message) Values (?,?,?)", [
+  //     user.room, user.name, message //이 부분 수정 필요! (변수 부분!)
+  //   ], function (){
+  //     console.log("데이터가 정상적으로 입력 되었습니다!")
+  //   })
+  //   io.to(user.room).emit('message', {user: user.name,text:message});
+  //   io.to(user.room).emit('message', {room: user.room,users:getUsersInRoom(user.room)});
+  //   callback()
+
+  // })
+  // socket.on('disconnect', () => {
+  //   const user = removeUser(socekt.id);
+  //   if(user) {
+  //     io.to(user.room).emit('message',{user:'admin',text:`${user.name} has left.`})
+  //   }
+  // })
+// });
+//여기까지
+
+
+
 app.use(router);
 
 //   cors:{
