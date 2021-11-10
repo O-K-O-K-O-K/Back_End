@@ -6,9 +6,6 @@ const { db } = require("../models/index");
 const dotenv = require('dotenv');
 const { ConnectContactLens } = require('aws-sdk');
 dotenv.config();
-// const util = require('util'); //현재시간을 찍어주는 모듈 
-// const { JsonWebTokenError } = require('jsonwebtoken');
-
 
 //산책 약속페이지 등록하기
 router.post('/write', auth, async (req, res) => {
