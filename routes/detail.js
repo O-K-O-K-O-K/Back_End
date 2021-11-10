@@ -178,8 +178,8 @@ router.get('/', function (req, res, next) {
     post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  
     FROM post
     JOIN dog
-    ON dog.userId=post.userId
-    WHERE ` + where 
+    ON dog.userId=post.userId`
+    // WHERE ` + where 
 
     // const query2 = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
     // post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  

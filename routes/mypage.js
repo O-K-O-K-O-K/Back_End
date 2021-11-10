@@ -63,15 +63,15 @@ router.get("/me", auth, async (req, res) => {
   }
 });
 
-// 내 정보 수정하기
+// 내 정보 수정하기 version 1
 // router.patch("/me", upload.single("userImage"), auth, async (req, res) => {
 
 //   try {
 //     const userId = res.locals.user.userId;
 //     console.log("req.body:", req.body);
-//     const { userNickname, userGender, userAge, userLocation, userImage} = req.body;
+//     const { userNickname, userGender, userAge, userLocation} = req.body;
 
-//     // const userImage = req.file.location;
+//     const userImage = req.file.location;
 //     const obj = JSON.parse(JSON.stringify(req.body));
 //     console.log("obj: ", obj)
 //     // console.log("이미지 타입:",typeof(userImage));
@@ -164,7 +164,62 @@ router.get("/myPage", auth, async (req, res) => {
 });
 
 
-//내 정보 수정하기 
+// 유저/강아지 정보 조회
+// auth 빼면 어떻게 할건지
+router.get("/myPage", auth, async (req, res) => {
+  console.log("myPage 여기까지 옴");
+  const userId = res.locals.user.userId;
+
+  let exist_post;
+  const post = `SELECT * FROM post WHERE post.userId= "${userId}"`;
+  const results = await db.query(post);
+  exist_post = results[0];
+
+  console.log("existpost:", exist_post);
+
+  //포스트가 없으면
+  if (!exist_post) {
+    //강아지와 유저 정보를 보내준다.
+    const query = `select dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
+    user.userId, user.userNickname, user.userGender, user.userAge, user.userImage, user.userLocation 
+    from dog left join user on dog.userId = user.userId where dog.userId= "${userId}";`;
+
+    await db.query(query, (error, rows) => {
+      if (error) {
+        console.log(error);
+        return res.sendStatus(400);
+      }
+      res.status(200).json({
+        posts: rows,
+      });
+      console.log(rows);
+    });
+  } else {
+    // 강아지, 유저, 유저가 쓴 글을 보내준다
+    const query = `select dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, 
+      dog.neutral, dog.dogComment, dog.dogImage, post.postId, post.meetingDate, post.wishDesc, post.userId,
+      user.userId, user.userNickname, user.userGender, user.userAge, user.userImage, user.userLocation  
+      from post
+      join dog
+      on post.userId = dog.userId
+      join user
+      on user.userId = dog.userId
+      WHERE post.userId = "${userId}";`;
+
+    await db.query(query, (error, rows) => {
+      if (error) {
+        console.log(error);
+        return res.sendStatus(400);
+      }
+      res.status(200).json({
+        posts: rows,
+      });
+      console.log("rows", rows);
+    });
+  }
+});
+
+//내 정보 수정하기 version 2
 router.patch("/me", upload.single("userImage"), auth, async (req, res) => {
   try {
     const userId = res.locals.user.userId;
