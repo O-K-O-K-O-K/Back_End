@@ -53,6 +53,7 @@ app.use("/auth", kakaoRouter);
 app.get("/", (_, res) => res.render("home"));
 
 
+app.get("/",(_,res) => res.render("home"));
 
 //swagger
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
