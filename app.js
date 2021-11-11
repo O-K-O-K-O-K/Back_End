@@ -6,7 +6,6 @@ const express = require('express');
 const app = express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
-
 const path = require('path');
 // const authMiddleware = require("./middlewares/auth");
 // app.use(logger('dev'));
@@ -27,6 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 
 require('dotenv').config();
+
 
 // app.use(compression());
 // app.set('views', path.join(__dirname, 'views'));

@@ -66,10 +66,15 @@ CREATE TABLE `post` (
   ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 
+CREATE TABLE `room` (
+  `roomId` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY(`roomId`),
+  KEY `roomId` (`roomId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-REATE TABLE `chat` (
+CREATE TABLE `chat` (
   `chatId` int(11) NOT NULL AUTO_INCREMENT,
-  `chatBoxId` int(11) NOT NULL,
+  `roomId` int(11) NOT NULL,
   `userNickname` VARCHAR(45) NOT NULL,
   `message` text NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -77,7 +82,7 @@ REATE TABLE `chat` (
   PRIMARY KEY(`chatId`),
   KEY `chatId` (`chatId`),
   KEY `userId` (`userId`),
-  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
+  FOREIGN KEY (`roomId`) REFERENCES `room` (`roomId`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
