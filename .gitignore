@@ -3,3 +3,4 @@
 .vscode
 log
 config
+.DS_store
