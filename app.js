@@ -2,13 +2,12 @@ const createError = require("http-errors");
 const express = require("express");
 // const socketIo = require("socket.io")
 // const authMiddleware = require("./middlewares/auth");
-const logger = require("morgan");
+const morgan = require("morgan");
 const app = express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
-// const path = require("path");
+const path = require("path");
 
-app.use(logger("dev"));
 
 const cors = require("cors");
 const corsOptions = {
@@ -25,6 +24,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
 require("dotenv").config();
+app.use(morgan('dev'));
+
 
 // app.use(compression());
 // app.set('views', path.join(__dirname, 'views'));
