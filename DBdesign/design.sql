@@ -34,16 +34,14 @@ CREATE TABLE `post` (
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `completed` tinyint NOT NULL,
   `locationCategory` varchar(45) NOT NULL,
-  `startLongitude` varchar(45) NOT NULL,
-  `startLatitude` varchar(45) NOT NULL,
+  `coordinate` JSON NOT NULL,
+  `dogCount` varchar(45) NOT NULL,
   `startLocationAddress` varchar(100) NOT NULL,
-  `endLongitude` varchar(45) NOT NULL,
-  `endLatitude` varchar(45) NOT NULL,
-  `endLocationAddress` varchar(100) NOT NULL,
+  `endLocationAddress` varchar(45) NOT NULL,
   `totalDistance` varchar(45) NOT NULL,
-  `dogCount` INT NOT NULL,
-  `startTime` VARCHAR(45) NOT NULL,
-  `endTime` VARCHAR(45) NOT NULL,
+  `totalTime` varchar(100) NOT NULL,
+  `routeColor` varchar(45) NOT NULL,
+  `routeName` INT NOT NULL,
   `userId` INT NOT NULL,
   PRIMARY KEY (`postId`),
   KEY `userId` (`userId`),
@@ -51,6 +49,7 @@ CREATE TABLE `post` (
   FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
   )
   ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
 
 
   CREATE TABLE `dogSta` (
@@ -67,6 +66,21 @@ CREATE TABLE `post` (
   ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 
+
+REATE TABLE `chat` (
+  `chatId` int(11) NOT NULL AUTO_INCREMENT,
+  `chatBoxId` int(11) NOT NULL,
+  `userNickname` VARCHAR(45) NOT NULL,
+  `message` text NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `userId` INT NOT NULL,
+  PRIMARY KEY(`chatId`),
+  KEY `chatId` (`chatId`),
+  KEY `userId` (`userId`),
+  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 --   CREATE TABLE `kakaoUser` (
 --   `kakaoUserId` INT NOT NULL AUTO_INCREMENT,
 --   `userEmail` VARCHAR(45) NOT NULL,
@@ -81,21 +95,3 @@ CREATE TABLE `post` (
 -- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 
-CREATE TABLE `chat` (
-  `chatId` int(11) NOT NULL,
-  `userId` INT NOT NULL,
-  `message` text NOT NULL,
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY(`chatId`),
-  KEY `chatId` (`chatId`),
-  FOREIGN KEY (`user.Id`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `conversation` (
-  `conversationId` int(11) NOT NULL,
-  `userId` INT NOT NULL,
-  `theotherId`INT NOT NULL,
-  PRIMARY KEY(`conversationId`),
-  KEY `conversationId` (`conversationId`),
-  FOREIGN KEY (`user.Id`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;

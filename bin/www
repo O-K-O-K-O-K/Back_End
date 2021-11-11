@@ -8,6 +8,8 @@
  const debug = require('debug')('clone-coding:server');
  const socketio = require('socket.io');
  const http = require('http');
+ const webSocket = require('../socket')
+//  const socket = new webSocket('ws://localhost:3000')
  const { db } = require("../models/index");
 //  const cors = require("cors");
 
@@ -18,7 +20,7 @@
  const WebSocket = require('ws')
  const server = http.createServer(app);
  const port = normalizePort(process.env.PORT || '3000');
- const router = require('../router');
+//  const router = require('../router');
 const { connection } = require('mongoose');
 const { isObject } = require('util');
 //  const socket = new WebSocket(`ws://${window.location.host}`)
@@ -104,7 +106,7 @@ const io = socketio(server);
 
 
 
-app.use(router);
+// app.use(router);
 
 //   cors:{
 //     origin:"*"},
@@ -129,6 +131,7 @@ app.use(router);
  }
  wss.on("connection",handleConnection);
 
+
  /**
   * Listen on provided port, on all network interfaces.
   */
@@ -136,6 +139,7 @@ app.use(router);
  server.listen(port);
  server.on('error', onError);
  server.on('listening', onListening);
+
   
  /**
   * Normalize a port into a number, string, or false.
@@ -192,3 +196,4 @@ app.use(router);
    const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
    debug('Listening on ' + bind);
  }
+

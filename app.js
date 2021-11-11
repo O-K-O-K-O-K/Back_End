@@ -6,6 +6,7 @@ const express = require('express');
 const app = express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
+
 const path = require('path');
 // const authMiddleware = require("./middlewares/auth");
 // app.use(logger('dev'));
@@ -34,12 +35,12 @@ const dogsRouter = require('./routes/dog');
 const detailRouter = require('./routes/detail');
 const pagesRouter = require('./routes/mypage');
 const usersRouter = require('./routes/user');
-const chatRouter = require('./routes/chat')
+const chatRouter = require('./routes/chat');
 
 
 app.use('/dogs', dogsRouter);
 app.use('/posts', detailRouter);
-app.use('/posts', chatRouter);
+app.use('/', chatRouter);
 app.use('/users', pagesRouter);
 app.use('/users', usersRouter);
 

@@ -16,26 +16,24 @@ router.post('/write', auth, async (req, res) => {
   const completed = false;
   const userId = res.locals.user.userId;
   try {
-    const {meetingDate,wishDesc,locationCategory, dogCount,startTime,endTime,startLongitude,startLatitude,startLocationAddress,endLongitude,endLatitude,endLocationAddress,totalDistance} = req.body;
+    const {meetingDate,wishDesc,locationCategory, coordinate, dogCount,totalTime,startLocationAddress,endLocationAddress,totalDistance,routeColor,routeName} = req.body;
     const params= [
       meetingDate,
       wishDesc,
       completed,
       locationCategory,
       dogCount,
-      startTime,
-      endTime,
-      startLongitude,
-      startLatitude,
+      totalTime,
       startLocationAddress,
-      endLongitude,
-      endLatitude,
       endLocationAddress,
       totalDistance,
-      userId
+      routeColor,
+      routeName,
+      userId,
+      coordinate,
     ];  
     const query =
-    'INSERT INTO post (meetingDate,wishDesc,completed,locationCategory,dogCount,startTime,endTime,startLongitude,startLatitude,startLocationAddress,endLongitude,endLatitude,endLocationAddress,totalDistance,userId) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    'INSERT INTO post (meetingDate,wishDesc,completed,locationCategory,dogCount,totalTime,startLocationAddress,endLocationAddress,totalDistance,routeColor,routeName, userId,coordinate) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,json_object(?))';
       await db.query(query, params, (error, rows, fields) => {
         console.log("row는",rows)
         if (error) {
@@ -65,12 +63,12 @@ router.post('/write', auth, async (req, res) => {
 //산책 약속 상세 조회하기
 router.get('/:postId', auth, function (req, res, next) {
   const {postId} = req.params;
-  const userId = res.locals.user.userId;
+  // const userId = res.locals.user.userId;
   console.log("get method 연결완료!")
   try {
     const query = 
     `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage,
-    post.userId, post.postId, post.meetingDate, post.wishDesc, post.locationCategory, post.dogCount, post.createdAt, post.completed, post.startTime, post.endTime, post.startLongitude, post.startLatitude, post.startLocationAddress, post.endLongitude, post.endLatitude, post.endLocationAddress, post.totalDistance, 
+    post.userId, post.postId, post.meetingDate, post.wishDesc, post.locationCategory, post.dogCount, post.createdAt, post.completed, post.totalTime, post.startLocationAddress, post.endLocationAddress, post.totalDistance, post.routeColor, post.routeName,coordinate,
     user.userNickname, user.userGender, user.userAge, user.userImage,user.userId
     from post
     join dog
@@ -79,6 +77,7 @@ router.get('/:postId', auth, function (req, res, next) {
     on user.userId = dog.userId
     WHERE post.postId =${postId}`;
     db.query(query, (error, rows) => {
+      console.log("들어가니",rows)
       if (error) {
         console.log(error)
         // logger.error('게시글 조회 중 발생한 DB관련 에러', error);
@@ -87,9 +86,9 @@ router.get('/:postId', auth, function (req, res, next) {
       // logger.info('게시글을 성공적으로 조회했습니다.');
       res.status(200).json({
         success: true,
-        posts: rows[0],
+        posts: rows,
       });
-      console.log("rows는", rows[0])
+      console.log("rows는", rows)
     });
   } catch (err) {
     // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
@@ -109,23 +108,23 @@ router.get('/', function (req, res, next) {
   console.log(dogSize, dogGender, dogAge, locationCategory, completed)
 
   //카테고리 필터 
-  if(dogSize !== 'undefined'){
-    conditions.push(`dogSize = '${dogSize}'`);
-  }
-  if(dogGender !== 'undefined'){
-    conditions.push(`dogGender = '${dogGender}'`);
-  }
-  if(dogAge !== 'undefined'){
-    conditions.push(`dogAge = '${dogAge}'`);
-  }
-  if(locationCategory !== 'undefined'){
-    conditions.push(`locationCategory = '${locationCategory}'`);
-  }
-  if(completed !== 'undefined'){
-    conditions.push(`completed = '${completed}'`);
-  }
-  where = conditions.join(' AND ' );
-  console.log('where', where);
+  // if(dogSize !== 'undefined'){
+  //   conditions.push(`dogSize = '${dogSize}'`);
+  // }
+  // if(dogGender !== 'undefined'){
+  //   conditions.push(`dogGender = '${dogGender}'`);
+  // }
+  // if(dogAge !== 'undefined'){
+  //   conditions.push(`dogAge = '${dogAge}'`);
+  // }
+  // if(locationCategory !== 'undefined'){
+  //   conditions.push(`locationCategory = '${locationCategory}'`);
+  // }
+  // if(completed !== 'undefined'){
+  //   conditions.push(`completed = '${completed}'`);
+  // }
+  // where = conditions.join(' AND ' );
+  // console.log('where', where);
 
   //if절 test 추후 삭제 필요
   // if (locationCategory == undefined) {
@@ -174,12 +173,18 @@ router.get('/', function (req, res, next) {
     // END)
     // `
 
+    // const query = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
+    // post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  
+    // FROM post
+    // JOIN dog
+    // ON dog.userId=post.userId
+    // // WHERE ` + where  // 라우터 2개 만들기!
+
     const query = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
     post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  
     FROM post
     JOIN dog
-    ON dog.userId=post.userId
-    WHERE ` + where 
+    ON dog.userId=post.userId` 
 
     // const query2 = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
     // post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  
@@ -220,22 +225,22 @@ router.get('/', function (req, res, next) {
 router.patch('/:postId',auth, async (req, res) => {
   const postId = req.params.postId;
   const userId = res.locals.user.userId;
-  const { locationCategory, meetingDate, wishDesc, dogCount, startLongitude, startLatitude, endLongitude, endLatitude,startLocationAddress,endLocationAddress,completed,totalDistance,startTime,endTime} = req.body;
+  const {locationCategory, meetingDate, wishDesc, dogCount,startLocationAddress,endLocationAddress,completed,totalDistance,totalTime,routeColor,routeName,coordinate} = req.body;
   const escapeQuery = {
     locationCategory: locationCategory,
     meetingDate: meetingDate,
     wishDesc: wishDesc,
-    startLongitude:startLongitude,
-    startLatitude:startLatitude,
-    startLocationAddress:startLocationAddress,
-    endLongitude:endLongitude,
-    endLatitude:endLatitude,
-    endLocationAddress:endLocationAddress,
     dogCount:dogCount,
-    totalDistance:totalDistance,
-    startTime:startTime,
-    endTime:endTime,
+    startLocationAddress:startLocationAddress,
+    endLocationAddress:endLocationAddress,
     completed:completed,
+    totalDistance:totalDistance,
+    totoalTime:totalTime,
+    totalDistance:totalDistance,
+    routeColor:routeColor,
+    routeName:routeName,
+    coordinate:coordinate
+
   };
   const query = `UPDATE post SET ? WHERE postId = ${postId} and userId = '${userId}'`;
   await db.query(query, escapeQuery, (error, rows, fields) => {
