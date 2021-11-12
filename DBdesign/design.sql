@@ -1,6 +1,5 @@
 CREATE TABLE `user` (
   `userId` INT NOT NULL AUTO_INCREMENT,
-  `kakaoId` INT NOT NULL AUTO_INCREMENT,
   `userEmail` VARCHAR(45) NOT NULL,
   `password` varchar(255) NOT NULL,
   `userNickname` VARCHAR(45) NOT NULL,

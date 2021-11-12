@@ -50,9 +50,6 @@ app.use("/dogsta", dogstaRouter);
 app.use("/mypage", pagesRouter);
 app.use("/auth", kakaoRouter);
 
-app.get("/", (_, res) => res.render("home"));
-
-
 app.get("/",(_,res) => res.render("home"));
 
 //swagger
