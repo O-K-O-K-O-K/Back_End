@@ -224,6 +224,7 @@ router.patch("/me", upload.single("userImage"), auth, async (req, res) => {
       if (err) {
         return res.status(400).json({
           success: false,
+          msg: "user 정보 수정 실패",
         });
       }
       return res.status(200).json({
