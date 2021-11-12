@@ -23,6 +23,7 @@
   "consumes": [],
   "produces": [],
   "paths": {
+    
     "/users/signUp": {
       "post": {
         "tags": [
