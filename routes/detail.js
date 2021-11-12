@@ -234,12 +234,11 @@ router.patch('/:postId',auth, async (req, res) => {
     endLocationAddress:endLocationAddress,
     completed:completed,
     totalDistance:totalDistance,
-    totoalTime:totalTime,
+    totalTime:totalTime,
     totalDistance:totalDistance,
     routeColor:routeColor,
     routeName:routeName,
     // coordinate:coordinate
-
   };
   const query = `UPDATE post SET ? WHERE postId = ${postId} and userId = '${userId}'`;
   await db.query(query, escapeQuery, (error, rows, fields) => {

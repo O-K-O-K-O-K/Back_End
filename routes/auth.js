@@ -23,28 +23,39 @@ passport.use(
       const provider = profile.provider;
       const userGender = profile["_json"].kakao_account.gender;
 
-      //카카오 유저에 defalt 값으로 age, userImage , location 적어놓고 새로운 api를 통해서 수정
-      console.log(userEmail,userNickname, provider,userImage,userGender);
-      
-      
-    //   if (!user)
+      //default 값
+      const userAge = "20대",
+      const userImage = "https://doggy-project-bucket.s3.ap-northeast-2.amazonaws.com/4a3dddfd9c7458c1c824bf5e6f7d1528",
+      const userLocation = "서울시 성동구 서울숲"
 
-    //   const [userEmail, userNickname, provider, userImage]  = req.body;
-    //   const userParams = [
-    //       userEmail,
-    //       userNickname,
-    //       provider,
-    //       userImage,];
-    //   const post = `INSERT INTO kakao (userEmail, provider , userNickname, userGender, userImage) VALUES (?, ?, ? , ?, ?);`;
-    //   await db.query(post, userParams, (error, results, fields) => {
-    //     if (error) {
-    //       res.status(401).send(error);
-    //       console.log(error);
-    //     } else {
-    //       console.log("누군가가 카카오회원가입을 했습니다.");
-    //       res.send({ results: "완료" });
-    //     }
-    //   });
+      //카카오 유저에 defalt 값으로 age, userImage , location 적어놓고 새로운 api를 통해서 수정
+      console.log(userEmail,userNickname, provider,userImage,userGender, userAge, userImage, userLocation);
+      
+
+      //const { userEmail, userNickname, provider, userGender } = req.body;
+      const userParams = [
+        userEmail, 
+        userNickname, 
+        provider, 
+        userGender,
+        userImage, 
+        userAge, 
+        userLocation
+        ];
+      const post = `INSERT INTO user (userEmail, provider, userNickname, userGender, userImage, userAge, userLocation) VALUES (?,?,?,?,?,?,?);`;
+
+      await db.query(post, (error, results, fields) => {
+        if (error) {
+           return res.status(400).json({
+                success: false,
+              });
+        } else {
+          console.log("누군가가 카카오회원가입을 했습니다.");
+          return res.status(200).json({
+            success: true,
+          });
+        }
+      });
     }
   )
 );
