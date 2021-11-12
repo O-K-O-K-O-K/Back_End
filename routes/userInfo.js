@@ -51,49 +51,49 @@ router.get("/me", auth, async (req, res) => {
 });
 
 // 내 정보 수정하기 version 1
-// router.patch("/me", upload.single("userImage"), auth, async (req, res) => {
+router.patch("/me", upload.single("userImage"), auth, async (req, res) => {
 
-//   try {
-//     const userId = res.locals.user.userId;
-//     console.log("req.body:", req.body);
-//     const { userNickname, userGender, userAge, userLocation} = req.body;
+  try {
+    const userId = res.locals.user.userId;
+    console.log("req.body:", req.body);
+    const { userNickname, userGender, userAge, userLocation} = req.body;
 
-//     const userImage = req.file.location;
-//     const obj = JSON.parse(JSON.stringify(req.body));
-//     console.log("obj: ", obj)
-//     // console.log("이미지 타입:",typeof(userImage));
+    const userImage = req.file.location;
+    const obj = JSON.parse(JSON.stringify(req.body));
+    console.log("obj: ", obj)
+    // console.log("이미지 타입:",typeof(userImage));
 
-//     const escapeQuery = {
-//       userNickname: userNickname,
-//       userGender: userGender,
-//       userAge: userAge,
-//       userLocation: userLocation,
-//       userImage: userImage,
-//     };
+    const escapeQuery = {
+      userNickname: userNickname,
+      userGender: userGender,
+      userAge: userAge,
+      userLocation: userLocation,
+      userImage: userImage,
+    };
 
-//     console.log("여기: ", escapeQuery);
+    console.log("여기: ", escapeQuery);
 
-//     const userQuery = `UPDATE user SET ? WHERE user.userId = '${userId}'`;
+    const userQuery = `UPDATE user SET ? WHERE user.userId = '${userId}'`;
 
-//     await db.query(userQuery, escapeQuery, async (err, user) => {
-//       if (err) {
-//         return res.status(400).json({
-//           success: false,
-//         });
-//       }
-//       return res.status(200).json({
-//         success: true,
-//         msg: "user 정보 수정 성공!",
-//         user,
-//       });
-//     });
-//   } catch (err) {
-//     res.status(500).json({
-//       success: false,
-//       msg: "로그인 하세요"
-//     });
-//   }
-// });
+    await db.query(userQuery, escapeQuery, async (err, user) => {
+      if (err) {
+        return res.status(400).json({
+          success: false,
+        });
+      }
+      return res.status(200).json({
+        success: true,
+        msg: "user 정보 수정 성공!",
+        user,
+      });
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      msg: "로그인 하세요"
+    });
+  }
+});
 
 //내 정보 수정하기 version 2
 // router.patch("/me", upload.single("userImage"), auth, async (req, res) => {
@@ -193,53 +193,53 @@ router.get("/me", auth, async (req, res) => {
 
 
 // 내 정보 수정하기, version3, using Lodash_pickBy() Method
-router.patch("/me", upload.single("userImage"), auth, async (req, res) => {
-  try {
-    const userId = res.locals.user.userId;
-    console.log("req.body:", req.body);
-    const { userNickname, userGender, userAge, userLocation } = req.body;
+// router.patch("/me", upload.single("userImage"), auth, async (req, res) => {
+//   try {
+//     const userId = res.locals.user.userId;
+//     console.log("req.body:", req.body);
+//     const { userNickname, userGender, userAge, userLocation } = req.body;
 
-    // const userImage = req.file.location;
-    // console.log("userImage: ",userImage)
+//     // const userImage = req.file.location;
+//     // console.log("userImage: ",userImage)
 
-    const obj = {
-      userImage: req.file.location
-    }
+//     const obj = {
+//       userImage: req.file.location
+//     }
 
-    console.log("여기:", _.pickBy(obj))
+//     console.log("여기:", _.pickBy(obj))
 
-    const escapeQuery = {
-      userNickname: userNickname,
-      userGender: userGender,
-      userAge: userAge,
-      userLocation: userLocation,
-      userImage: obj,
-    };
+//     const escapeQuery = {
+//       userNickname: userNickname,
+//       userGender: userGender,
+//       userAge: userAge,
+//       userLocation: userLocation,
+//       userImage: obj,
+//     };
 
-    console.log("여기: ", escapeQuery);
+//     console.log("여기: ", escapeQuery);
 
-    const userQuery = `UPDATE user SET ? WHERE user.userId = '${userId}'`;
+//     const userQuery = `UPDATE user SET ? WHERE user.userId = '${userId}'`;
 
-    await db.query(userQuery, escapeQuery, async (err, user) => {
-      if (err) {
-        return res.status(400).json({
-          success: false,
-          msg: "user 정보 수정 실패",
-        });
-      }
-      return res.status(200).json({
-        success: true,
-        msg: "user 정보 수정 성공!",
-        user,
-      });
-    });
-  } catch (err) {
-    res.status(500).json({
-      success: false,
-      msg: "로그인 하세요"
-    });
-  }
-});
+//     await db.query(userQuery, escapeQuery, async (err, user) => {
+//       if (err) {
+//         return res.status(400).json({
+//           success: false,
+//           msg: "user 정보 수정 실패",
+//         });
+//       }
+//       return res.status(200).json({
+//         success: true,
+//         msg: "user 정보 수정 성공!",
+//         user,
+//       });
+//     });
+//   } catch (err) {
+//     res.status(500).json({
+//       success: false,
+//       msg: "로그인 하세요"
+//     });
+//   }
+// });
 
 
 module.exports = router;
