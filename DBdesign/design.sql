@@ -30,7 +30,7 @@ create table `dog`(
 
 CREATE TABLE `post` (
   `postId` INT NOT NULL AUTO_INCREMENT,
-  `meetingDate` DATE NOT NULL,
+  `meetingDate` varchar(45) NOT NULL,
   `wishDesc` TEXT NOT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `completed` tinyint NOT NULL,

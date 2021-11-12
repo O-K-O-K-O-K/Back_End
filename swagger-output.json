@@ -105,7 +105,9 @@
     },
     "/users/checkDup": {
       "post": {
-        "tags": ["USERS"],
+        "tags": [
+          "USERS"
+        ],
         "description": "이메일 중복검사",
         "parameters": [
           {
@@ -122,7 +124,7 @@
           }
         ],
         "responses": {
-          "200":{
+          "200": {
             "description": "사용 가능한 EMAIL입니다."
           },
           "400": {
@@ -161,7 +163,6 @@
         }
       }
     },
-
     "/users/me": {
       "get": {
         "description": "로그인 한 유저의 정보를 조회하는 API",
@@ -247,7 +248,6 @@
         }
       }
     },
-
     "/users/dogExist": {
       "get": {
         "description": "강아지 등록 여부 API",
@@ -272,7 +272,6 @@
         }
       }
     },
-
     "/dogs/dogInfo": {
       "post": {
         "description": "로그인 한 유저가 강아지를 등록하는 API",
@@ -454,7 +453,284 @@
         }
       }
     },
-
+    "/posts/write": {
+      "post": {
+        "description": "산책 약속 등록하는 API",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Detail"
+        ],
+        "name": "산책 약속 등록",
+        "summary": "산책 약속 등록.",
+        "parameters": [
+          {
+            "name": "req.body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "meetingDate": {
+                  "type": "String",
+                  "description": "약속날짜, 시간"
+                },
+                "wishDesc": {
+                  "type": "String",
+                  "description": "코멘트"
+                },
+                "locationCategory": {
+                  "type": "String",
+                  "description": "장소카테고리"
+                },
+                "dogCount": {
+                  "type": "Number",
+                  "description": "산책할 강아지 수"
+                },
+                "TotalTime": {
+                  "type": "String",
+                  "description": "산책 시간"
+                },
+                "startLocationAddress": {
+                  "type": "String",
+                  "description": "산책 시작 장소 "
+                },
+                "endLocationAddress": {
+                  "type": "String",
+                  "description": "산책 종료 장소 "
+                },
+                "totalDistance": {
+                  "type": "String",
+                  "description": "총 산책 길이 "
+                },
+                "routeColor": {
+                  "type": "String",
+                  "description": "산책 종료 장소 "
+                },
+                "routeName": {
+                  "type": "String",
+                  "description": "산책 경로 이름 "
+                }
+              },
+              "example": {
+                "meetingDate": "2021-12-20T18:05:00.000Z",
+                "wishDesc": "소형견 산책 가능",
+                "locationCategory": "올림픽 공원",
+                "dogCount": 2,
+                "totalTime": "2시간",
+                "startLocationAddress": "서울 성동구1동",
+                "endLocationAddress": "서울 성동구1동",
+                "totalDistance": "2km",
+                "routeColor": "green",
+                "routeName": "1"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "게시글이 성공적으로 포스팅 되었습니다!"
+          },
+          "400": {
+            "description": "400 에러 게시중 오류가 발생 하였습니다!"
+          },
+          "500": {
+            "description": "500 에러 게시중 오류가 발생 하였습니다!."
+          }
+        }
+      }
+    },
+    "/posts/{postId}": {
+      "get": {
+        "description": "산책약속 상세 조회하기",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Detail"
+        ],
+        "name": "산책 약속 상세 조회하기",
+        "summary": "산책 약속 상세 조회하기",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "description": "상세조회"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success: true"
+          },
+          "400": {
+            "description": "success: false"
+          },
+          "500": {
+            "description": "로그인이 필요합니다."
+          }
+        }
+      },
+      "patch": {
+        "description": "로그인한 유저의 산책약속을 수정하는 API",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Detail"
+        ],
+        "name": "로그인한 유저의 산책 약속 수정",
+        "summary": "로그인한 유저의 산책 약속 수정",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "description": "해당 게시글 고유 아이디"
+          },
+          {
+            "name": "req.body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "meetingDate": {
+                  "type": "String",
+                  "description": "약속날짜, 시간"
+                },
+                "wishDesc": {
+                  "type": "String",
+                  "description": "코멘트"
+                },
+                "locationCategory": {
+                  "type": "String",
+                  "description": "장소카테고리"
+                },
+                "dogCount": {
+                  "type": "Number",
+                  "description": "산책할 강아지 수"
+                },
+                "totalTime": {
+                  "type": "String",
+                  "description": "산책 시간"
+                },
+                "startLocationAddress": {
+                  "type": "String",
+                  "description": "산책 시작 장소 "
+                },
+                "endLocationAddress": {
+                  "type": "String",
+                  "description": "산책 종료 장소 "
+                },
+                "totalDistance": {
+                  "type": "String",
+                  "description": "총 산책 길이 "
+                },
+                "routeColor": {
+                  "type": "String",
+                  "description": "산책 종료 장소 "
+                },
+                "routeName": {
+                  "type": "String",
+                  "description": "산책 경로 이름 "
+                },
+                "completed": {
+                  "type": "Boolean",
+                  "description": "산책 경로 이름 "
+                }
+              },
+              "example": {
+                "meetingDate": "2021-12-20T18:05:00.000Z",
+                "wishDesc": "소형견 산책 가능",
+                "locationCategory": "올림픽 공원",
+                "dogCount": 2,
+                "totalTime": "2시간",
+                "startLocationAddress": "서울 성동구1동",
+                "endLocationAddress": "서울 성동구1동",
+                "totalDistance": "2km",
+                "routeColor": "green",
+                "routeName": "1",
+                "completed": 1
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "게시글을 성공적으로 수정하였습니다."
+          },
+          "400": {
+            "description": "게시글 수정 중 발생한 DB관련 에러가 발생 하였습니다"
+          },
+          "500": {
+            "description": "500 에러 게시중 오류가 발생 하였습니다!."
+          }
+        }
+      },
+      "delete": {
+        "description": "로그인한 유저가 작성한 게시글 삭제 하기",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Detail"
+        ],
+        "name": "로그인한 유저가 작성한 게시글 삭제 하기",
+        "summary": "로그인한 유저가 작성한 게시글 삭제 하기",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "default": 1,
+            "description": "해당 게시글 고유 아이디"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "게시글을 성공적으로 수정하였습니다."
+          },
+          "400": {
+            "description": "게시글 수정 중 발생한 DB관련 에러가 발생 하였습니다"
+          },
+          "500": {
+            "description": "500 에러 게시중 오류가 발생 하였습니다!."
+          }
+        }
+      }
+    },
+    "/posts/": {
+      "get": {
+        "description": "산책 약속 조회하는 API",
+        "tags": [
+          "Detail"
+        ],
+        "name": "산책 약속 전체 조회하기",
+        "summary": "산책 약속 전체 조회하기",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "게시글이 성공적으로 포스팅 되었습니다!"
+          },
+          "400": {
+            "description": "400 에러 게시중 오류가 발생 하였습니다!"
+          },
+          "500": {
+            "description": "500 에러 게시중 오류가 발생 하였습니다!."
+          }
+        }
+      }
+    },
     "/mypage/myPost/{userId}": {
       "get": {
         "description": "마이페이지에서 내가 쓴 글 조회하기 API",
@@ -481,7 +757,6 @@
         }
       }
     },
-  
     "/mypage/myInfo/{userId}": {
       "get": {
         "description": "마이페이지에서 유저/강아지 정보 조회 API",
@@ -508,7 +783,6 @@
         }
       }
     },
-
     "/dogsta/write": {
       "post": {
         "description": "로그인 한 유저가 개스타그램 글을 등록하는 API",
@@ -709,6 +983,5 @@
       }
     }
   },
-
   "definitions": {}
 }

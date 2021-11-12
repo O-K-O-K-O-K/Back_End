@@ -176,15 +176,8 @@ router.delete("/:dogPostId", auth, async (req, res) => {
   const userId = res.locals.user.userId;
   const { dogPostId } = req.params;
 
-  let userExist;
-  const findUser = `SELECT * FROM dogSta where dogSta.userId = '${userId}'`;
-  const results = await db.query(findUser);
-  userExist = results[0];
-
-  console.log(userExist)
-
-  if (userExist) {
-    const query = `DELETE from dogSta where dogSta.dogPostId = '${dogPostId}' and dogSta.userId = '${userId}'`;
+  const query = `DELETE from dogSta where dogSta.dogPostId = '${dogPostId}' and dogSta.userId = '${userId}'`;
+  try {
     await db.query(query, (error, rows, fields) => {
       if (error) {
         return res.status(400).json({
@@ -192,16 +185,17 @@ router.delete("/:dogPostId", auth, async (req, res) => {
         });
       }
       return res.status(200).json({
-        success: true
+        success: true,
       });
     });
-  } else {
-    res.status(500).json({
-      success: false,
-      msg: "로그인 하세요",
+  } catch (err) {
+     res.status(500).json({ 
+        success: false,
+        msg: "로그인 하세요" 
     });
   }
 });
+
 
 // 개스타그램 메인 조회하기
 router.get("/", async (req, res) => {
