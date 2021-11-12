@@ -28,23 +28,21 @@ create table `dog`(
   FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
+
 CREATE TABLE `post` (
   `postId` INT NOT NULL AUTO_INCREMENT,
-  `meetingDate` varchar(50) NOT NULL,
+  `meetingDate` varchar(45) NOT NULL,
   `wishDesc` TEXT NOT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `completed` tinyint NOT NULL,
   `locationCategory` varchar(45) NOT NULL,
-  `startLongitude` varchar(45) NOT NULL,
-  `startLatitude` varchar(45) NOT NULL,
-  `startLocationAddress` varchar(100) NOT NULL,
-  `endLongitude` varchar(45) NOT NULL,
-  `endLatitude` varchar(45) NOT NULL,
-  `endLocationAddress` varchar(100) NOT NULL,
-  `totalDistance` varchar(45) NOT NULL,
   `dogCount` INT NOT NULL,
-  `startTime` VARCHAR(45) NOT NULL,
-  `endTime` VARCHAR(45) NOT NULL,
+  `startLocationAddress` varchar(100) NOT NULL,
+  `endLocationAddress` varchar(45) NOT NULL,
+  `totalDistance` varchar(45) NOT NULL,
+  `totalTime` varchar(100) NOT NULL,
+  `routeColor` varchar(45) NOT NULL,
+  `routeName` varchar(45) NOT NULL,
   `userId` INT NOT NULL,
   PRIMARY KEY (`postId`),
   KEY `userId` (`userId`),
@@ -68,28 +66,10 @@ CREATE TABLE `post` (
   ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 
---   CREATE TABLE `kakaoUser` (
---   `kakaoUserId` INT NOT NULL AUTO_INCREMENT,
---   `userEmail` VARCHAR(45) NOT NULL,
---   `password` varchar(255) NOT NULL,
---   `userNickname` VARCHAR(45) NOT NULL,
---   `userGender` VARCHAR(45) NOT NULL,
---   `userAge` VARCHAR(45) NOT NULL,
---   `userImage` TEXT NOT NULL,
---   `userLocation` varchar(45) NOT NULL,
---   PRIMARY KEY (`userId`),
---   KEY `userId` (`userId`)
--- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
-
-
-  create table `category`(
-  `categoryId` INT NOT NULL,
-  `dogId` INT NOT NULL,
-  `userId` INT NOT NULL,
-  `postId` INT NOT NULL,
-  PRIMARY KEY(`categoryId`),
-  KEY `categoryId` (`categoryId`),
-  FOREIGN KEY (`dogId`) REFERENCES `dog` (`dogId`) ON UPDATE CASCADE
-  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
-  FOREIGN KEY (`postId`) REFERENCES `post` (`postId`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+CREATE TABLE `location` (
+  `locationId` INT NOT NULL AUTO_INCREMENT,
+  `route` JSON NOT NULL,
+  PRIMARY KEY (`locationId`),
+  KEY `locationId` (`locationId`)
+  )
+  ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4

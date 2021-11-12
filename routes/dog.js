@@ -107,6 +107,7 @@ router.get("/", auth, async (req, res) => {
 
 // 강아지 정보 수정하기
 router.patch('/', upload.single("dogImage"), auth, async (req, res) => {
+  console.log("수정하기")
   const userId =  res.locals.user.userId;
 
   console.log("reqbody:", req.body)
