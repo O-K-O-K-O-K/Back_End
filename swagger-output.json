@@ -272,7 +272,6 @@
         }
       }
     },
-    
     "/dogs/dogInfo": {
       "post": {
         "description": "로그인 한 유저가 강아지를 등록하는 API",
