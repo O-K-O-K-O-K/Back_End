@@ -1,5 +1,4 @@
 const express = require('express');
-const multer = require('multer')
 const router = express.Router();
 const auth = require('../middlewares/auth'); 
 const { db } = require("../models/index");
@@ -13,10 +12,11 @@ dotenv.config();
 //산책 약속페이지 등록하기
 router.post('/write', auth, async (req, res) => {
   console.log("write post 연결완료!")
-  const completed = false;
+  const completed = 0;
   const userId = res.locals.user.userId;
   try {
-    const {meetingDate,wishDesc,locationCategory, coordinate, dogCount,totalTime,startLocationAddress,endLocationAddress,totalDistance,routeColor,routeName} = req.body;
+    const {meetingDate,wishDesc,locationCategory, dogCount,totalTime,startLocationAddress,endLocationAddress,totalDistance,routeColor,routeName} = req.body;
+    console.log(meetingDate)
     const params= [
       meetingDate,
       wishDesc,
@@ -30,10 +30,9 @@ router.post('/write', auth, async (req, res) => {
       routeColor,
       routeName,
       userId,
-      coordinate,
     ];  
     const query =
-    'INSERT INTO post (meetingDate,wishDesc,completed,locationCategory,dogCount,totalTime,startLocationAddress,endLocationAddress,totalDistance,routeColor,routeName, userId,coordinate) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,json_object(?))';
+    'INSERT INTO post (meetingDate,wishDesc,completed,locationCategory,dogCount,totalTime,startLocationAddress,endLocationAddress,totalDistance,routeColor,routeName, userId) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)';
       await db.query(query, params, (error, rows, fields) => {
         console.log("row는",rows)
         if (error) {
@@ -68,7 +67,7 @@ router.get('/:postId', auth, function (req, res, next) {
   try {
     const query = 
     `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage,
-    post.userId, post.postId, post.meetingDate, post.wishDesc, post.locationCategory, post.dogCount, post.createdAt, post.completed, post.totalTime, post.startLocationAddress, post.endLocationAddress, post.totalDistance, post.routeColor, post.routeName,coordinate,
+    post.userId, post.postId, post.meetingDate, post.wishDesc, post.locationCategory, post.dogCount, post.createdAt, post.completed, post.totalTime, post.startLocationAddress, post.endLocationAddress, post.totalDistance, post.routeColor, post.routeName,
     user.userNickname, user.userGender, user.userAge, user.userImage,user.userId
     from post
     join dog
@@ -97,115 +96,82 @@ router.get('/:postId', auth, function (req, res, next) {
 });
 
 
-//메인 조회하기 - 필터포함!
+//메인 조회하기 - 필터 미포함 
 router.get('/', function (req, res, next) {
   let conditions = [];
   let where
   console.log("get method 연결완료!")
-  // const dogSize = "소형견";
-  // const dogGender = '남';
   const {dogSize, dogGender, dogAge, locationCategory, completed} = req.body;
   console.log(dogSize, dogGender, dogAge, locationCategory, completed)
-
-  //카테고리 필터 
-  // if(dogSize !== 'undefined'){
-  //   conditions.push(`dogSize = '${dogSize}'`);
-  // }
-  // if(dogGender !== 'undefined'){
-  //   conditions.push(`dogGender = '${dogGender}'`);
-  // }
-  // if(dogAge !== 'undefined'){
-  //   conditions.push(`dogAge = '${dogAge}'`);
-  // }
-  // if(locationCategory !== 'undefined'){
-  //   conditions.push(`locationCategory = '${locationCategory}'`);
-  // }
-  // if(completed !== 'undefined'){
-  //   conditions.push(`completed = '${completed}'`);
-  // }
-  // where = conditions.join(' AND ' );
-  // console.log('where', where);
-
-  //if절 test 추후 삭제 필요
-  // if (locationCategory == undefined) {
-  //   console.log(1)
-  // } else (console.log(2))
-  // let {selected_category} =req.body
-  // const [filter, subfilter] = selected_category.split("_");
-  // console.log(filter) //all 을 했을때 안쓰게 하는 방법!
-
-  console.log(3)
   try {
-    console.log(4)
-    //1) 1번 쿼리
-    // const query = 
-    // `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
-    // post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  
-    // FROM post
-    // JOIN dog
-    // ON dog.userId=post.userId
-    // WHERE 1
-    // AND dog.dogSize = '${dogSize}' 
-    // AND dog.dogGender = '${dogGender}'
-    // AND dog.dogAge = '${dogAge}'
-    // AND post.locationCategory = '${locationCategory}'
-    // AND post.completed = '${completed}'
-    // `;
-
-    // //2번 쿼리
-    // const query = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
-    // post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  
-    // FROM post
-    // JOIN dog
-    // ON dog.userId=post.userId
-    // WHERE
-    // (CASE
-    //   when (dogSize != '')
-    //     // then dog.dogSize = '${dogSize}'
-    //   when (dogSize != '' )
-    //     then dog.dogGender = '${dogGender}'
-    //   when (dogAge != '')
-    //     then dog.dogAge = '${dogAge}'
-    //   when (locationCategory != '')
-    //     then post.locationCategory = '${locationCategory}'
-    //   when (completed != '')
-    //     then post.completed = '${completed}'
-    // END)
-    // `
-
-    // const query = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
-    // post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  
-    // FROM post
-    // JOIN dog
-    // ON dog.userId=post.userId
-    // // WHERE ` + where  // 라우터 2개 만들기!
 
     const query = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
     post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  
     FROM post
     JOIN dog
     ON dog.userId=post.userId` 
-
-    // const query2 = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
-    // post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  
-    // FROM post
-    // JOIN dog
-    // ON dog.userId=post.userId
-    // WHERE `
-
     console.log('query', typeof query);
-    // console.log('query', typeof query2);
-
-    console.log('5');
 
     db.query(query, (error, rows) => {
-      console.log('6');
       if (error) {
         console.log(error)
         // logger.error('게시글 조회 중 발생한 DB관련 에러', error);
         return res.sendStatus(400);
       }
+      // logger.info('게시글을 성공적으로 조회했습니다.');
+      res.status(200).json({
+        success: true,
+        posts: rows,
+      });
+      console.log("rows는", rows)
+    });
 
+  } catch (err) {
+    // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
+    return res.sendStatus(500);
+  }
+});
+
+router.get('/category', function (req, res, next) {
+  let conditions = [];
+  let where
+  console.log("get method 연결완료!")
+  const {dogSize, dogGender, dogAge, locationCategory, completed} = req.body;
+  console.log(dogSize, dogGender, dogAge, locationCategory, completed)
+
+  //카테고리 필터 
+  if(dogSize !== 'undefined'){
+    conditions.push(`dogSize = '${dogSize}'`);
+  }
+  if(dogGender !== 'undefined'){
+    conditions.push(`dogGender = '${dogGender}'`);
+  }
+  if(dogAge !== 'undefined'){
+    conditions.push(`dogAge = '${dogAge}'`);
+  }
+  if(locationCategory !== 'undefined'){
+    conditions.push(`locationCategory = '${locationCategory}'`);
+  }
+  if(completed !== 'undefined'){
+    conditions.push(`completed = '${completed}'`);
+  }
+  where = conditions.join(' AND ' );
+  console.log('where', where);
+
+  try {
+    console.log(4)
+    const query = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
+    post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  
+    FROM post
+    JOIN dog
+    ON dog.userId=post.userId` 
+    console.log('query', typeof query);
+    db.query(query, (error, rows) => {
+      if (error) {
+        console.log(error)
+        // logger.error('게시글 조회 중 발생한 DB관련 에러', error);
+        return res.sendStatus(400);
+      }
       console.log('7');
       // logger.info('게시글을 성공적으로 조회했습니다.');
       res.status(200).json({
@@ -221,11 +187,12 @@ router.get('/', function (req, res, next) {
   }
 });
 
+
 //산책 게시물 수정하기
 router.patch('/:postId',auth, async (req, res) => {
   const postId = req.params.postId;
   const userId = res.locals.user.userId;
-  const {locationCategory, meetingDate, wishDesc, dogCount,startLocationAddress,endLocationAddress,completed,totalDistance,totalTime,routeColor,routeName,coordinate} = req.body;
+  const {locationCategory, meetingDate, wishDesc, dogCount,startLocationAddress,endLocationAddress,completed,totalDistance,totalTime,routeColor,routeName} = req.body;
   const escapeQuery = {
     locationCategory: locationCategory,
     meetingDate: meetingDate,
@@ -235,12 +202,11 @@ router.patch('/:postId',auth, async (req, res) => {
     endLocationAddress:endLocationAddress,
     completed:completed,
     totalDistance:totalDistance,
-    totoalTime:totalTime,
+    totalTime:totalTime,
     totalDistance:totalDistance,
     routeColor:routeColor,
     routeName:routeName,
-    coordinate:coordinate
-
+    // coordinate:coordinate
   };
   const query = `UPDATE post SET ? WHERE postId = ${postId} and userId = '${userId}'`;
   await db.query(query, escapeQuery, (error, rows, fields) => {
@@ -320,8 +286,5 @@ router.delete('/:postId', auth, async (req, res) => {
     res.status(500).json({ err: err });
   }
 });
-
-
-
 
 module.exports = router;

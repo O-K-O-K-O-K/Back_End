@@ -23,27 +23,156 @@
   "consumes": [],
   "produces": [],
   "paths": {
-    "/dogs/dogInfo": {
+    "/users/signUp": {
       "post": {
-        "description": "로그인 한 유저가 강아지를 등록하는 API",
+        "tags": ["USERS"],
+        "description": "회원가입",
+        "consumes": "multipart/form-data",
+        "produces": "application/json",
+        "parameters": [
+          {
+            "name": "userImage",
+            "in": "formData",
+            "type": "file",
+            "description": "userImage to upload"
+          },
+          {
+            "name": "userEmail",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          }, 
+          {
+            "name": "confirmPassword",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "userNickname",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "userGender",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "userAge",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "userLocation",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201":{
+            "description": "회원가입이 완료되었습니다."
+          },
+          "401": {
+            "description": "사용중인 닉네임입니다."
+          },
+          "402": {
+            "description": "이메일 형식이 올바르지 않습니다."
+          },
+          "403": {
+            "description": "비밀번호와 비밀번호확인을 동일하게 입력해주세요."
+          },
+          "404": {
+            "description": "비밀번호는 3자리 이상으로 작성해주세요."
+          },
+          "405": {
+            "description": "비밀번호에 아이디가 포함되어있습니다."
+          }
+        }
+      }
+    },
+    
+    "/users/login": {
+      "post": {
+        "tags": ["USERS"],
+        "description": "로그인",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description":"The user email for login"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description":"The user password for login"
+          }
+        ],
+        "responses": {
+          "200":{
+            "description": "JWT token"
+          },
+          "400": {
+            "description": "이메일 또는 패스워드가 잘 못 되었습니다."
+          }
+        }
+        }
+      },
+
+    "/users/checkDup": {
+      "post": {
+        "tags": ["USERS"],
+        "description": "userEmail 중복 검사",
+        "parameters": [
+          {
+            "name": "userEmail",
+            "in": "query",
+            "type": "string",
+            "description": "Check tour email",
+            "required":true
+          }
+        ],
+        "responses": {
+          "200":{
+            "description": "사용 가능한 EMAIL입니다."
+          },
+          "400": {
+            "description": "EMAIL 확인 또는 중복입니다."
+          }
+        }
+      }
+    },
+    "/posts/write": {
+      "post": {
+        "description": "산책 약속 등록하는 API",
         "security": [
           {
             "bearerAuth": []
           }
         ],
         "tags": [
-          "DOGS"
+          "Detail"
         ],
-        "name": "강아지 등록",
-        "summary": "로그인한 유저의 강아지 정보를 추가한다.",
-        "consumes": "multipart/form-data",
+        "name": "산책 약속 등록",
+        "summary": "산책 약속 등록.",
         "parameters": [
           {
             "name": "req.body",
-            "in": "formData",
-            "required": true,
-            "type": "file",
-            "description": "dog_image"
+            "in": "req.body"
           },
           {
             "name": "req.body",
@@ -52,74 +181,97 @@
             "schema": {
               "type": "object",
               "properties": {
-                "dogGender": {
+                "meetingDate": {
                   "type": "String",
-                  "description": "강아지 성별"
+                  "description": "약속날짜, 시간"
                 },
-                "dogName": {
+                "wishDesc": {
                   "type": "String",
-                  "description": "강아지 이름"
+                  "description": "코멘트"
                 },
-                "dogSize": {
+                "locationCategory": {
                   "type": "String",
-                  "description": "강아지 크기"
+                  "description": "장소카테고리"
                 },
-                "dogBreed": {
-                  "type": "String",
-                  "description": "강아지 종"
+                "dogCount": {
+                  "type": "Number",
+                  "description": "산책할 강아지 수"
                 },
-                "dogAge": {
+                "TotalTime": {
                   "type": "String",
-                  "description": "강아지 나이"
+                  "description": "산책 시간"
                 },
-                "neutral": {
+                "startLocationAddress": {
                   "type": "String",
-                  "description": "중성화 여부"
+                  "description": "산책 시작 장소 "
                 },
-                "dogComment": {
+                "endLocationAddress": {
                   "type": "String",
-                  "description": "강아지에 대한 한 줄 소개"
+                  "description": "산책 종료 장소 "
+                },
+                "totalDistance": {
+                  "type": "String",
+                  "description": "총 산책 길이 "
+                },
+                "routeColor": {
+                  "type": "String",
+                  "description": "산책 종료 장소 "
+                },
+                "routeName": {
+                  "type": "String",
+                  "description": "산책 경로 이름 "
                 }
               },
               "example": {
-                "dogGender": "남",
-                "dogName": "가을이",
-                "dogSize": "중형견",
-                "dogBreed": "비숑",
-                "dogAge": "8세 이상",
-                "neutral": "true",
-                "dogComment": "짖지 않아요"
+                "meetingDate": "2021-12-20T18:05:00.000Z",
+                "wishDesc": "소형견 산책 가능",
+                "locationCategory": "올림픽 공원",
+                "dogCount": 2,
+                "totalTime" : "2시간",
+                "startLocationAddress": "서울 성동구1동",
+                "endLocationAddress": "서울 성동구1동",
+                "totalDistance" : "2km",
+                "routeColor": "green",
+                "routeName": "1"
               }
             }
           }
         ],
         "responses": {
           "201": {
-            "description": "db에 강아지 등록 성공"
+            "description": "게시글이 성공적으로 포스팅 되었습니다!"
           },
           "400": {
-            "description": "db에 저장하기 실패"
+            "description": "400 에러 게시중 오류가 발생 하였습니다!"
           },
           "500": {
-            "description": "로그인이 필요합니다."
+            "description": "500 에러 게시중 오류가 발생 하였습니다!."
           }
         }
       }
     },
-    "/dogs/": {
+    "/posts/:postId": {
       "get": {
-        "description": "로그인 한 유저의 강아지를 조회하는 API",
+        "description": "산책약속 상세 조회하기",
         "security": [
           {
             "bearerAuth": []
           }
         ],
         "tags": [
-          "DOGS"
+          "Detail"
         ],
-        "name": "강아지 정보 조회",
-        "summary": "로그인한 유저의 강아지 정보를 조회",
-        "parameters": [],
+        "name": "산책 약속 상세 조회하기",
+        "summary": "산책 약속 상세 조회하기",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "default": 1,
+            "description": "500 에러 조회중 오류가 발생 하였습니다!."
+          }
+        ],
         "responses": {
           "200": {
             "description": "success: true"
@@ -133,24 +285,24 @@
         }
       },
       "put": {
-        "description": "로그인한 유저의 강아지 정보를 수정하는 API",
+        "description": "로그인한 유저의 산책약속을 수정하는 API",
         "security": [
           {
             "bearerAuth": []
           }
         ],
         "tags": [
-          "DOGS"
+          "Detail"
         ],
-        "name": "강아지 정보 수정",
-        "summary": "로그인한 유저의 강아지 정보를 수정",
+        "name": "로그인한 유저의 산책 약속 수정",
+        "summary": "로그인한 유저의 산책 약속 수정",
         "parameters": [
           {
-            "name": "req.body",
-            "in": "formData",
+            "name": "postId",
+            "in": "path",
             "required": true,
-            "type": "file",
-            "description": "dog_image"
+            "default": 1,
+            "description": "해당 게시글 고유 아이디"
           },
           {
             "name": "req.body",
@@ -159,60 +311,131 @@
             "schema": {
               "type": "object",
               "properties": {
-                "dogGender": {
+                "meetingDate": {
                   "type": "String",
-                  "description": "강아지 성별"
+                  "description": "약속날짜, 시간"
                 },
-                "dogName": {
+                "wishDesc": {
                   "type": "String",
-                  "description": "강아지 이름"
+                  "description": "코멘트"
                 },
-                "dogSize": {
+                "locationCategory": {
                   "type": "String",
-                  "description": "강아지 크기"
+                  "description": "장소카테고리"
                 },
-                "dogBreed": {
-                  "type": "String",
-                  "description": "강아지 종"
+                "dogCount": {
+                  "type": "Number",
+                  "description": "산책할 강아지 수"
                 },
-                "dogAge": {
+                "TotalTime": {
                   "type": "String",
-                  "description": "강아지 나이"
+                  "description": "산책 시간"
                 },
-                "neutral": {
+                "startLocationAddress": {
                   "type": "String",
-                  "description": "중성화 여부"
+                  "description": "산책 시작 장소 "
                 },
-                "dogComment": {
+                "endLocationAddress": {
                   "type": "String",
-                  "description": "강아지에 대한 한 줄 소개"
-                }
-              },
+                  "description": "산책 종료 장소 "
+                },
+                "totalDistance": {
+                  "type": "String",
+                  "description": "총 산책 길이 "
+                },
+                "routeColor": {
+                  "type": "String",
+                  "description": "산책 종료 장소 "
+                },
+                "routeName": {
+                  "type": "String",
+                  "description": "산책 경로 이름 "
+                },
+                "completed": {
+                  "type": "Boolean",
+                  "description": "산책 경로 이름 "
+                },
               "example": {
-                "dogGender": "남",
-                "dogName": "가을이",
-                "dogSize": "중형견",
-                "dogBreed": "비숑",
-                "dogAge": "8세 이상",
-                "neutral": "true",
-                "dogComment": "짖지 않아요"
+                "meetingDate": "2021-12-20T18:05:00.000Z",
+                "wishDesc": "소형견 산책 가능",
+                "locationCategory": "올림픽 공원",
+                "dogCount": 2,
+                "totalTime" : "2시간",
+                "startLocationAddress": "서울 성동구1동",
+                "endLocationAddress": "서울 성동구1동",
+                "totalDistance" : "2km",
+                "routeColor": "green",
+                "routeName": "1",
+                "completed": 1
+              }
               }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "수정이 완료되었습니다."
+            "description": "게시글을 성공적으로 수정하였습니다."
           },
           "400": {
-            "description": "수정에 실패하였습니다."
+            "description": "게시글 수정 중 발생한 DB관련 에러가 발생 하였습니다"
           },
           "500": {
-            "description": "로그인이 필요합니다."
+            "description": "500 에러 게시중 오류가 발생 하였습니다!."
           }
         }
       }
+    },
+  "put": {
+    "description": "로그인한 유저가 마감 설정 하기",
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ],
+    "tags": [
+      "Detail"
+    ],
+    "name": "로그인한 유저의 마감 여부 수정",
+    "summary": "로그인한 유저의 마감 여부 수정",
+    "parameters": [
+      {
+        "name": "postId",
+        "in": "path",
+        "required": true,
+        "default": 1,
+        "description": "해당 게시글 고유 아이디"
+      },
+      {
+        "name": "req.body",
+        "in": "body",
+        "required": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "completed": {
+              "type": "Boolean",
+              "description": "산책 경로 이름 "
+            },
+          "example": {
+            "completed": 1
+          }
+          }
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "게시글을 성공적으로 수정하였습니다."
+      },
+      "400": {
+        "description": "게시글 수정 중 발생한 DB관련 에러가 발생 하였습니다"
+      },
+      "500": {
+        "description": "500 에러 게시중 오류가 발생 하였습니다!."
+      }
     }
-  },
+  }
+  
+    },
   "definitions": {}
 }

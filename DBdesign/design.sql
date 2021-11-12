@@ -29,27 +29,25 @@ create table `dog`(
 
 CREATE TABLE `post` (
   `postId` INT NOT NULL AUTO_INCREMENT,
-  `meetingDate` varchar(50) NOT NULL,
+  `meetingDate` Date NOT NULL,
   `wishDesc` TEXT NOT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `completed` tinyint NOT NULL,
   `locationCategory` varchar(45) NOT NULL,
-  `coordinate` JSON NOT NULL,
-  `dogCount` varchar(45) NOT NULL,
+  `dogCount` INT NOT NULL,
   `startLocationAddress` varchar(100) NOT NULL,
   `endLocationAddress` varchar(45) NOT NULL,
   `totalDistance` varchar(45) NOT NULL,
   `totalTime` varchar(100) NOT NULL,
   `routeColor` varchar(45) NOT NULL,
-  `routeName` INT NOT NULL,
+  `routeName` varchar(45) NOT NULL,
   `userId` INT NOT NULL,
   PRIMARY KEY (`postId`),
   KEY `userId` (`userId`),
   KEY `postId` (`postId`),
   FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
   )
-  ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
-
+  ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4
 
 
   CREATE TABLE `dogSta` (
