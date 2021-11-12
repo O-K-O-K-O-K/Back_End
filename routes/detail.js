@@ -16,7 +16,6 @@ router.post('/write', auth, async (req, res) => {
   const userId = res.locals.user.userId;
   try {
     const {meetingDate,wishDesc,locationCategory, dogCount,totalTime,startLocationAddress,endLocationAddress,totalDistance,routeColor,routeName} = req.body;
-    console.log(meetingDate)
     const params= [
       meetingDate,
       wishDesc,
@@ -168,6 +167,7 @@ router.get('/category', function (req, res, next) {
     ON dog.userId=post.userId` 
     console.log('query', typeof query);
     db.query(query, (error, rows) => {
+      console.log('6');
       if (error) {
         console.log(error)
         // logger.error('게시글 조회 중 발생한 DB관련 에러', error);
@@ -287,5 +287,4 @@ router.delete('/:postId', auth, async (req, res) => {
     res.status(500).json({ err: err });
   }
 });
-
 module.exports = router;

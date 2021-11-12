@@ -20,18 +20,22 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
     "logger": "^0.0.1",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.34",
     "morgan": "~1.9.1",
     "multer": "^1.4.3",
     "multer-s3": "^2.10.0",
     "mysql": "^2.18.1",
-    "nodemon": "^2.0.14",
+    "nodemon": "^2.0.15",
     "passport": "^0.5.0",
     "passport-kakao": "^1.0.1",
     "path": "^0.12.7",
     "pm2": "^5.1.2",
     "pug": "^3.0.2",
     "sharp": "^0.29.2",
+<<<<<<< HEAD
     "socket.io": "^2.4.1",
     "socketio-jwt": "^4.6.2",
     "socketio-jwt-auth": "^0.2.1",
@@ -39,6 +43,16 @@
     "swagger-autogen": "^2.12.4",
     "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.1.6"
+=======
+    "socket.io": "^4.3.2",
+    "swagger": "^0.7.5",
+    "swagger-autogen": "^2.12.4",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.5",
+    "ws": "^8.2.3"
+>>>>>>> 49ace4c39fdb903036655a95a725f6f131a93069
   },
   "main": "app.js",
   "devDependencies": {

@@ -19,6 +19,7 @@ const cors = require('cors');
 router.post("/dogInfo", upload.single("dogImage"), auth, async (req, res, next) => {
   const userId =  res.locals.user.userId;
   console.log("auth 들어옴: ", userId)
+  console.log("req.file ",req.file)
 
   try {
     console.log("req.body", req.body);
@@ -35,6 +36,7 @@ router.post("/dogInfo", upload.single("dogImage"), auth, async (req, res, next) 
     } = req.body;
     console.log(dogGender, dogName)
     const dogImage = req.file.location;
+    
     console.log("dogImage:", dogImage)
 
     const params = [
@@ -106,6 +108,7 @@ router.get("/", auth, async (req, res) => {
 
 // 강아지 정보 수정하기
 router.patch('/', upload.single("dogImage"), auth, async (req, res) => {
+  console.log("수정하기")
   const userId =  res.locals.user.userId;
 
   console.log("reqbody:", req.body)

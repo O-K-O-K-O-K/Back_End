@@ -59,13 +59,13 @@ router.post("/signUp", upload.single("userImage"), async (req, res) => {
     res.status(401).send({ result: "닉네임이 존재합니다." });
   } else if (!idCheck(userEmail)) {
     // id 정규식 검사
-    res.sendStatus(401);
+    res.sendStatus(402);
   } else if (!pwConfirm(password, confirmPassword)) {
     // 비밀번호와 비밀번호 확인이 맞는지 검사
-    res.sendStatus(401);
+    res.sendStatus(403);
   } else if (!pwLenCheck(password)) {
     // 비밀번호 최소길이 검사
-    res.sendStatus(401);
+    res.sendStatus(404);
   } else if (!pw_idCheck(userEmail, password)) {
     // 아이디가 비밀번호를 포함하는지 검사
     res.status(401).send({ result: "비밀번호 형식이 올바르지않습니다." });
@@ -167,19 +167,5 @@ async function nicknameExist(nickGive) {
   }
 }
 
-//카카오 로그인
-module.exports = (passport) => {
-  passport.use('kakao', new KakaoStrategy({
-    clientID: '856ec0be1a62b01007353103f2cbc64d',
-    callbackURL: '/auth/login',
-  }, async (accessToken, refreshToken, profile, done) => {
-    console.log(profile);
-    console.log(accessToken);
-    console.log(refreshToken);
-  }))
-}
-
 
 module.exports = router;
-
-

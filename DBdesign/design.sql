@@ -1,5 +1,6 @@
 CREATE TABLE `user` (
   `userId` INT NOT NULL AUTO_INCREMENT,
+  `kakaoId` INT NOT NULL AUTO_INCREMENT,
   `userEmail` VARCHAR(45) NOT NULL,
   `password` varchar(255) NOT NULL,
   `userNickname` VARCHAR(45) NOT NULL,
@@ -27,9 +28,14 @@ create table `dog`(
   FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
+
 CREATE TABLE `post` (
   `postId` INT NOT NULL AUTO_INCREMENT,
+<<<<<<< HEAD
   `meetingDate` Date NOT NULL,
+=======
+  `meetingDate` varchar(45) NOT NULL,
+>>>>>>> 49ace4c39fdb903036655a95a725f6f131a93069
   `wishDesc` TEXT NOT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `completed` tinyint NOT NULL,
@@ -56,14 +62,15 @@ CREATE TABLE `post` (
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `dogPostDesc` VARCHAR(45) NOT NULL,
   `userId` INT NOT NULL,
-  PRIMARY KEY (`dogPostId`),
-  KEY `dogPostId` (`dogPostId`),
-  KEY `userId` (`userId`),
-  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
+   PRIMARY KEY (`dogPostId`),
+   KEY `dogPostId` (`dogPostId`),
+   KEY `userId` (`userId`),
+   FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
   )
   ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 
+<<<<<<< HEAD
 CREATE TABLE `room` (
   `roomId` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY(`roomId`),
@@ -98,3 +105,12 @@ CREATE TABLE `chat` (
 -- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 
+=======
+CREATE TABLE `location` (
+  `locationId` INT NOT NULL AUTO_INCREMENT,
+  `route` JSON NOT NULL,
+  PRIMARY KEY (`locationId`),
+  KEY `locationId` (`locationId`)
+  )
+  ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4
+>>>>>>> 49ace4c39fdb903036655a95a725f6f131a93069
