@@ -74,7 +74,7 @@ router.get('/:postId', auth, function (req, res, next) {
     on post.userId = dog.userId
     join user
     on user.userId = dog.userId
-    WHERE post.postId =${postId}`;
+    WHERE post.postId ='${postId}'`;
     db.query(query, (error, rows) => {
       console.log("들어가니",rows)
       if (error) {
@@ -109,7 +109,8 @@ router.get('/', function (req, res, next) {
     post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  
     FROM post
     JOIN dog
-    ON dog.userId=post.userId` 
+    ON dog.userId=post.userId 
+     by desc ` 
     console.log('query', typeof query);
 
     db.query(query, (error, rows) => {
