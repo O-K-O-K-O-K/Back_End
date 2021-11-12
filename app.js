@@ -31,21 +31,6 @@ app.use(morgan('dev'));
 // app.use(compression());
 // app.set('views', path.join(__dirname, 'views'));
 
-<<<<<<< HEAD
-const dogsRouter = require('./routes/dog');
-const detailRouter = require('./routes/detail');
-const pagesRouter = require('./routes/mypage');
-const usersRouter = require('./routes/user');
-const chatRouter = require('./routes/chat');
-
-
-app.use('/dogs', dogsRouter);
-app.use('/posts', detailRouter);
-app.use('/', chatRouter);
-app.use('/users', pagesRouter);
-app.use('/users', usersRouter);
-
-=======
 const dogsRouter = require("./routes/dog");
 const detailRouter = require("./routes/detail");
 const infoRouter = require("./routes/userInfo");
@@ -59,7 +44,6 @@ app.use("/users", infoRouter);
 app.use("/users", usersRouter);
 app.use("/dogsta", dogstaRouter);
 app.use("/mypage", pagesRouter);
->>>>>>> 49ace4c39fdb903036655a95a725f6f131a93069
 
 app.get("/", (_, res) => res.render("home"));
 

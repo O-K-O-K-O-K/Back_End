@@ -35,16 +35,8 @@
     "pm2": "^5.1.2",
     "pug": "^3.0.2",
     "sharp": "^0.29.2",
-<<<<<<< HEAD
-    "socket.io": "^2.4.1",
-    "socketio-jwt": "^4.6.2",
-    "socketio-jwt-auth": "^0.2.1",
-    "swagger": "^0.7.5",
-    "swagger-autogen": "^2.12.4",
-    "swagger-jsdoc": "^6.1.0",
-    "swagger-ui-express": "^4.1.6"
-=======
     "socket.io": "^4.3.2",
+    "socketio-jwt-auth": "^0.2.1",
     "swagger": "^0.7.5",
     "swagger-autogen": "^2.12.4",
     "swagger-jsdoc": "^6.1.0",
@@ -52,7 +44,6 @@
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.5",
     "ws": "^8.2.3"
->>>>>>> 49ace4c39fdb903036655a95a725f6f131a93069
   },
   "main": "app.js",
   "devDependencies": {

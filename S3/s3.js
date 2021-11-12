@@ -56,8 +56,4 @@ const upload = multer({
 //   cb(null, Date.now().toString() + extension);
 // },
 
-<<<<<<< HEAD
 module.exports = upload;
-=======
-module.exports = upload;
->>>>>>> 49ace4c39fdb903036655a95a725f6f131a93069

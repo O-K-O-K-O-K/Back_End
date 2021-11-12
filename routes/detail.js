@@ -132,6 +132,7 @@ router.get('/', function (req, res, next) {
   }
 });
 
+//카테고리 포함 전체 조회
 router.get('/category', function (req, res, next) {
   let conditions = [];
   let where
