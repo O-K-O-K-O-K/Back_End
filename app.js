@@ -1,7 +1,7 @@
 const createError = require("http-errors");
 const express = require("express");
 // const socketIo = require("socket.io")
-// const logger = require('morgan');
+const logger = require('morgan');
 const app = express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
@@ -9,7 +9,7 @@ const path = require("path");
 // const passport = require('passport');
 const auth = require("./middlewares/auth");
 // const authMiddleware = require("./middlewares/auth");
-// app.use(logger('dev'));
+app.use(logger('dev'));
 
 const cors = require("cors");
 const corsOptions = {
@@ -42,6 +42,7 @@ const dogstaRouter = require("./routes/dogsta");
 const pagesRouter = require("./routes/mypage");
 const kakaoRouter = require("./routes/auth");
 
+
 app.use("/dogs", dogsRouter);
 app.use("/posts", detailRouter);
 app.use("/users", infoRouter);
@@ -49,6 +50,7 @@ app.use("/users", usersRouter);
 app.use("/dogsta", dogstaRouter);
 app.use("/mypage", pagesRouter);
 app.use("/auth", kakaoRouter);
+
 
 app.get("/",(_,res) => res.render("home"));
 

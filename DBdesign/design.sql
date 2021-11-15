@@ -1,15 +1,29 @@
 CREATE TABLE `user` (
   `userId` INT NOT NULL AUTO_INCREMENT,
-  `userEmail` VARCHAR(45) NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `userEmail` VARCHAR(45) NULL,
+  `password` varchar(255) NULL,
+  `proviser` varchar(45) NOT NULL,
   `userNickname` VARCHAR(45) NOT NULL,
-  `userGender` VARCHAR(45) NOT NULL,
-  `userAge` VARCHAR(45) NOT NULL,
+  `userGender` VARCHAR(45) NULL,
+  `userAge` VARCHAR(45) NULL,
   `userImage` TEXT NOT NULL,
-  `userLocation` varchar(45) NOT NULL,
+  `userLocation` varchar(45) NULL,
   PRIMARY KEY (`userId`),
   KEY `userId` (`userId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+-- CREATE TABLE `user` (
+--   `userId` INT NOT NULL AUTO_INCREMENT,
+--   `userEmail` VARCHAR(45) NOT NULL,
+--   `password` varchar(255) NOT NULL,
+--   `userNickname` VARCHAR(45) NOT NULL,
+--   `userGender` VARCHAR(45) NOT NULL,
+--   `userAge` VARCHAR(45) NOT NULL,
+--   `userImage` TEXT NOT NULL,
+--   `userLocation` varchar(45) NOT NULL,
+--   PRIMARY KEY (`userId`),
+--   KEY `userId` (`userId`)
+-- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 create table `dog`(
   `dogId` INT NOT NULL AUTO_INCREMENT,
