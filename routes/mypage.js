@@ -22,7 +22,7 @@ router.get("/myPost/:userId", async (req, res) => {
   if (!existPost) {
     //강아지와 유저 정보를 보내준다.
     const query = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
-    user.userNickname, user.userGender, user.userAge, user.userImage, user.userLocation 
+    user.userNickname, user.userGender, user.userAge, user.userImage, user.userLocation
     FROM dog 
     LEFT JOIN user 
     ON dog.userId = user.userId 
