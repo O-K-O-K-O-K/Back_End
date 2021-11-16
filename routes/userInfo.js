@@ -61,8 +61,8 @@ router.patch("/me", upload.single("userImage"), auth, async (req, res) => {
     const userImage = req.file.location;
 
     //json으로 parse를 해서 보내줌..!
-    const obj = JSON.parse(JSON.stringify(req.body));
-    console.log("obj: ", obj)
+    //const obj = JSON.parse(JSON.stringify(req.body));
+    //console.log("obj: ", obj)
 
     // console.log("이미지 타입:",typeof(userImage));
 

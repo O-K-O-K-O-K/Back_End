@@ -226,4 +226,95 @@ router.get("/", async (req, res) => {
   }
 });
 
+// dogsta/:dogPostId/like
+router.post("/:dogPostId/like", auth, async (req, res) => {
+  try {
+    const userId = res.locals.user.userId;
+    const { dogPostId } = req.params;
+
+    let existLike;
+    const isLiked = `SELECT * FROM likes WHERE dogPostId ="${dogPostId}" AND userId= "${userId}"`;
+    console.log(isLiked);
+
+    const results = await db.query(isLiked);
+    console.log("r", results);
+
+    existLike = results[0];
+    console.log("like 존재함?", existLike);
+
+    //좋아요 생성 전
+    if (!existLike) {
+      const params = [dogPostId, userId];
+      const query = `INSERT INTO likes (dogPostId, userId) VALUES(?, ?)`;
+
+      await db.query(query, params, (error, rows) => {
+        if (error) {
+          console.log(error);
+          return res.status(400).json({
+            success:false
+          });
+        }
+        return res.status(200).send({
+          existLike: true,
+          message: "좋아요를 눌렀습니다.",
+        });
+      });
+    } else {
+      // user가 좋아요를 이미 누른 상태에서 한번 더 눌렀을 경우
+      return res.status(400).send({
+        message: "좋아요를 이미 누르셨습니다.",
+      });
+    }
+  } catch (err) {
+    return res.status(500).send({
+      message: "좋아요 기능이 안됩니다. 관리자에게 문의하세요",
+    });
+  }
+
+})
+
+// dogsta/:dogPostId/like
+router.delete("/:dogPostId/like", auth, async(req, res) => {
+  try{
+    const userId = res.locals.user.userId;
+    const { dogPostId } = req.params;
+
+    let existLike;
+    const isLiked = `SELECT * FROM likes WHERE dogPostId ="${dogPostId}" AND userId= "${userId}"`;
+    console.log(isLiked);
+
+    const results = await db.query(isLiked);
+    console.log("r", results);
+
+    existLike = results[0];
+    console.log("like 존재함?", existLike);
+
+    if(existLike){
+      
+      const query = `DELETE from likes where dogPostId = '${dogPostId}' and userId = '${userId}'`;
+
+      await db.query(query, (error, rows) => {
+        if (error) {
+          console.log(error);
+          return res.status(400).json({
+            success:false
+          });
+        }
+        return res.status(200).send({
+          message: "좋아요가 취소 되었습니다.",
+        });
+      });
+    } else{
+      return res.status(400).send({
+        msg: "이미 좋아요를 취소하였습니다."
+      })
+    }
+  } catch(err){
+    console.log(err);
+    return res.status(500).send({
+      msg: "좋아요 취소 기능이 안됩니다. 관리자에게 문의하세요"
+    })
+  }
+  
+})
 module.exports = router;
