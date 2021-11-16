@@ -129,19 +129,48 @@ router.get("/:userId/:dogPostId", async (req, res) => {
   }
 });
 
-// 강아지 정보 수정하기
-router.patch(
-  "/:dogPostId",
-  upload.single("dogPostImage"),
-  auth,
-  async (req, res) => {
+
+// 개스타그램 사진 수정하기
+// url: /dogsta/changeImage
+router.patch('/changeImage', upload.single("dogPostImage"), auth, async (req, res) => {
+  const userId = res.locals.user.userId;
+
+  const dogPostImage = req.file.location;
+
+  console.log("dogPostImage", dogPostImage)
+
+  const escapeQuery = {
+    dogPostImage : dogPostImage
+  }
+
+  console.log("escapeQuery", escapeQuery)
+
+  const userQuery = `UPDATE dogSta SET dogSta.dogPostImage = "${dogPostImage}" WHERE dogSta.userId = "${userId}"`
+
+  console.log("query ", userQuery)
+
+  await db.query(userQuery, escapeQuery, async(err, user)=> {
+    if(err){
+      return res.status(400).json({
+        msg: "개스타그램 사진 변경 실패"
+      })
+    }
+    return res.status(200).json({
+      msg: "개스타그램 사진 변경 성공",
+      user
+    })
+  })
+
+})
+
+
+// 개스타그램 정보 수정하기
+router.patch("/:dogPostId", auth, async (req, res) => {
     try {
       const userId = res.locals.user.userId;
       const { dogPostId } = req.params;
 
       const { dogPostDesc } = req.body;
-
-      //const dogIPostImage = req.file.location;
 
       const escapeQuery = {
         dogPostDesc: dogPostDesc,
@@ -301,6 +330,7 @@ router.delete("/:dogPostId/like", auth, async(req, res) => {
           });
         }
         return res.status(200).send({
+          existLike: false,
           message: "좋아요가 취소 되었습니다.",
         });
       });

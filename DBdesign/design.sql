@@ -55,7 +55,7 @@ CREATE TABLE `post` (
   ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4
 
 
-  CREATE TABLE `dogSta` (
+  CREATE TABLE `dogSta` ( --> table 드랍하면 dogsta 로 ㄱㄱ, not dogSta
   `dogPostId` INT NOT NULL AUTO_INCREMENT,
   `dogPostImage` TEXT NOT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

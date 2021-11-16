@@ -104,9 +104,41 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+// dog 사진 수정하기
+// url: /dogs/changeImage
+router.patch('/changeImage', upload.single("dogImage"), auth, async (req, res) => {
+  const userId = res.locals.user.userId;
+
+  const dogImage = req.file.location;
+
+  console.log("dogImage", dogImage)
+
+  const escapeQuery = {
+    dogImage : dogImage
+  }
+
+  console.log("escapeQuery", escapeQuery)
+
+  const userQuery = `UPDATE dog SET dogImage = "${dogImage}" WHERE dog.userId = "${userId}"`
+
+  console.log("query ", userQuery)
+
+  await db.query(userQuery, escapeQuery, async(err, user)=> {
+    if(err){
+      return res.status(400).json({
+        msg: "강아지 사진 변경 실패"
+      })
+    }
+    return res.status(200).json({
+      msg: "강아지 사진 변경 성공",
+      user
+    })
+  })
+
+})
 
 // 강아지 정보 수정하기
-router.patch('/', upload.single("dogImage"), auth, async (req, res) => {
+router.patch('/', auth, async (req, res) => {
   const userId =  res.locals.user.userId;
 
   console.log("reqbody:", req.body)
@@ -120,7 +152,7 @@ router.patch('/', upload.single("dogImage"), auth, async (req, res) => {
     dogComment,
   } = req.body;
 
-  const dogImage = req.file.location;
+  // const dogImage = req.file.location;
   // console.log("이미지 타입:",typeof(dogImage));
 
   const escapeQuery = {
@@ -131,26 +163,30 @@ router.patch('/', upload.single("dogImage"), auth, async (req, res) => {
     dogAge : dogAge,
     neutral : neutral,
     dogComment : dogComment,
-    dogImage : dogImage,
+    // dogImage : dogImage,
   };
 
   console.log(escapeQuery)
-  const query = `UPDATE dog SET ? WHERE dog.userId = '${userId}'`;
 
-  await db.query(query, escapeQuery, (error, rows, fields) => {
-    if(error){
+  const userQuery = `UPDATE dog 
+  SET dogGender="${dogGender}", dogName="${dogName}", dogSize="${dogSize}", dogBreed="${dogBreed}", 
+  dogAge = "${dogAge}", neutral="${neutral}", dogComment ="${dogComment}"
+  WHERE dog.userId = '${userId}'`;
+
+  console.log(userQuery)
+
+  await db.query(userQuery, escapeQuery, async (err, user) => {
+    if (err) {
       return res.status(400).json({
         success: false,
-        error,
-        msg : "실패임",
-      });
-    } else{
-      return res.status(200).json({
-        success:true,
-        dogs: rows,
       });
     }
-  })
+    return res.status(200).json({
+      success: true,
+      msg: "dog 정보 수정 성공! 사진 제외",
+      user,
+    });
+  });
 });
 
 
