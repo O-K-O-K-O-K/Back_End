@@ -34,7 +34,7 @@ router.post("/dogInfo", upload.single("dogImage"), auth, async (req, res, next) 
       // dogImage,
       // userId,
     } = req.body;
-    console.log(dogGender, dogName)
+
     const dogImage = req.file.location;
     
     console.log("dogImage:", dogImage)
@@ -51,13 +51,12 @@ router.post("/dogInfo", upload.single("dogImage"), auth, async (req, res, next) 
       userId,
     ];
 
-    console.log("정보들어",params);
+    console.log(params);
     const query =
       "INSERT INTO dog(dogGender, dogName, dogSize, dogBreed, dogAge, neutral, dogComment, dogImage, userId) VALUES(?,?,?,?,?,?,?,?,?)";
-    console.log("여기까지 오나 실험", query)
+    // console.log("여기까지 오나 실험", query)
 
     await db.query(query, params, (error, rows, fields) => {
-      console.log("여기 들어옴?",query)
       if (error) {
         return res.status(400).json({
           success: false,
@@ -108,7 +107,6 @@ router.get("/", auth, async (req, res) => {
 
 // 강아지 정보 수정하기
 router.patch('/', upload.single("dogImage"), auth, async (req, res) => {
-  console.log("수정하기")
   const userId =  res.locals.user.userId;
 
   console.log("reqbody:", req.body)

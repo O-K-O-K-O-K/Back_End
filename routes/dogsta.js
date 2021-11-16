@@ -57,7 +57,7 @@ router.get("/:userId", async (req, res) => {
   //작성된 개스타그램 post가 없다면
   if (!existDogPost) {
     //유저 정보 보내준다
-    const query = `SELECT user.userId, user.userNickname, user.userImage, user.userLocation FROM user WHERE user.userId = "${userId}";`;
+    const query = `SELECT * FROM dogSta WHERE dogSta.userId = "${userId}"`;
 
     await db.query(query, (error, rows) => {
       if (error) {

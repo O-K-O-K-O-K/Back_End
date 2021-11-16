@@ -8,8 +8,8 @@ const { db } = require("../models/index");
 const _ = require("lodash");  //lodash library
 
 
-///////// 나중에 user.js router로 합쳐야 함//////////////////////
-////////강아지 등록 여부, 내 정보 조회, 내 정보 수정/////////////
+///////// 나중에 user.js router로 합쳐야 함/////////////////////
+////////강아지 등록 여부, 내 정보 조회, 내 정보 수정////////////
 
 // 강아지 등록 여부
 router.get("/dogExist", auth, async (req, res) => {
@@ -59,8 +59,11 @@ router.patch("/me", upload.single("userImage"), auth, async (req, res) => {
     const { userNickname, userGender, userAge, userLocation} = req.body;
 
     const userImage = req.file.location;
+
+    //json으로 parse를 해서 보내줌..!
     const obj = JSON.parse(JSON.stringify(req.body));
     console.log("obj: ", obj)
+
     // console.log("이미지 타입:",typeof(userImage));
 
     const escapeQuery = {
