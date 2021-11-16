@@ -1,14 +1,21 @@
 const express = require('express');
 const router = express.Router();
-// const auth = require('../middlewares/auth'); 
+const messengerAuth = require('../middlewares/messengerAuth'); 
+const auth = require('../middlewares/auth');
 const { db } = require("../models/index");
 
 
-//make room
-router.post('/room',async (req, res, next) => {
+//대화창 만들기 //   //receiverNickname 받는방법 프론트에 물어보기!
+router.post('/',auth,async (req, res, next) => {
   try {
-    const params=[]
-    const query = `INSERT INTO room VALUES()`
+    const senderNickname = res.locals.user.userNickname;
+    //receiverNickname 받는방법 있을까?
+    const receiverNickname ="엘리엇"
+    const params=[
+      senderNickname,
+      receiverNickname 
+    ]
+    const query = `INSERT INTO room (senderNickname,receiverNickname) VALUES(?,?)`
     await db.query(query,params, (error,rows,fields) => {
       console.log(rows)
       if (error) {
@@ -17,7 +24,9 @@ router.post('/room',async (req, res, next) => {
           success: false,
           errMessage: '400 에러 게시중 오류가 발생 하였습니다!.'
         });
-      }
+      } //유저가 어떻게 들어가냐?
+      //상대 유저를 어떻게 찾냐?
+
       return res.status(201).json({
         success: true,
         Message: 'roomId가 성공적으로 저장 되었습니다!.'
@@ -33,9 +42,11 @@ router.post('/room',async (req, res, next) => {
   }
 });
 
-router.get('/room/:roomId', async(req, res, next) => {
+//상세대화창 //roomId만!! 그리고 messengerAuth 지나가게 하려면, /:userId/:senderId/
+router.get('/:roomId', auth, async(req, res, next) => {
   const {roomId} = req.params;
-  try { const query = `SELECT chat.message, chat.createdAt, chat.userNickname from chat where chat.roomId = ${roomId} order by createdAt DESC`;
+  console.log("roomId는",roomId)
+  try { const query = `SELECT * from chat where chat.roomId = ${roomId} ORDER BY chat.createdAt DESC`;
   db.query(query, (error,rows) => {
     const io = req.app.get('io')
     if (error) {
@@ -53,22 +64,54 @@ router.get('/room/:roomId', async(req, res, next) => {
   }
 })
 
-router.post('/room/:roomId/chat', async (req,res,next) =>{
+//전체 대화 리스트 //OKAY
+router.get('/',auth, async(req, res, next) => {
+  const {userNickname} = res.locals.user;
+  try { 
+  const query = 
+  `SELECT senderNickname, receiverNickname, roomId
+  from room
+  where (senderNickname = '${userNickname}' OR receiverNickname = '${userNickname}')
+  ORDER BY room.createdAt DESC`;
+  //룸에 닉네임이랑, 아이디 들어가야 하나??
+  db.query(query, (error,rows) => {
+    // const io = req.app.get('io')
+    if (error) {
+      console.log(error)
+      return res.sendStatus(400);
+    }
+    res.status(200).json ({
+      success: true,
+      message:rows,
+    })
+    console.log("메세지 들어가니",rows)
+  })
+  }catch (error) {
+    return next(error);
+  }
+})
+
+//쪽지 보내기 
+router.post('/:userId/:senderId/:roomId', auth, messengerAuth, async (req,res,next) =>{
   try {
-    const {roomId} = req.params;
+    const {roomId}= req.params;
+    // const receiverId= req.params.userId;
+    const receiverId=1
     console.log(roomId)
     // const userNickname = res.locals.user.userNickname;
-    const userNickname ="엘리"
-    const userId =1
+    const senderNickname =res.locals.user.userNickname
+    const senderId = res.locals.user.userId
+    console.log("userId는",senderId)
     const {message} = req.body;
     const params = [
       roomId,
-      userNickname,
+      senderNickname,
       message,
-      userId
+      senderId,
+      receiverId
     ];
     const query = 
-    `INSERT INTO chat(roomId,userNickname,message,userId) VALUES(?,?,?,?)`;
+    `INSERT INTO chat(roomId,senderNickname,message,senderId,receiverId) VALUES(?,?,?,?,?)`;
     await db.query(query, params,(error,rows,fields) => {
       console.log("row는",rows)
         if (error) {
