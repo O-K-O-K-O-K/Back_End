@@ -77,7 +77,6 @@ CREATE TABLE `room` (
 
 CREATE TABLE `chat` (
   `chatId` int(11) NOT NULL AUTO_INCREMENT,
-  `roomId` int(11) NOT NULL,
   `receiverId` int(11) NOT NULL,
   `senderId` VARCHAR(45) NOT NULL,
   `senderNickname` VARCHAR(45) NOT NULL,
@@ -85,8 +84,8 @@ CREATE TABLE `chat` (
   `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(`chatId`),
   KEY `chatId` (`chatId`),
-  KEY `roomId` (`roomId`),
-  FOREIGN KEY (`roomId`) REFERENCES `room` (`roomId`) ON UPDATE CASCADE
+  KEY `receiverId` (`receiverId`),
+  FOREIGN KEY (`receiverId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `location` (
