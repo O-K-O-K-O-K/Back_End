@@ -8,6 +8,8 @@ const path = require("path");
 const morgan = require("morgan");
 
 //cors
+const logger = require("./logger")
+
 const cors = require("cors");
 const corsOptions = {
   origin: "*",
@@ -46,6 +48,17 @@ app.use("/mypage", pagesRouter);
 app.use("/chat", chatRouter);
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
+app.use((req,res,next) => {
+  const error = new Error(`${req.method} ${req.url} 라우터가 없습니다`);
+  error.status =  404;
+  logger.info('hello');
+  logger.error(error.message);
+  next(error);
+});
+
+app.get("/", (_, res) => res.render("home"));
+
+// const auth = require("./middlewares/auth");
 
 app.get("/", (_, res) => res.render("home"));
 
