@@ -114,5 +114,29 @@ router.get('/:chatId', auth, async(req, res, next) => {
   }
 })
 
+//메세지 삭제
+router.delete('/:chatId', auth, async(req, res, next) => {
+  try { 
+    const {chatId}= req.params;
+    const userId = res.locals.user.userId;
+    const query = `DELETE from chat where chatId = ${chatId} AND (receiverId OR senderId = '${userId}')`;
+    await db.query(query, (error, rows, fields) => {
+      if (error) {
+        console.log(error)
+        return res.status(400).json({
+          success: false,
+        });
+      }
+      // logger.info('게시글을 성공적으로 삭제하였습니다.');
+      res.status(200).json({
+        success: true,
+      });
+    });
+  } catch (err) {
+    // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
+    return res.sendStatus(500);
+  }
+})
+
 
 module.exports = router;
