@@ -7,7 +7,7 @@ const app = express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
 const path = require("path");
-
+const logger = require("./logger")
 
 const cors = require("cors");
 const corsOptions = {
@@ -46,6 +46,14 @@ app.use("/users", usersRouter);
 app.use("/dogsta", dogstaRouter);
 app.use("/mypage", pagesRouter);
 app.use("/chat", chatRouter);
+
+app.use((req,res,next) => {
+  const error = new Error(`${req.method} ${req.url} 라우터가 없습니다`);
+  error.status =  404;
+  logger.info('hello');
+  logger.error(error.message);
+  next(error);
+});
 
 app.get("/", (_, res) => res.render("home"));
 
