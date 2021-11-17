@@ -68,21 +68,31 @@ CREATE TABLE `post` (
 
 CREATE TABLE `room` (
   `roomId` int(11) NOT NULL AUTO_INCREMENT,
+  `senderNickname` VARCHAR(45) NOT NULL,
+  `receiverNickname` VARCHAR(45) NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(`roomId`),
   KEY `roomId` (`roomId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `chat` (
   `chatId` int(11) NOT NULL AUTO_INCREMENT,
-  `roomId` int(11) NOT NULL,
-  `userNickname` VARCHAR(45) NOT NULL,
+  `receiverId` int(11) NOT NULL,
+  `senderId` VARCHAR(45) NOT NULL,
+  `senderNickname` VARCHAR(45) NOT NULL,
   `message` text NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `userId` INT NOT NULL,
   PRIMARY KEY(`chatId`),
   KEY `chatId` (`chatId`),
-  KEY `userId` (`userId`),
-  FOREIGN KEY (`roomId`) REFERENCES `room` (`roomId`) ON UPDATE CASCADE
+  KEY `receiverId` (`receiverId`),
+  FOREIGN KEY (`receiverId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `location` (
+  `locationId` int(11) NOT NULL AUTO_INCREMENT,
+  `points` JSON NOT NULL,
+  PRIMARY KEY(`locationId`),
+  KEY `locationId` (`locationId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

@@ -84,9 +84,10 @@ router.get('/:postId', auth, function (req, res, next) {
       // logger.info('게시글을 성공적으로 조회했습니다.');
       res.status(200).json({
         success: true,
-        posts: rows,
+        posts: rows[0],
       });
       console.log("rows는", rows)
+      console.log("userId는",rows[0].userId)
     });
   } catch (err) {
     // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
@@ -165,7 +166,8 @@ router.get('/category', function (req, res, next) {
     post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  
     FROM post
     JOIN dog
-    ON dog.userId=post.userId` 
+    ON dog.userId=post.userId
+    WHERE ` + where 
     console.log('query', typeof query);
     db.query(query, (error, rows) => {
       console.log('6');
