@@ -3,7 +3,7 @@ const router = express.Router();
 const auth = require('../middlewares/auth');
 const { db } = require("../models/index");
 
-//보낸쪽지함
+//보낸 쪽지함
 router.get('/outbox', auth, async(req, res, next) => {
   try { 
     const userId= res.locals.user.userId;
@@ -34,7 +34,11 @@ router.get('/inbox',auth, async(req, res, next) => {
   try { 
   const userId= res.locals.user.userId;
   const query = 
-  `SELECT senderNickname, message, createdAt from chat where receiverId = ${userId} ORDER BY createdAt DESC`;
+  `SELECT chat.senderNickname, chat.chatId, chat.message, chat.createdAt, user.userImage
+  from chat 
+  join user
+  on user.userId = chat.senderId
+  where receiverId = ${userId} ORDER BY createdAt DESC`;
   db.query(query, (error,rows) => {
     if (error) {
       console.log(error)
@@ -83,7 +87,7 @@ router.post('/:receiverId', auth, async (req,res,next) =>{
           Message: '게시글이 성공적으로 포스팅 되었습니다!.'
         });
     })
-    res.send(ok)
+    res.send(오케이)
   } catch (err) {
     // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
     return res.sendStatus(500);

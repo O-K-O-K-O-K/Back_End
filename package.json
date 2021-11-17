@@ -36,7 +36,7 @@
     "pm2": "^5.1.2",
     "pug": "^3.0.2",
     "sharp": "^0.29.2",
-    "socket.io": "^4.3.2",
+    "socket.io": "^2.4.1",
     "socketio-jwt-auth": "^0.2.1",
     "swagger": "^0.7.5",
     "swagger-autogen": "^2.12.4",

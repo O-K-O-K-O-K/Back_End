@@ -263,19 +263,13 @@ router.post("/:dogPostId/like", auth, async (req, res) => {
 
     let existLike;
     const isLiked = `SELECT * FROM likes WHERE dogPostId ="${dogPostId}" AND userId= "${userId}"`;
-    console.log(isLiked);
-
     const results = await db.query(isLiked);
-    console.log("r", results);
-
     existLike = results[0];
-    console.log("like 존재함?", existLike);
 
     //좋아요 생성 전
     if (!existLike) {
       const params = [dogPostId, userId];
       const query = `INSERT INTO likes (dogPostId, userId) VALUES(?, ?)`;
-
       await db.query(query, params, (error, rows) => {
         if (error) {
           console.log(error);
@@ -285,43 +279,37 @@ router.post("/:dogPostId/like", auth, async (req, res) => {
         }
         return res.status(200).send({
           existLike: true,
-          message: "좋아요를 눌렀습니다.",
+          msg: "좋아요를 눌렀습니다.",
         });
       });
     } else {
       // user가 좋아요를 이미 누른 상태에서 한번 더 눌렀을 경우
       return res.status(400).send({
-        message: "좋아요를 이미 누르셨습니다.",
+        msg: "좋아요를 이미 누르셨습니다.",
       });
     }
   } catch (err) {
     return res.status(500).send({
-      message: "좋아요 기능이 안됩니다. 관리자에게 문의하세요",
+      msg: "좋아요 기능이 안됩니다. 관리자에게 문의하세요",
     });
   }
 
 })
 
-// dogsta/:dogPostId/like
+// 개스타그램 좋아요 취소하기
 router.delete("/:dogPostId/like", auth, async(req, res) => {
   try{
     const userId = res.locals.user.userId;
     const { dogPostId } = req.params;
+    console.log(dogPostId)
 
     let existLike;
     const isLiked = `SELECT * FROM likes WHERE dogPostId ="${dogPostId}" AND userId= "${userId}"`;
-    console.log(isLiked);
-
     const results = await db.query(isLiked);
-    console.log("r", results);
-
     existLike = results[0];
-    console.log("like 존재함?", existLike);
 
-    if(existLike){
-      
+    if(existLike){     
       const query = `DELETE from likes where dogPostId = '${dogPostId}' and userId = '${userId}'`;
-
       await db.query(query, (error, rows) => {
         if (error) {
           console.log(error);
@@ -331,7 +319,7 @@ router.delete("/:dogPostId/like", auth, async(req, res) => {
         }
         return res.status(200).send({
           existLike: false,
-          message: "좋아요가 취소 되었습니다.",
+          msg: "좋아요가 취소 되었습니다.",
         });
       });
     } else{
@@ -347,4 +335,44 @@ router.delete("/:dogPostId/like", auth, async(req, res) => {
   }
   
 })
+
+// /dogsta/:dogPostId/like
+// no auth
+router.get('/:dogPostId/like', async(req, res) =>{
+  // const userId = res.locals.user.userId;
+  const { dogPostId } = req.params;
+  console.log(dogPostId)
+
+  let likeCount;
+  const likeUser = `SELECT dogPostId FROM likes WHERE dogPostId ="${dogPostId}"`;
+  console.log(likeUser)
+  const results = await db.query(isLiked);
+  likeCount = results[0];
+  console.log(likeCount)
+
+  if(likeCount){
+    const likeQuery = `SELECT dogPostId FROM likes WHERE dogPostId ="${dogPostId}"`;
+    const likeNum = likeQuery.length;
+
+    console.log(likeQuery)
+
+    await db.query(likeQuery, (error, rows) => {
+      if (error) {
+        console.log(error);
+        return res.status(400).json({
+          success:false
+        });
+      }
+      return res.status(200).send({
+        likeNum: likeNum
+      });
+    });
+  }
+  else{
+    res.status(404).send({ msg: "좋아요를 한 사람이 없습니다" });
+  }
+
+
+});
+
 module.exports = router;

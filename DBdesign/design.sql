@@ -8,11 +8,8 @@ CREATE TABLE `user` (
   `userAge` VARCHAR(45) NOT NULL,
   `userImage` TEXT NOT NULL,
   `userLocation` varchar(45) NOT NULL,
-  -- `userImageId` INT NOT NULL,
   PRIMARY KEY (`userId`),
   KEY `userId` (`userId`),
-  -- KEY `userImageId` (`userImageId`),
-  -- FOREIGN KEY (`userImageId`) REFERENCES `userimage` (`userImageId`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 create table `dog`(
@@ -71,6 +68,7 @@ CREATE TABLE `post` (
 CREATE TABLE `likes` (
   `likeId` INT NOT NULL AUTO_INCREMENT,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  -- `likeCount` INT NOT NULL,
   `dogPostId` INT NOT NULL,
   `userId` INT NOT NULL,
   PRIMARY KEY (`likeId`),
@@ -80,44 +78,6 @@ CREATE TABLE `likes` (
   FOREIGN KEY (`dogPostId`) REFERENCES `dogSta` (`dogPostId`) ON UPDATE CASCADE,
   FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
-
-
--- CREATE TABLE `image` (
---   `imageId` INT NOT NULL AUTO_INCREMENT,
---   `userImage` VARCHAR(45),
---   `dogImage` VARCHAR(45),
---   `dogPostImage` VARCHAR(45),
---   `userId` INT NOT NULL,
---   PRIMARY KEY(`imageId`),
---   KEY `imageId` (`imageId`),
---   KEY `userId` (`userId`),
---   FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
--- )  ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 
-
-
--- CREATE TABLE `userImage` (
---   `userImageId` INT NOT NULL AUTO_INCREMENT,
---   `userImage` TEXT,
---   -- `userId` INT NOT NULL,
---   PRIMARY KEY(`userImageId`),
---   KEY `userImageId` (`userImageId`),
---   -- KEY `userId` (`userId`),
---   -- FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
--- ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4
-
---   CREATE TABLE `kakaoUser` (
---   `kakaoUserId` INT NOT NULL AUTO_INCREMENT,
---   `userEmail` VARCHAR(45) NOT NULL,
---   `password` varchar(255) NOT NULL,
---   `userNickname` VARCHAR(45) NOT NULL,
---   `userGender` VARCHAR(45) NOT NULL,
---   `userAge` VARCHAR(45) NOT NULL,
---   `userImage` TEXT NOT NULL,
---   `userLocation` varchar(45) NOT NULL,
---   PRIMARY KEY (`userId`),
---   KEY `userId` (`userId`)
--- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
-
 
 CREATE TABLE `room` (
   `roomId` int(11) NOT NULL AUTO_INCREMENT,
@@ -147,6 +107,19 @@ CREATE TABLE `location` (
   PRIMARY KEY(`locationId`),
   KEY `locationId` (`locationId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--   CREATE TABLE `kakaoUser` (
+--   `kakaoUserId` INT NOT NULL AUTO_INCREMENT,
+--   `userEmail` VARCHAR(45) NOT NULL,
+--   `password` varchar(255) NOT NULL,
+--   `userNickname` VARCHAR(45) NOT NULL,
+--   `userGender` VARCHAR(45) NOT NULL,
+--   `userAge` VARCHAR(45) NOT NULL,
+--   `userImage` TEXT NOT NULL,
+--   `userLocation` varchar(45) NOT NULL,
+--   PRIMARY KEY (`userId`),
+--   KEY `userId` (`userId`)
+-- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 
 
