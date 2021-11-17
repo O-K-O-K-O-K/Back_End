@@ -2,10 +2,7 @@ const AWS = require("aws-sdk");
 const path = require("path");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
-const sharp = require("sharp"); //새로 추가
-// const awsLoadPath = path.join(__dirname, "../S3/awsconfig.json");
-// AWS.config.loadFromPath(awsLoadPath);
-// let s3 = new AWS.S3();
+const sharp = require("sharp"); 
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.S3_KEYID,
@@ -50,10 +47,5 @@ const upload = multer({
     acl: "public-read-write",
   }),
 });
-
-// key: function (req, file, cb) {
-//   const extension = path.extname(file.originalname);
-//   cb(null, Date.now().toString() + extension);
-// },
 
 module.exports = upload;
