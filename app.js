@@ -6,15 +6,13 @@ const app = express();
 const swaggerUi = require("swagger-ui-express");
 const path = require("path");
 const morgan = require("morgan");
-
 //cors
-const logger = require("./logger")
-
 const cors = require("cors");
 const corsOptions = {
   origin: "*",
   credentials: true,
 };
+
 
 //라우팅
 const swaggerFile = require("./swagger-output");
@@ -26,6 +24,7 @@ const dogstaRouter = require("./routes/dogsta");
 const pagesRouter = require("./routes/mypage");
 const chatRouter = require("./routes/chat");
 const accessLogStream = require('./src/config/log');
+const logger = require("./logger")
 
 //앱세팅
 app.use(cors(corsOptions));
@@ -58,9 +57,8 @@ app.use((req,res,next) => {
 
 app.get("/", (_, res) => res.render("home"));
 
-// const auth = require("./middlewares/auth");
 
-app.get("/", (_, res) => res.render("home"));
+
 
 
 module.exports = app;
