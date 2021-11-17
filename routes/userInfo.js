@@ -87,30 +87,18 @@ router.patch('/changeImage', upload.single("userImage"), auth, async (req, res) 
 router.patch("/me", auth, async (req, res) => {
   try {
     const userId = res.locals.user.userId;
-    console.log("userId" , userId)
-    console.log("req.body:", req.body);
     const { userNickname, userGender, userAge, userLocation} = req.body;
-
-    // const userImage = req.file.location;
-
-    //json으로 parse를 해서 보내줌..!
-    //const obj = JSON.parse(JSON.stringify(req.body));
-    //console.log("obj: ", obj)
-
-    // console.log("이미지 타입:",typeof(userImage));
 
     const escapeQuery = {
       userNickname: userNickname,
       userGender: userGender,
       userAge: userAge,
       userLocation: userLocation,
-      // userImage: userImage,
     };
 
-    console.log("여기: ", escapeQuery);
-
     const userQuery = `UPDATE user 
-    SET userNickname="${userNickname}", userGender="${userGender}", userAge="${userAge}", userLocation="${userLocation}"
+    SET userNickname="${userNickname}", userGender="${userGender}", userAge="${userAge}", 
+    userLocation="${userLocation}"
     WHERE user.userId = '${userId}'`;
 
     await db.query(userQuery, escapeQuery, async (err, user) => {
@@ -287,11 +275,9 @@ router.patch("/me", auth, async (req, res) => {
 // router.patch("/me", upload.single("userImage"), auth, async (req, res) => {
 //   try {
 //     const userId = res.locals.user.userId;
-//     console.log("req.body:", req.body);
 //     const { userNickname, userGender, userAge, userLocation } = req.body;
 
-//     // const userImage = req.file.location;
-//     // console.log("userImage: ",userImage)
+//     // const userImage = req.file.location
 
 //     const obj = {
 //       userImage: req.file.location
@@ -306,8 +292,6 @@ router.patch("/me", auth, async (req, res) => {
 //       userLocation: userLocation,
 //       userImage: obj,
 //     };
-
-//     console.log("여기: ", escapeQuery);
 
 //     const userQuery = `UPDATE user SET ? WHERE user.userId = '${userId}'`;
 
