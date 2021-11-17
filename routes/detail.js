@@ -3,7 +3,8 @@ const router = express.Router();
 const auth = require('../middlewares/auth'); 
 const { db } = require("../models/index");
 const dotenv = require('dotenv');
-const { ConnectContactLens } = require('aws-sdk');
+// const { ConnectContactLens } = require('aws-sdk');
+const logger = require("../src/config/logger")
 dotenv.config();
 // const util = require('util'); //현재시간을 찍어주는 모듈 
 // const { JsonWebTokenError } = require('jsonwebtoken');
@@ -37,20 +38,20 @@ router.post('/write', auth, async (req, res) => {
         console.log("row는",rows)
         if (error) {
           console.log(error)
-          // logger.error(`Msg: raise Error in createPost => ${error}`);
+          logger.error(`Msg: raise Error in createPost => ${error}`);
           return res.status(400).json({
             success: false,
             errMessage: '400 에러 게시중 오류가 발생 하였습니다!.'
           });
         }
-        // logger.info(`${userNickname}님, 게시글 등록이 완료되었습니다.`);
+        logger.info(`${userNickname}님, 게시글 등록이 완료되었습니다.`);
         return res.status(201).json({
           success: true,
           Message: '게시글이 성공적으로 포스팅 되었습니다!.'
         });
       });
     } catch (err) {
-      // logger.error('게시글 작성 중 발생한 에러: ', err);
+      logger.error('게시글 작성 중 발생한 에러: ', err);
       return res.status(500).json({
         success: false,
         errMessage: '500 에러 게시중 오류가 발생 하였습니다!.'
@@ -79,10 +80,10 @@ router.get('/:postId', auth, function (req, res, next) {
       console.log("들어가니",rows)
       if (error) {
         console.log(error)
-        // logger.error('게시글 조회 중 발생한 DB관련 에러', error);
+        logger.error('게시글 조회 중 발생한 DB관련 에러', error);
         return res.sendStatus(400);
       }
-      // logger.info('게시글을 성공적으로 조회했습니다.');
+      logger.info('게시글을 성공적으로 조회했습니다.');
       res.status(200).json({
         success: true,
         posts: rows[0],
@@ -91,7 +92,7 @@ router.get('/:postId', auth, function (req, res, next) {
       console.log("userId는",rows[0].userId)
     });
   } catch (err) {
-    // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
+    logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
     return res.sendStatus(500);
   }
 });
@@ -117,10 +118,10 @@ router.get('/', function (req, res, next) {
     db.query(query, (error, rows) => {
       if (error) {
         console.log(error)
-        // logger.error('게시글 조회 중 발생한 DB관련 에러', error);
+        logger.error('게시글 조회 중 발생한 DB관련 에러', error);
         return res.sendStatus(400);
       }
-      // logger.info('게시글을 성공적으로 조회했습니다.');
+      logger.info('게시글을 성공적으로 조회했습니다.');
       res.status(200).json({
         success: true,
         posts: rows,
@@ -129,7 +130,7 @@ router.get('/', function (req, res, next) {
     });
 
   } catch (err) {
-    // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
+    logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
     return res.sendStatus(500);
   }
 });

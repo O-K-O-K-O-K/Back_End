@@ -1,6 +1,13 @@
-.env
-/node_modules
-.vscode
+#logs
+logs
+*.log
+npm-debug.log*
 log
 config
 .DS_store
+
+.env
+#모듈 
+/node_modules
+.vscode
+
