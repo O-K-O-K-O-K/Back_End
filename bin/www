@@ -6,10 +6,36 @@
 //모듈 
 const app = require('../app');
 const http = require('http');
- const socketio = require('socket.io');
+const socketIo =  require("socket.io")
  const server = http.createServer(app);
  const { connection } = require('mongoose');
  const { isObject } = require('util');
+const io = socketIo(server);
+//소켓때문에 cors 문제가 발생한다면 app.use(express.static("asset")) 과 비슷한 미들웨어 설정해두기!
+//socketIo
+io.on('connection', (socket) => {
+  console.log("누군가 연결 했어요!")
+  
+  socket.on("aaa", (data) => {
+    const payload = {
+      // userNickname =  data.userNickname,
+      // postId = data.postId,
+      // postLike = data.postLike,
+      date: new Date().toISOString()
+    } //수정해야함
+    console.log("클라이언트에서 발생한 이벤트",data, new Date())
+    socket.broadcast.emit("aaa", payload)
+    //io는 모든 소켓을 관리해주는 역할! //broadcast 나를 제외한 모두에게 
+  }) //특정 그 사람에게 어떻게 알람을 뜨게 할 것인가?
+  //프론트 엔드에서 이벤트가 발생하는 경우, "aaa" 이벤트를 제대로 보내는지 확인하기
+  socket.on("disconnect",() => {
+    console.log("누군가 연결을 끊었어요!")
+  })
+
+
+  
+});
+
  
  //라우터
  const debug = require('debug')('clone-coding:server');

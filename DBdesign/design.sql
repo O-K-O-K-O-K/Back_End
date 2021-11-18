@@ -141,6 +141,19 @@ CREATE TABLE `chat` (
   FOREIGN KEY (`receiverId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `deleteChat` (
+  `deleteChatId` int(11) NOT NULL AUTO_INCREMENT,
+  `chatId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `receiverId` int(11) NOT NULL,
+  `senderId` VARCHAR(45) NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY(`deleteChatId`),
+  KEY `deleteChatId` (`deleteChatId`),
+  KEY `chatId` (`chatId`),
+  FOREIGN KEY (`chatId`) REFERENCES `chat` (`chatId`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `location` (
   `locationId` int(11) NOT NULL AUTO_INCREMENT,
   `points` JSON NOT NULL,

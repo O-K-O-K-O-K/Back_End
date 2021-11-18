@@ -7,40 +7,43 @@ const { db } = require("../models/index");
 router.get('/outbox', auth, async(req, res, next) => {
   try { 
     const userId= res.locals.user.userId;
+    console.log(userId)
     const query = `SELECT 
     chat.message, chat.chatId, user.userNickname as receiverNickname, user.userImage as receiverImage 
     from chat 
     join user
     on user.userId = chat.receiverId
-    where senderId = ${userId} ORDER BY createdAt DESC`;
-  db.query(query, (error,rows) => {
-    if (error) {
-      console.log(error)
-      return res.sendStatus(400);
-    }
-    res.status(200).json ({
-      success: true,
-      message:rows,
-    })
-    console.log("메세지 들어가니",rows)
-  })
-  }catch (err) {
+    WHERE (chat.chatId, ${userId}) NOT IN (select deleteChat.chatId, deleteChat.userId from deleteChat) AND chat.senderId = ${userId} ORDER BY createdAt DESC`;
+    db.query(query, (error,rows) => {
+        if (error) {
+            console.log(error)
+            return res.sendStatus(400);
+        }
+        res.status(200).json ({
+            success: true,
+            message:rows,
+        })
+        console.log("메세지 들어가니",rows)
+     })
+    }catch (err) {
     // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
     return res.sendStatus(500);
-  }
+}
 })
 
 //받은 쪽지함
 router.get('/inbox',auth, async(req, res, next) => {
   try { 
   const userId= res.locals.user.userId;
+  console.log(userId)
   const query = 
   `SELECT chat.senderNickname, chat.chatId, chat.message, chat.createdAt, user.userImage  as senderImage
   from chat 
   join user
   on user.userId = chat.senderId
-  where receiverId = ${userId} ORDER BY createdAt DESC`;
+  WHERE ((chat.chatId, ${userId}) NOT IN (select deleteChat.chatId, deleteChat.userId from deleteChat)) AND chat.receiverId = ${userId} ORDER BY createdAt DESC`;
   db.query(query, (error,rows) => {
+    console.log(query)
     if (error) {
       console.log(error)
       return res.sendStatus(400);
@@ -120,23 +123,36 @@ router.get('/:chatId', auth, async(req, res, next) => {
 })
 
 //메세지 삭제
-router.delete('/:chatId', auth, async(req, res, next) => {
-  try { 
-    const {chatId}= req.params;
-    const userId = res.locals.user.userId;
-    const query = `DELETE from chat where chatId = ${chatId} AND (receiverId OR senderId = '${userId}')`;
-    await db.query(query, (error, rows, fields) => {
-      if (error) {
-        console.log(error)
-        return res.status(400).json({
-          success: false,
+router.post('/:receiverId/:senderId/:chatId', auth, async(req, res, next) => {
+  try {
+    const {chatId,receiverId,senderId}= req.params;
+    console.log(chatId,receiverId)
+    const userId = res.locals.user.userId
+    console.log(userId)
+    const params = [
+      chatId,
+      receiverId,
+      senderId,
+      userId
+    ];
+    const query = 
+    `INSERT INTO deleteChat (chatId,receiverId,senderId,userId) VALUES(?,?,?,?)`;
+    await db.query(query, params,(error,rows,fields) => {
+      console.log("row는",rows)
+        if (error) {
+          console.log(error)
+          // logger.error(`Msg: raise Error in createPost => ${error}`);
+          return res.status(400).json({
+            success: false,
+            errMessage: '400 에러 게시중 오류가 발생 하였습니다!.'
+          });
+        }
+        return res.status(201).json({
+          success: true,
+          Message: '게시글이 성공적으로 포스팅 되었습니다!.'
         });
-      }
-      // logger.info('게시글을 성공적으로 삭제하였습니다.');
-      res.status(200).json({
-        success: true,
-      });
-    });
+    })
+    res.send(ok)
   } catch (err) {
     // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
     return res.sendStatus(500);

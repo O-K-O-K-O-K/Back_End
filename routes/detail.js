@@ -98,7 +98,7 @@ router.get('/:postId', auth, function (req, res, next) {
 });
 
 
-//메인 조회하기 - 필터 미포함 
+//메인 조회하기 - 전체 조회하기
 router.get('/', function (req, res, next) {
   let conditions = [];
   let where
@@ -135,6 +135,158 @@ router.get('/', function (req, res, next) {
   }
 });
 
+//메인 조회하기 - 올림픽 공원
+router.get('/olympicPark', function (req, res, next) {
+  let conditions = [];
+  let where
+  console.log("get method 연결완료!")
+  const {dogSize, dogGender, dogAge, locationCategory, completed} = req.body;
+  console.log(dogSize, dogGender, dogAge, locationCategory, completed)
+  try {
+
+    const query = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
+    post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
+    FROM post
+    JOIN dog
+    ON dog.userId=post.userId 
+    ORDER BY post.createdAt DESC ` 
+    console.log('query', typeof query);
+
+    db.query(query, (error, rows) => {
+      if (error) {
+        console.log(error)
+        logger.error('게시글 조회 중 발생한 DB관련 에러', error);
+        return res.sendStatus(400);
+      }
+      logger.info('게시글을 성공적으로 조회했습니다.');
+      res.status(200).json({
+        success: true,
+        posts: rows,
+      });
+      console.log("rows는", rows)
+    });
+
+  } catch (err) {
+    logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
+    return res.sendStatus(500);
+  }
+});
+
+//메인 조회하기 - 올림픽 공원
+router.get('/olympicPark', function (req, res, next) {
+  let conditions = [];
+  let where
+  console.log("get method 연결완료!")
+  const {dogSize, dogGender, dogAge, locationCategory, completed} = req.body;
+  console.log(dogSize, dogGender, dogAge, locationCategory, completed)
+  try {
+
+    const query = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
+    post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
+    FROM post
+    JOIN dog
+    ON dog.userId=post.userId 
+    where locationCategory ="올림픽공원"
+    ORDER BY post.createdAt DESC ` 
+    console.log('query', typeof query);
+
+    db.query(query, (error, rows) => {
+      if (error) {
+        console.log(error)
+        logger.error('게시글 조회 중 발생한 DB관련 에러', error);
+        return res.sendStatus(400);
+      }
+      logger.info('게시글을 성공적으로 조회했습니다.');
+      res.status(200).json({
+        success: true,
+        posts: rows,
+      });
+      console.log("rows는", rows)
+    });
+
+  } catch (err) {
+    logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
+    return res.sendStatus(500);
+  }
+});
+
+//메인 조회하기 - 반포 공원
+router.get('/banpoPark', function (req, res, next) {
+  let conditions = [];
+  let where
+  console.log("get method 연결완료!")
+  const {dogSize, dogGender, dogAge, locationCategory, completed} = req.body;
+  console.log(dogSize, dogGender, dogAge, locationCategory, completed)
+  try {
+
+    const query = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
+    post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
+    FROM post
+    JOIN dog
+    ON dog.userId=post.userId 
+    where locationCategory ="반포공원"
+    ORDER BY post.createdAt DESC ` 
+    console.log('query', typeof query);
+
+    db.query(query, (error, rows) => {
+      if (error) {
+        console.log(error)
+        logger.error('게시글 조회 중 발생한 DB관련 에러', error);
+        return res.sendStatus(400);
+      }
+      logger.info('게시글을 성공적으로 조회했습니다.');
+      res.status(200).json({
+        success: true,
+        posts: rows,
+      });
+      console.log("rows는", rows)
+    });
+
+  } catch (err) {
+    logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
+    return res.sendStatus(500);
+  }
+});
+
+//메인 조회하기 - 한강 공원
+router.get('/hanRiverPark', function (req, res, next) {
+  let conditions = [];
+  let where
+  console.log("get method 연결완료!")
+  const {dogSize, dogGender, dogAge, locationCategory, completed} = req.body;
+  console.log(dogSize, dogGender, dogAge, locationCategory, completed)
+  try {
+
+    const query = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
+    post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
+    FROM post
+    JOIN dog
+    ON dog.userId=post.userId 
+    where locationCategory ="한강공원"
+    ORDER BY post.createdAt DESC ` 
+    console.log('query', typeof query);
+
+    db.query(query, (error, rows) => {
+      if (error) {
+        console.log(error)
+        logger.error('게시글 조회 중 발생한 DB관련 에러', error);
+        return res.sendStatus(400);
+      }
+      logger.info('게시글을 성공적으로 조회했습니다.');
+      res.status(200).json({
+        success: true,
+        posts: rows,
+      });
+      console.log("rows는", rows)
+    });
+
+  } catch (err) {
+    logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
+    return res.sendStatus(500);
+  }
+});
+
+//카테고리 전체 조회
 router.get('/category', function (req, res, next) {
   let conditions = [];
   let where

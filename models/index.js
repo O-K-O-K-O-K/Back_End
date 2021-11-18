@@ -15,7 +15,8 @@ exports.db = mysql.createConnection({
     user: 'root',
     port: '3306',
     password: 'test',
-    database: 'dogdogdog'
+    database: 'dogdogdog',
+    multipleStatements: true
   });
 
 // exports.db = mysql.createConnection({
