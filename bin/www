@@ -4,156 +4,25 @@
  * Module dependencies.
  */
 
- const app = require('../app');
- const debug = require('debug')('clone-coding:server');
- const socketio = require('socket.io');
- const http = require('http');
- const webSocket = require('../socket')
-//  const socket = new webSocket('ws://localhost:3000')
- const { db } = require("../models/index");
-//  const cors = require("cors");
-
-//  app.use(cors());
- 
-
-//  const {addUser, removeUser, getUser, getUsersInRoom} =require('../users.js');
- const WebSocket = require('ws')
- const server = http.createServer(app);
- const io = require('socket.io')(server);
- const port = normalizePort(process.env.PORT || '3000');
-//  const router = require('../router');
-const { connection } = require('mongoose');
-const { isObject } = require('util');
+const app = require("../app");
+const debug = require("debug")("clone-coding:server");
+const http = require("http");
+//  const WebSocket = require('ws')
+const server = http.createServer(app);
+const port = normalizePort(process.env.PORT || "3000");
 //  const socket = new WebSocket(`ws://${window.location.host}`)
- app.set('port', port);
+app.set("port", port);
 //  const logger = require('../config/logger');
- require('dotenv').config();
+require("dotenv").config();
 // const {Server} = require("socket.io")
 
+/**
+ * Get port from environment and store in Express.
+ */
 
-io.on('connection', (socket) =>{
-  console.log('연결이 되었습니다')
-  socket.send("Hello")
-  socket.emit("greeting", "Hey!")
-  socket.on("chat",(data) =>{
-    console.log(data);
-  })
-})
-
-// io.use(jwtAuth.authenticate({
-//   secret: process.env.SECRET_KEY,    // required, used to verify the token's signature
-//   algorithm: 'HS256'        // optional, default to be HS256
-// }, function(payload, done) {
-//   // done is a callback, you can use it as follows
-//   console.log('연결이 되었습니다22')
-//   const query = `SELECT * FROM user WHERE userId = ?`;
-//   db.query(query, (err,user) => {
-//   if (err) {
-//       // return error
-//     return done(err);}
-//       if (!user) {
-//         // return fail with an error message
-//         return done(null, false, 'user does not exist');}
-//         // return success with a user info
-//         return done(null, user);
-//     });
-// }))
-
-
-
-//사용자 인증 소켓
-// io.use(function(socket,next) {
-//   console.log(socket.handshake.auth.token) 
-//   next();
-// });
-//연결확인
-// io.on ('connection', function (con) {
-//   console.log(con.id)
-
-// })
-//대화내용 가져오기
-// const showChat = async () => {
-//   try {
-//     const {room} = req.body // 수정필요! 
-//     const userNickname = res.locals.user.userNickname; //미들웨어 auth 를 지나야함
-//     const query = `SELECT chat.message, chat.room, chat.createdAt, chat.readStatus, user.userNickname
-//     from chat 
-//     join user
-//     on chat.userId = user.userId
-//     WHERE chat.room = ${room}`
-//     db.query(query, (error, rows) => {
-//       if(error) {
-//         console.log(error)
-//         return res.sendStatus(400);
-//       }
-//       res.status(200).json({
-//         success:true,
-//         message: rows, //수정필요
-//       })
-//     })
-//   } catch (err) {
-//     return res.sendStatus(500);
-//   }
-// }
-// const currentOn =[]
-// const currentOnUserInfo =[]
-
-// io.on('connection', (socket) => {
-  
-  // socket.on('join', ({userNickname,room}, callback) => {
-  // const {error,user} = addUser({id:socket.id,userNickname,room});
-  //   if(error) return callback(error);
-
-  //   socket.emit('message', {user: 'admin', text: `${user.name}, welcome to the room ${user.room}`});
-  //   socket.broadcast.to(user.room).emit('message',{user:'amdin', text:`${user.name}, has joined`});
-  //   socket.join(user.room);
-
-  //   io.to(user.room).emit('roomData', {room:user.room, users:getUsersInRoom(user.room)})
-  //   callback();
-  // });
-
-  
-  // socket.on('sendMessage',(message,callback) => {
-  //   const user = getUser(socket.id)
-  //   connection.query("INSERT INTO chat (room,userNickname,message) Values (?,?,?)", [
-  //     user.room, user.name, message //이 부분 수정 필요! (변수 부분!)
-  //   ], function (){
-  //     console.log("데이터가 정상적으로 입력 되었습니다!")
-  //   })
-  //   io.to(user.room).emit('message', {user: user.name,text:message});
-  //   io.to(user.room).emit('message', {room: user.room,users:getUsersInRoom(user.room)});
-  //   callback()
-
-  // })
-  // socket.on('disconnect', () => {
-  //   const user = removeUser(socekt.id);
-  //   if(user) {
-  //     io.to(user.room).emit('message',{user:'admin',text:`${user.name} has left.`})
-  //   }
-  // })
-// });
-//여기까지
-
-
-
-// app.use(router);
-
-//   cors:{
-//     origin:"*"},
-// });
-
-
- /**
-  * Get port from environment and store in Express.
-  */
-
- 
-
-
- /**
-  * Create HTTP server.
-  */
- 
+/**
+ * Create HTTP server.
+ */
 
 //  const wss = new WebSocket.Server({server})
 //  function handleConnection (socket) {
@@ -161,67 +30,66 @@ io.on('connection', (socket) =>{
 //  }
 //  wss.on("connection",handleConnection);
 
- /**
-  * Listen on provided port, on all network interfaces.
-  */
- 
- server.listen(port);
- server.on('error', onError);
- server.on('listening', onListening);
+/**
+ * Listen on provided port, on all network interfaces.
+ */
 
-  
- /**
-  * Normalize a port into a number, string, or false.
-  */
- 
- function normalizePort(val) {
-   const port = parseInt(val, 10);
- 
-   if (isNaN(port)) {
-     // named pipe
-     return val;
-   }
- 
-   if (port >= 0) {
-     // port number
-     return port;
-   }
- 
-   return false;
- }
- 
- /**
-  * Event listener for HTTP server "error" event.
-  */
- 
- function onError(error) {
-   if (error.syscall !== 'listen') {
-     throw error;
-   }
- 
-   const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
- 
-   // handle specific listen errors with friendly messages
-   switch (error.code) {
-     case 'EACCES':
-       console.error(bind + ' requires elevated privileges');
-       process.exit(1);
-       break;
-     case 'EADDRINUSE':
-       console.error(bind + ' is already in use');
-       process.exit(1);
-       break;
-     default:
-       throw error;
-   }
- }
- 
- /**
-  * Event listener for HTTP server "listening" event.
-  */
- function onListening() {
+server.listen(port);
+server.on("error", onError);
+server.on("listening", onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  const port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== "listen") {
+    throw error;
+  }
+
+  const bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case "EACCES":
+      console.error(bind + " requires elevated privileges");
+      process.exit(1);
+      break;
+    case "EADDRINUSE":
+      console.error(bind + " is already in use");
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+function onListening() {
   //  logger.info(`${port}번 포트에서 정상적으로 서버가 가동되었습니다.`);
-   const addr = server.address();
-   const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-   debug('Listening on ' + bind);
- }
+  const addr = server.address();
+  const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
+  debug("Listening on " + bind);
+}
