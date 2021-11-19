@@ -52,7 +52,7 @@ CREATE TABLE `post` (
   ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4
 
 
-  CREATE TABLE `dogSta` ( --> table 드랍하면 dogsta 로 ㄱㄱ, not dogSta
+  CREATE TABLE `dogSta` ( 
   `dogPostId` INT NOT NULL AUTO_INCREMENT,
   `dogPostImage` TEXT NOT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -68,7 +68,6 @@ CREATE TABLE `post` (
 CREATE TABLE `likes` (
   `likeId` INT NOT NULL AUTO_INCREMENT,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  -- `likeCount` INT NOT NULL,
   `dogPostId` INT NOT NULL,
   `userId` INT NOT NULL,
   PRIMARY KEY (`likeId`),
@@ -79,14 +78,14 @@ CREATE TABLE `likes` (
   FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 
-CREATE TABLE `room` (
-  `roomId` int(11) NOT NULL AUTO_INCREMENT,
-  `senderNickname` VARCHAR(45) NOT NULL,
-  `receiverNickname` VARCHAR(45) NOT NULL,
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY(`roomId`),
-  KEY `roomId` (`roomId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- CREATE TABLE `room` (
+--   `roomId` int(11) NOT NULL AUTO_INCREMENT,
+--   `senderNickname` VARCHAR(45) NOT NULL,
+--   `receiverNickname` VARCHAR(45) NOT NULL,
+--   `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+--   PRIMARY KEY(`roomId`),
+--   KEY `roomId` (`roomId`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `chat` (
   `chatId` int(11) NOT NULL AUTO_INCREMENT,
@@ -99,14 +98,42 @@ CREATE TABLE `chat` (
   KEY `chatId` (`chatId`),
   KEY `receiverId` (`receiverId`),
   FOREIGN KEY (`receiverId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4
+
+CREATE TABLE `deleteChat` (
+  `deleteChatId` int(11) NOT NULL AUTO_INCREMENT,
+  `chatId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `receiverId` int(11) NOT NULL,
+  `senderId` int(11) NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY(`deleteChatId`),
+  KEY `deleteChatId` (`deleteChatId`),
+  KEY `chatId` (`chatId`),
+  FOREIGN KEY (`chatId`) REFERENCES `chat` (`chatId`) ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4
+
+
+CREATE TABLE `notification` (
+  `notificationId` int(11) NOT NULL AUTO_INCREMENT,
+  `receiverId` int(11) NOT NULL,
+  `senderId`  int(11) NOT NULL,
+  `type`  int(11) NOT NULL,
+  `senderNickname` VARCHAR(100) NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `readdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY(`notificationId`),
+  KEY `notificationId` (`notificationId`),
+  KEY `senderId` (`senderId`),
+  FOREIGN KEY (`senderId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `location` (
-  `locationId` int(11) NOT NULL AUTO_INCREMENT,
-  `points` JSON NOT NULL,
-  PRIMARY KEY(`locationId`),
-  KEY `locationId` (`locationId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- CREATE TABLE `location` (
+--   `locationId` int(11) NOT NULL AUTO_INCREMENT,
+--   `points` JSON NOT NULL,
+--   PRIMARY KEY(`locationId`),
+--   KEY `locationId` (`locationId`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --   CREATE TABLE `kakaoUser` (
 --   `kakaoUserId` INT NOT NULL AUTO_INCREMENT,

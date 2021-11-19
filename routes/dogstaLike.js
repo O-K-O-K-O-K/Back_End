@@ -55,10 +55,11 @@ router.post("/:dogPostId", auth, async (req, res) => {
 });
 
 // 본인이 눌렀냐 안 눌렀냐 여부 -  auth 필요함 -> 마이페이지에서 개스타그램 가져올 때 볼 수 있음.
-router.get("/likeExist", auth, async (req, res) => {
+router.get("/:dogPostId/likeExist", auth, async (req, res) => {
+    const { dogPostId } = req.params;
     const userId = res.locals.user.userId;
 
-    const likeExist = `SELECT * FROM likes WHERE userId ="${userId}"`;
+    const likeExist = `SELECT * FROM likes WHERE dogPostId = "${dogPostId}" AND userId ="${userId}"`;
     const results = await db.query(likeExist);
     console.log("results:", results);
     
@@ -105,7 +106,24 @@ router.get("/:dogPostId", async (req, res) => {
         });
       });
     } else {
-      res.status(404).send({ msg: "좋아요를 한 사람이 없습니다" });
+      let likeNum;
+      const likeQuery = `SELECT COUNT(dogPostId) as count FROM likes WHERE dogPostId ="${dogPostId}"`;
+      console.log("likeQuery", likeQuery)
+
+      const results = await db.query(likeQuery)
+      likeNum = results[0];  
+
+      await db.query(likeQuery, (error, rows) => {
+        if (error) {
+          console.log(error);
+          return res.status(400).json({
+            success: false,
+          });
+        }
+        return res.status(200).send({
+          likeNum
+        });
+      });
     }
   } catch (err) {
     console.log(err);

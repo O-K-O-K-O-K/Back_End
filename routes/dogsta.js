@@ -6,6 +6,39 @@ dotenv.config();
 const upload = require("../S3/s3");
 const { db } = require("../models/index");
 
+// 개스타그램 메인 조회하기- like 정렬
+router.get("/likeFilter", async (req, res) => {
+  try {
+    const likeQuery = `SELECT *,
+      COUNT(likes.dogPostId) as count
+      FROM likes
+      JOIN dogSta
+      ON dogSta.dogPostId = likes.dogPostId
+      JOIN user
+      ON user.userId = dogSta.userId
+      GROUP BY likes.dogPostId
+      ORDER BY count DESC`;
+
+    await db.query(likeQuery, (error, rows) => {
+      if (error) {
+        return res.status(400).json({
+          success: false,
+          msg: "메인 조회하기 실패",
+        });
+      }
+      return res.status(200).json({
+        success: true,
+        posts: rows,
+      });
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      msg: "로그인 하세용",
+    });
+  }
+});
+
 // 개스타그램 글 등록하기
 router.post("/write", upload.single("dogPostImage"), auth, async (req, res) => {
   const userId = res.locals.user.userId;
@@ -39,39 +72,6 @@ router.post("/write", upload.single("dogPostImage"), auth, async (req, res) => {
     return res.status(500).json({
       success: false,
       msg: "로그인 하세요",
-    });
-  }
-});
-
-// 개스타그램 메인 조회하기- like 정렬
-router.get("/likeFilter", async (req, res) => {
-  try {
-    const likeQuery = `SELECT *,
-      COUNT(likes.dogPostId) as count
-      FROM likes
-      JOIN dogSta
-      ON dogSta.dogPostId = likes.dogPostId
-      JOIN user
-      ON user.userId = dogSta.userId
-      GROUP BY likes.dogPostId
-      ORDER BY count DESC`;
-
-    await db.query(likeQuery, (error, rows) => {
-      if (error) {
-        return res.status(400).json({
-          success: false,
-          msg: "메인 조회하기 실패",
-        });
-      }
-      return res.status(200).json({
-        success: true,
-        posts: rows,
-      });
-    });
-  } catch (err) {
-    return res.status(500).json({
-      success: false,
-      msg: "로그인 하세용",
     });
   }
 });

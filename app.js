@@ -40,6 +40,7 @@ const dogstaRouter = require("./routes/dogsta");
 const pagesRouter = require("./routes/mypage");
 const chatRouter = require("./routes/chat");
 const likeRouter = require("./routes/dogstaLike");
+const notificationRouter = require("./routes/notification");
 
 app.use("/dogs", dogsRouter);
 app.use("/posts", detailRouter);
@@ -49,6 +50,7 @@ app.use("/dogsta", dogstaRouter);
 app.use("/mypage", pagesRouter);
 app.use("/chat", chatRouter);
 app.use("/likes", likeRouter);
+app.use("/notification", notificationRouter);
 
 app.get("/",(_,res) => res.render("home"));
 
