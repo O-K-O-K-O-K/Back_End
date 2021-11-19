@@ -131,7 +131,7 @@ CREATE TABLE `room` (
 CREATE TABLE `chat` (
   `chatId` int(11) NOT NULL AUTO_INCREMENT,
   `receiverId` int(11) NOT NULL,
-  `senderId` VARCHAR(45) NOT NULL,
+  `senderId`  int(11) NOT NULL,
   `senderNickname` VARCHAR(45) NOT NULL,
   `message` text NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -146,12 +146,40 @@ CREATE TABLE `deleteChat` (
   `chatId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
   `receiverId` int(11) NOT NULL,
-  `senderId` VARCHAR(45) NOT NULL,
+  `senderId`  int(11) NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(`deleteChatId`),
   KEY `deleteChatId` (`deleteChatId`),
   KEY `chatId` (`chatId`),
   FOREIGN KEY (`chatId`) REFERENCES `chat` (`chatId`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `likes` (
+  `likeId` INT NOT NULL AUTO_INCREMENT,
+  `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  -- `likeCount` INT NOT NULL,
+  `dogPostId` INT NOT NULL,
+  `userId` INT NOT NULL,
+  PRIMARY KEY (`likeId`),
+  KEY `likeId` (`likeId`),
+  KEY `dogPostId` (`dogPostId`),
+  KEY `userId` (`userId`),
+  FOREIGN KEY (`dogPostId`) REFERENCES `dogSta` (`dogPostId`) ON UPDATE CASCADE,
+  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+
+CREATE TABLE `notification` (
+  `notificationId` int(11) NOT NULL AUTO_INCREMENT,
+  `receiverId` int(11) NOT NULL,
+  `senderId`  int(11) NOT NULL,
+  `type`  int(11) NOT NULL,
+  `senderNickname` VARCHAR(100) NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `readdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY(`notificationId`),
+  KEY `notificationId` (`notificationId`),
+  KEY `senderId` (`senderId`),
+  FOREIGN KEY (`senderId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `location` (

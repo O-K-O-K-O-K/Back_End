@@ -27,7 +27,7 @@ const usersRouter = require("./routes/user");
 const dogstaRouter = require("./routes/dogsta");
 const pagesRouter = require("./routes/mypage");
 const chatRouter = require("./routes/chat");
-const chattestRouter = require("./routes/chattest");
+const notificationRouter = require("./routes/notification");
 const accessLogStream = require('./src/config/log');
 
 //앱세팅
@@ -49,7 +49,7 @@ app.use("/users", usersRouter);
 app.use("/dogsta", dogstaRouter);
 app.use("/mypage", pagesRouter);
 app.use("/chat", chatRouter);
-app.use("/chat1", chattestRouter);
+app.use("/notification", notificationRouter);
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use((req,res,next) => {

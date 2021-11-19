@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middlewares/auth');
 const { db } = require("../models/index");
+const logger = require("../src/config/logger")
 
 //보낸 쪽지함
 router.get('/outbox', auth, async(req, res, next) => {
@@ -17,15 +18,18 @@ router.get('/outbox', auth, async(req, res, next) => {
     db.query(query, (error,rows) => {
         if (error) {
             console.log(error)
+            logger.error('쪽지 조회 중 DB관련 에러가 발생했습니다', error);
             return res.sendStatus(400);
         }
+        logger.info('쪽지를 성공적으로 조회했습니다.');
         res.status(200).json ({
             success: true,
             message:rows,
         })
-        console.log("메세지 들어가니",rows)
+        console.log("쪽지 들어가니",rows)
      })
     }catch (err) {
+      logger.error('쪽지 조회 중 예상치 못한 에러가 발생 했습니다: ', err);
     // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
     return res.sendStatus(500);
 }
@@ -46,16 +50,18 @@ router.get('/inbox',auth, async(req, res, next) => {
     console.log(query)
     if (error) {
       console.log(error)
+      logger.error('쪽지 조회 중 DB관련 에러가 발생했습니다', error);
       return res.sendStatus(400);
     }
+    logger.info('쪽지를 성공적으로 조회했습니다.');
     res.status(200).json ({
       success: true,
       message:rows,
     })
-    console.log("메세지 들어가니",rows)
+    console.log("쪽지 들어가니",rows)
   })
   }catch (err) {
-    // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
+    logger.error('쪽지 조회 중 예상치 못한 에러가 발생 했습니다: ', err);
     return res.sendStatus(500);
   }
 })
@@ -80,20 +86,21 @@ router.post('/:receiverId', auth, async (req,res,next) =>{
       console.log("row는",rows)
         if (error) {
           console.log(error)
-          // logger.error(`Msg: raise Error in createPost => ${error}`);
+          logger.error('쪽지 저장 중 DB관련 에러가 발생 했습니다', error);
           return res.status(400).json({
             success: false,
             errMessage: '400 에러 게시중 오류가 발생 하였습니다!.'
           });
         }
+        logger.info(`${senderNickname}님, 쪽지 등록이 완료되었습니다.`);
         return res.status(201).json({
           success: true,
-          Message: '게시글이 성공적으로 포스팅 되었습니다!.'
+          Message: '쪽지가 성공적으로 보내졌습니다!.'
         });
     })
     res.send(ok)
   } catch (err) {
-    // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
+    logger.error('쪽지 작성 중 에러가 발생 했습니다: ', err);
     return res.sendStatus(500);
   }
 })
@@ -108,16 +115,18 @@ router.get('/:chatId', auth, async(req, res, next) => {
   db.query(query, (error,rows) => {
     if (error) {
       console.log(error)
+      logger.error('쪽지 조회 중 DB관련 에러가 발생했습니다', error);
       return res.sendStatus(400);
     }
+    logger.info('쪽지를 성공적으로 조회했습니다.');
     res.status(200).json ({
       success: true,
       message:rows,
     })
-    console.log("메세지 들어가니",rows)
+    console.log("쪽지",rows)
   })
   }catch (err) {
-    // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
+    logger.error('쪽지 조회 중 예상치 못한 에러가 발생 했습니다: ', err);
     return res.sendStatus(500);
   }
 })
@@ -141,12 +150,13 @@ router.post('/:receiverId/:senderId/:chatId', auth, async(req, res, next) => {
       console.log("row는",rows)
         if (error) {
           console.log(error)
-          // logger.error(`Msg: raise Error in createPost => ${error}`);
+          logger.error('삭제된 쪽지를 저장 중 DB관련 에러가 발생 했습니다', error);
           return res.status(400).json({
             success: false,
             errMessage: '400 에러 게시중 오류가 발생 하였습니다!.'
           });
         }
+        logger.info(`삭제된 쪽지 등록이 완료되었습니다.`);
         return res.status(201).json({
           success: true,
           Message: '게시글이 성공적으로 포스팅 되었습니다!.'
@@ -154,7 +164,7 @@ router.post('/:receiverId/:senderId/:chatId', auth, async(req, res, next) => {
     })
     res.send(ok)
   } catch (err) {
-    // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
+    logger.error('삭제된 쪽지 작성 중 에러가 발생 했습니다: ', err);
     return res.sendStatus(500);
   }
 })
