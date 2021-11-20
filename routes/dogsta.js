@@ -7,8 +7,7 @@ const upload = require("../S3/s3");
 const { db } = require("../models/index");
 
 // 안 산뜻하게 보내려면 -> rows[0]
-
-// 개스타그램 메인 조회하기_좋아요 순
+// 개스타그램 메인 조회하기_추천순
 router.get("/likeFilter", async (req, res) => {
   try {
     const likeQuery = `SELECT *,
@@ -47,12 +46,17 @@ router.get("/likeFilter", async (req, res) => {
 router.get("/recentFilter", async (req, res) => {
   try {
     //유저 정보와 개스타그램 post 정보를 다 보내준다.
-    const query = `SELECT * FROM dogSta 
-      JOIN user
-      ON dogSta.userId = user.userId
-      JOIN dog
-      ON dog.userId = user.userId
-      ORDER BY dogSta.createdAt DESC`;
+    const query = `SELECT *,
+    COUNT(likes.dogPostId) as count
+    FROM likes
+    JOIN dogSta
+    ON dogSta.dogPostId = likes.dogPostId
+    JOIN user
+    ON user.userId = dogSta.userId
+    JOIN dog
+    ON dog.userId = user.userId
+    GROUP BY likes.dogPostId
+    ORDER BY dogSta.createdAt DESC`;
 
     console.log("query", query);
 
@@ -107,7 +111,17 @@ router.post("/write", upload.single("dogPostImage"), auth, async (req, res) => {
   }
 });
 
-// 개스타그램 조회하기 -> 마이페이지 누르면 보이는 화면
+
+// `SELECT dogSta.dogPostId, dogSta.dogPostImage, dogSta.dogPostDesc, dogSta.createdAt, dogSta.userId, 
+//     user.userNickname, user.userImage, user.userLocation,
+// 	(SELECT COUNT(likes.dogPostId) as count FROM likes WHERE dogPostId ="44") as count
+//     FROM dogSta
+//     LEFT JOIN user 
+//     ON dogSta.userId = user.userId
+//     WHERE dogSta.userId= "29"
+//     ORDER BY dogSta.createdAt DESC`
+
+// 개스타그램 조회하기 -> 마이페이지 누르면 보이는 화면, dogPostId도 필요함
 router.get("/:userId", async (req, res) => {
   const { userId } = req.params;
 
@@ -139,7 +153,14 @@ router.get("/:userId", async (req, res) => {
     // 유정 정보와 개스타그램 post 정보를 다 보내준다.
     // 내림차순으로 정렬(최신순으로)
     const query = `SELECT dogSta.dogPostId, dogSta.dogPostImage, dogSta.dogPostDesc, dogSta.createdAt, dogSta.userId, 
-    user.userNickname, user.userImage, user.userLocation
+    user.userNickname, user.userImage, user.userLocation,
+    (SELECT
+      CASE
+      WHEN TIMESTAMPDIFF(MINUTE,dogSta.createdAt,NOW())<=0 THEN '방금 전'
+      WHEN TIMESTAMPDIFF(MINUTE, dogSta.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, dogSta.createdAt, NOW()), '분 전')
+      WHEN TIMESTAMPDIFF(HOUR, 'dogSta.createdAt', NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, 'dogSta.createdAt', NOW()), '시간 전')
+      ELSE concat(DATEDIFF(NOW(),dogSta.createdAt),'일 전')
+      END) AS AGOTIME 
     FROM dogSta
     LEFT JOIN user 
     ON dogSta.userId = user.userId
@@ -170,7 +191,14 @@ router.get("/:userId/:dogPostId", async (req, res) => {
   try {
     //유정 정보와 개스타그램 post 정보를 다 보내준다.
     const query = `SELECT dogSta.dogPostId, dogSta.dogPostImage, dogSta.dogPostDesc, dogSta.createdAt, dogSta.userId, 
-	user.userNickname, user.userImage, user.userLocation
+	user.userNickname, user.userImage, user.userLocation,
+  (SELECT
+    CASE
+    WHEN TIMESTAMPDIFF(MINUTE,dogSta.createdAt,NOW())<=0 THEN '방금 전'
+    WHEN TIMESTAMPDIFF(MINUTE, dogSta.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, dogSta.createdAt, NOW()), '분 전')
+    WHEN TIMESTAMPDIFF(HOUR, 'dogSta.createdAt', NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, 'dogSta.createdAt', NOW()), '시간 전')
+    ELSE concat(DATEDIFF(NOW(),dogSta.createdAt),'일 전')
+    END) AS AGOTIME 
     FROM dogSta 
     LEFT JOIN user 
     ON dogSta.userId = user.userId 

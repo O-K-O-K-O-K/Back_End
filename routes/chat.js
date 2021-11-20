@@ -10,7 +10,14 @@ router.get('/outbox', auth, async(req, res, next) => {
     const userId= res.locals.user.userId;
     console.log(userId)
     const query = `SELECT 
-    chat.chatId, chat.message, chat.createdAt, chat.senderId,chat.receiverId, user.userNickname as receiverNickname, user.userImage as receiverImage 
+    chat.chatId, chat.message, chat.createdAt, chat.senderId, chat.receiverId, user.userNickname as receiverNickname, user.userImage as receiverImage, 
+    (SELECT
+      CASE
+      WHEN TIMESTAMPDIFF(MINUTE,chat.createdAt,NOW())<=0 THEN '방금 전'
+      WHEN TIMESTAMPDIFF(MINUTE, chat.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, chat.createdAt, NOW()), '분 전')
+      WHEN TIMESTAMPDIFF(HOUR, 'chat.createdAt', NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, 'chat.createdAt', NOW()), '시간 전')
+      ELSE concat(DATEDIFF(NOW(),chat.createdAt),'일 전')
+      END) AS AGOTIME 
     from chat 
     join user
     on user.userId = chat.receiverId
@@ -41,7 +48,14 @@ router.get('/inbox',auth, async(req, res, next) => {
   const userId= res.locals.user.userId;
   console.log(userId)
   const query = 
-  `SELECT chat.senderNickname, chat.chatId, chat.message, chat.createdAt, user.userImage  as senderImage, chat.senderId, chat.receiverId
+  `SELECT chat.senderNickname, chat.chatId, chat.message, chat.createdAt, user.userImage  as senderImage, chat.senderId, chat.receiverId,
+  (SELECT
+    CASE
+    WHEN TIMESTAMPDIFF(MINUTE,chat.createdAt,NOW())<=0 THEN '방금 전'
+    WHEN TIMESTAMPDIFF(MINUTE, chat.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, chat.createdAt, NOW()), '분 전')
+    WHEN TIMESTAMPDIFF(HOUR, 'chat.createdAt', NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, 'chat.createdAt', NOW()), '시간 전')
+    ELSE concat(DATEDIFF(NOW(),chat.createdAt),'일 전')
+    END) AS AGOTIME 
   from chat 
   join user
   on user.userId = chat.senderId
@@ -74,6 +88,10 @@ router.post('/:receiverId', auth, async (req,res,next) =>{
     const senderId = res.locals.user.userId
     console.log("userId는",senderId)
     const {message} = req.body;
+    const data = {
+      senderNickname:senderNickname,
+      type:1
+    }
     const params = [
       senderNickname,
       message,
@@ -93,11 +111,13 @@ router.post('/:receiverId', auth, async (req,res,next) =>{
           });
         }
         // logger.info(`${senderNickname}님, 쪽지 등록이 완료되었습니다.`);
+
         return res.status(201).json({
           success: true,
           Message: '쪽지가 성공적으로 보내졌습니다!.'
         });
     })
+    req.app.get('io').to(req.params.receiverId).emit('sendNotifcation',data);
     res.send(오케이)
   } catch (err) {
     // logger.error('쪽지 작성 중 에러가 발생 했습니다: ', err);
@@ -111,7 +131,15 @@ router.post('/:receiverId', auth, async (req,res,next) =>{
 router.get('/:chatId', auth, async(req, res, next) => {
   try { 
     const {chatId}= req.params;
-    const query = `SELECT * from chat where chatId = ${chatId} ORDER BY chat.createdAt DESC`;
+    const query = `SELECT * ,
+    (SELECT
+      CASE
+      WHEN TIMESTAMPDIFF(MINUTE,chat.createdAt,NOW())<=0 THEN '방금 전'
+      WHEN TIMESTAMPDIFF(MINUTE, chat.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, chat.createdAt, NOW()), '분 전')
+      WHEN TIMESTAMPDIFF(HOUR, 'chat.createdAt', NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, 'chat.createdAt', NOW()), '시간 전')
+      ELSE concat(DATEDIFF(NOW(),chat.createdAt),'일 전')
+      END) AS AGOTIME 
+    from chat where chatId = ${chatId} ORDER BY chat.createdAt DESC`;
   db.query(query, (error,rows) => {
     if (error) {
       console.log(error)

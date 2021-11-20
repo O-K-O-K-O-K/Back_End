@@ -5,6 +5,37 @@ const dotenv = require("dotenv");
 dotenv.config();
 const { db } = require("../models/index");
 
+//likes/myLike
+router.get("/myLike", auth, async(req, res) => {
+  const userId = res.locals.user.userId;
+
+  let myLike;
+  const mylikeExist = `SELECT * FROM likes WHERE likeId = likes.likeId AND userId = "${userId}"`;
+  const results = await db.query(mylikeExist)
+  myLike = results;  
+
+  await db.query(mylikeExist, (error, rows) => {
+    if (error) {
+      console.log(error);
+      return res.status(400).json({
+        success: false,
+      });
+    }
+    return res.status(200).send({
+      myLike
+    });
+  });
+
+  // const mylikeExist = `SELECT * FROM likes WHERE likeId = likes.likeId AND userId = "${userId}"`;
+  // const results = await db.query(mylikeExist);
+  
+  // if (results.length) {
+  //   res.send(true);
+  // } else {
+  //   res.send(false);
+  // }
+})
+
 
 // likes/:dogPostId/like
 router.post("/:dogPostId", auth, async (req, res) => {
@@ -74,23 +105,15 @@ router.get("/:dogPostId/likeExist", auth, async (req, res) => {
 router.get("/:dogPostId", async (req, res) => {
   try {
     const { dogPostId } = req.params;
-    console.log(dogPostId);
 
     let likeCount;
     const likeUser = `SELECT dogPostId FROM likes WHERE dogPostId ="${dogPostId}"`;
-    console.log(likeUser);
-
     const results = await db.query(likeUser);
-    console.log("results", results)
-
     likeCount = results[0];
-    console.log("likeCount", likeCount);
 
     if (likeCount) {
       let likeNum;
       const likeQuery = `SELECT COUNT(dogPostId) as count FROM likes WHERE dogPostId ="${dogPostId}"`;
-      console.log("likeQuery", likeQuery)
-
       const results = await db.query(likeQuery)
       likeNum = results[0];  
 
@@ -108,14 +131,11 @@ router.get("/:dogPostId", async (req, res) => {
     } else {
       let likeNum;
       const likeQuery = `SELECT COUNT(dogPostId) as count FROM likes WHERE dogPostId ="${dogPostId}"`;
-      console.log("likeQuery", likeQuery)
-
       const results = await db.query(likeQuery)
       likeNum = results[0];  
 
       await db.query(likeQuery, (error, rows) => {
         if (error) {
-          console.log(error);
           return res.status(400).json({
             success: false,
           });
@@ -126,7 +146,6 @@ router.get("/:dogPostId", async (req, res) => {
       });
     }
   } catch (err) {
-    console.log(err);
     return res.status(500).send({
       msg: "관리자에게 문의하세요",
     });
@@ -139,7 +158,6 @@ router.delete("/:dogPostId", auth, async (req, res) => {
   try {
     const userId = res.locals.user.userId;
     const { dogPostId } = req.params;
-    console.log(dogPostId);
 
     let existLike;
     const isLiked = `SELECT * FROM likes WHERE dogPostId ="${dogPostId}" AND userId= "${userId}"`;
@@ -150,7 +168,6 @@ router.delete("/:dogPostId", auth, async (req, res) => {
       const query = `DELETE from likes where dogPostId = '${dogPostId}' and userId = '${userId}'`;
       await db.query(query, (error, rows) => {
         if (error) {
-          console.log(error);
           return res.status(400).json({
             success: false,
           });
@@ -166,7 +183,6 @@ router.delete("/:dogPostId", auth, async (req, res) => {
       });
     }
   } catch (err) {
-    console.log(err);
     return res.status(500).send({
       msg: "좋아요 취소 기능이 안됩니다. 관리자에게 문의하세요",
     });
