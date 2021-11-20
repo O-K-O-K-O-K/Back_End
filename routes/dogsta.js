@@ -7,6 +7,8 @@ const upload = require("../S3/s3");
 const { db } = require("../models/index");
 
 // 개스타그램 메인 조회하기- like 정렬
+// dog table
+// 안 산뜻하게 보내려면 -> rows[0]
 router.get("/likeFilter", async (req, res) => {
   try {
     const likeQuery = `SELECT *,
@@ -16,6 +18,8 @@ router.get("/likeFilter", async (req, res) => {
       ON dogSta.dogPostId = likes.dogPostId
       JOIN user
       ON user.userId = dogSta.userId
+      JOIN dog
+      ON dog.userId = user.userId
       GROUP BY likes.dogPostId
       ORDER BY count DESC`;
 
@@ -77,12 +81,15 @@ router.post("/write", upload.single("dogPostImage"), auth, async (req, res) => {
 });
 
 // 개스타그램 메인 조회하기
+// dog 정보
 router.get("/recentFilter", async (req, res) => {
   try {
     //유저 정보와 개스타그램 post 정보를 다 보내준다.
     const query = `SELECT * FROM dogSta 
       JOIN user
       ON dogSta.userId = user.userId
+      JOIN dog
+      ON dog.userId = user.userId
       ORDER BY dogSta.createdAt DESC`;
 
     console.log("query", query);
@@ -164,6 +171,7 @@ router.get("/:userId", async (req, res) => {
 });
 
 // 개스타그램 상세 조회하기
+// like 관련
 router.get("/:userId/:dogPostId", async (req, res) => {
   const { userId, dogPostId } = req.params;
 

@@ -9,7 +9,7 @@ CREATE TABLE `user` (
   `userImage` TEXT NOT NULL,
   `userLocation` varchar(45) NOT NULL,
   PRIMARY KEY (`userId`),
-  KEY `userId` (`userId`),
+  KEY `userId` (`userId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 create table `dog`(

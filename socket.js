@@ -14,7 +14,9 @@ module.exports = (server, app) => {
     path: "/socket.io",
   });
   app.set("io", io); //라우터 에서 io객체를 쓸수 있게 저장 (req.app.get('io')로 접근 가능)
-  const notification = io.of("/notification");
+
+
+  const notification = io.of(`/notification`);
   notification.on("connect", (socket) => {
     console.log("접속완료");
   });
@@ -22,32 +24,35 @@ module.exports = (server, app) => {
   let users = [];
 
   const addNewUser = (userId, socketId) => {
-    !users.some((user) => user.userId === userId) && users.push({ userId , socketId});
+    !users.some((user) => user.userId === userId) &&
+      users.push({ userId, socketId });
+      console.log("socket.Id", socketId)
   };
 
   const getUser = (userId) => {
-      return users.find(user => user.userId === userId)
+    return users.find((user) => user.userId === userId);
   };
 
-  
   notification.on("connect", (socket) => {
     socket.on("postUser", (userId) => {
       addNewUser(userId, socket.id);
+      console.log("socket.Id", socket.id)
       console.log("userId!!!!!!!!!!!", userId);
-      console.log("users:", users)
     });
-    socket.on("sendNotification", ({ senderName, senderUsername, receiverName, type }) => {
-        console.log("!!!",senderName, senderUsername, receiverName, type)
+    socket.on(
+      "sendNotification",
+      ({ senderName, senderUsername, receiverName, type }) => {
+        console.log("!!!", senderName, senderUsername, receiverName, type);
         const receiver = getUser(receiverName);
-        console.log("receiver: ", receiver)
+        console.log("receiver: ", receiver);
         notification.emit("getNotification", {
           senderName,
           senderUsername,
           type,
         });
-      });
+      }
+    );
   });
-
 
   // using middleware
   // io.use(jwtAuth.authenticate({

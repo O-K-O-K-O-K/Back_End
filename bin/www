@@ -9,8 +9,8 @@ const http = require('http');
 const path = require('path')
 const socketIo =  require("socket.io")
  const server = http.createServer(app);
- const { connection } = require('mongoose');
- const { isObject } = require('util');
+//  const { connection } = require('mongoose');
+//  const { isObject } = require('util');
 const io = socketIo({noServer:true});
 const webSocket = require('../socket')
 
