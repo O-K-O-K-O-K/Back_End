@@ -6,9 +6,9 @@ dotenv.config();
 const upload = require("../S3/s3");
 const { db } = require("../models/index");
 
-// 개스타그램 메인 조회하기- like 정렬
-// dog table
 // 안 산뜻하게 보내려면 -> rows[0]
+
+// 개스타그램 메인 조회하기_좋아요 순
 router.get("/likeFilter", async (req, res) => {
   try {
     const likeQuery = `SELECT *,
@@ -43,45 +43,7 @@ router.get("/likeFilter", async (req, res) => {
   }
 });
 
-// 개스타그램 글 등록하기
-router.post("/write", upload.single("dogPostImage"), auth, async (req, res) => {
-  const userId = res.locals.user.userId;
-
-  try {
-    console.log("req.body", req.body);
-    const { dogPostDesc } = req.body;
-
-    const dogPostImage = req.file.location;
-
-    console.log("dogPostImage:", dogPostImage);
-
-    const params = [dogPostDesc, dogPostImage, userId];
-
-    const query = `INSERT INTO dogSta(dogPostDesc, dogPostImage, userId) VALUES(?,?,?)`;
-    // console.log("여기까지 오나 실험", query)
-
-    await db.query(query, params, (error, rows, fields) => {
-      if (error) {
-        return res.status(400).json({
-          success: false,
-          msg: "개스타그램 등록 실패!",
-        });
-      }
-      return res.status(201).json({
-        success: true,
-        msg: "개스타그램 등록 성공!",
-      });
-    });
-  } catch (err) {
-    return res.status(500).json({
-      success: false,
-      msg: "로그인 하세요",
-    });
-  }
-});
-
-// 개스타그램 메인 조회하기
-// dog 정보
+// 개스타그램 메인 조회하기_최신순
 router.get("/recentFilter", async (req, res) => {
   try {
     //유저 정보와 개스타그램 post 정보를 다 보내준다.
@@ -110,6 +72,37 @@ router.get("/recentFilter", async (req, res) => {
     return res.status(500).json({
       success: false,
       msg: "로그인 하세용",
+    });
+  }
+});
+
+// 개스타그램 글 등록하기
+router.post("/write", upload.single("dogPostImage"), auth, async (req, res) => {
+  const userId = res.locals.user.userId;
+
+  try {
+    const { dogPostDesc } = req.body;
+    const dogPostImage = req.file.location;
+    const params = [dogPostDesc, dogPostImage, userId];
+
+    const query = `INSERT INTO dogSta(dogPostDesc, dogPostImage, userId) VALUES(?,?,?)`;
+
+    await db.query(query, params, (error, rows, fields) => {
+      if (error) {
+        return res.status(400).json({
+          success: false,
+          msg: "개스타그램 등록 실패!",
+        });
+      }
+      return res.status(201).json({
+        success: true,
+        msg: "개스타그램 등록 성공!",
+      });
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      msg: "로그인 하세요",
     });
   }
 });
@@ -171,7 +164,6 @@ router.get("/:userId", async (req, res) => {
 });
 
 // 개스타그램 상세 조회하기
-// like 관련
 router.get("/:userId/:dogPostId", async (req, res) => {
   const { userId, dogPostId } = req.params;
 
@@ -202,7 +194,6 @@ router.get("/:userId/:dogPostId", async (req, res) => {
 });
 
 // 개스타그램 사진 수정하기
-// url: /dogsta/changeImage
 router.patch(
   "/changeImage",
   upload.single("dogPostImage"),
