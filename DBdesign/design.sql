@@ -54,7 +54,6 @@ CREATE TABLE `post` (
   )
   ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4
 
-
   CREATE TABLE `dogSta` ( --> table 드랍하면 dogsta 로 ㄱㄱ, not dogSta
   `dogPostId` INT NOT NULL AUTO_INCREMENT,
   `dogPostImage` TEXT NOT NULL,
@@ -67,6 +66,18 @@ CREATE TABLE `post` (
    FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
   )
   ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+
+  CREATE TABLE `comment` (
+  `commentId` INT NOT NULL AUTO_INCREMENT,
+  `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `commentDesc` VARCHAR(45) NOT NULL,
+  `dogPostId` INT NOT NULL,
+  `userId` INT NOT NULL,
+  PRIMARY KEY (`commentId`),
+  FOREIGN KEY (`dogPostId`) REFERENCES `dogSta` (`dogPostId`) ON UPDATE CASCADE,
+  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 CREATE TABLE `likes` (
   `likeId` INT NOT NULL AUTO_INCREMENT,
@@ -118,15 +129,6 @@ CREATE TABLE `likes` (
 --   KEY `userId` (`userId`)
 -- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
-
-CREATE TABLE `room` (
-  `roomId` int(11) NOT NULL AUTO_INCREMENT,
-  `senderNickname` VARCHAR(45) NOT NULL,
-  `receiverNickname` VARCHAR(45) NOT NULL,
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY(`roomId`),
-  KEY `roomId` (`roomId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `chat` (
   `chatId` int(11) NOT NULL AUTO_INCREMENT,

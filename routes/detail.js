@@ -24,14 +24,7 @@ router.get('/olympicPark', function (req, res, next) {
     FROM post
     JOIN dog
     ON dog.userId=post.userId
-       (SELECT
-      CASE
-      WHEN TIMESTAMPDIFF(MINUTE,post.createdAt,NOW())<=0 THEN '방금 전'
-      WHEN TIMEDIFF(NOW(),post.createdAt)<1 THEN concat(MINUTE(TIMEDIFF(NOW(),post.createdAt)),'분 전')
-      WHEN TIMEDIFF(NOW(),post.createdAt)<24 THEN concat(HOUR(TIMEDIFF(NOW(),post.createdAt)),'시간 전')
-      ELSE concat(DATEDIFF(NOW(),post.createdAt),'일 전')
-      END) AS AGOTIME 
-    where post.locationCategory =${location}
+    where post.locationCategory ='${location}'
     ORDER BY post.createdAt DESC ` 
     console.log('query',query);
 
@@ -70,14 +63,7 @@ router.get('/banpoPark', function (req, res, next) {
     FROM post
     JOIN dog
     ON dog.userId=post.userId
-    (SELECT
-      CASE
-      WHEN TIMESTAMPDIFF(MINUTE,post.createdAt,NOW())<=0 THEN '방금 전'
-      WHEN TIMEDIFF(NOW(),post.createdAt)<1 THEN concat(MINUTE(TIMEDIFF(NOW(),post.createdAt)),'분 전')
-      WHEN TIMEDIFF(NOW(),post.createdAt)<24 THEN concat(HOUR(TIMEDIFF(NOW(),post.createdAt)),'시간 전')
-      ELSE concat(DATEDIFF(NOW(),post.createdAt),'일 전')
-      END) AS AGOTIME 
-    where post.locationCategory =${location}
+    where post.locationCategory ='${location}'
     ORDER BY post.createdAt DESC ` 
     console.log('query', typeof query);
 
@@ -115,13 +101,6 @@ router.get('/seoulForest', function (req, res, next) {
     FROM post
     JOIN dog
     ON dog.userId=post.userId 
-    (SELECT
-      CASE
-      WHEN TIMESTAMPDIFF(MINUTE,post.createdAt,NOW())<=0 THEN '방금 전'
-      WHEN TIMEDIFF(NOW(),post.createdAt)<1 THEN concat(MINUTE(TIMEDIFF(NOW(),post.createdAt)),'분 전')
-      WHEN TIMEDIFF(NOW(),post.createdAt)<24 THEN concat(HOUR(TIMEDIFF(NOW(),post.createdAt)),'시간 전')
-      ELSE concat(DATEDIFF(NOW(),post.createdAt),'일 전')
-      END) AS AGOTIME
     where post.locationCategory ="서울숲"
     ORDER BY post.createdAt DESC` 
     console.log('query', typeof query);
@@ -206,19 +185,18 @@ router.get('/:postId', auth, function (req, res, next) {
     const query = 
     `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage,
     post.userId, post.postId, post.meetingDate, post.wishDesc, post.locationCategory, post.dogCount, post.createdAt, post.completed, post.totalTime, post.startLocationAddress, post.endLocationAddress, post.totalDistance, post.routeColor, post.routeName,
-    user.userNickname, user.userGender, user.userAge, user.userImage,user.userId
-    from post
-    join dog
-    on post.userId = dog.userId
-    join user
-    on user.userId = dog.userId
+    user.userNickname, user.userGender, user.userAge, user.userImage,user.userId,
     (SELECT
       CASE
-      WHEN TIMESTAMPDIFF(MINUTE,post.createdAt,NOW())<=0 THEN '방금 전'
-      WHEN TIMEDIFF(NOW(),post.createdAt)<1 THEN concat(MINUTE(TIMEDIFF(NOW(),post.createdAt)),'분 전')
-      WHEN TIMEDIFF(NOW(),post.createdAt)<24 THEN concat(HOUR(TIMEDIFF(NOW(),post.createdAt)),'시간 전')
+      WHEN TIMESTAMPDIFF(MINUTE, post.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, post.createdAt, NOW()), '분 전')
+      WHEN TIMESTAMPDIFF(HOUR, 'post.createdAt', NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, 'post.createdAt', NOW()), '시간 전')
       ELSE concat(DATEDIFF(NOW(),post.createdAt),'일 전')
-      END) AS AGOTIME
+      END) AS AGOTIME 
+    from post
+    join dog
+    on post.userId = dog.userId 
+    join user
+    on user.userId = dog.userId
     WHERE post.postId ='${postId}'`;
     db.query(query, (error, rows) => {
       console.log("들어가니",rows)
@@ -252,14 +230,7 @@ router.get('/', function (req, res, next) {
 
     const query = `SELECT
     dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
-    post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory,
-    (SELECT
-      CASE
-      WHEN TIMESTAMPDIFF(MINUTE,post.createdAt,NOW())<=0 THEN '방금 전'
-      WHEN TIMEDIFF(NOW(),post.createdAt)<1 THEN concat(MINUTE(TIMEDIFF(NOW(),post.createdAt)),'분 전')
-      WHEN TIMEDIFF(NOW(),post.createdAt)<24 THEN concat(HOUR(TIMEDIFF(NOW(),post.createdAt)),'시간 전')
-      ELSE concat(DATEDIFF(NOW(),post.createdAt),'일 전')
-      END) AS AGOTIME
+    post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
     FROM post
     JOIN dog
     ON dog.userId=post.userId 

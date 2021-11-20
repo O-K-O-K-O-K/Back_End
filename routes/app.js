@@ -6,7 +6,7 @@ const app = express();
 const swaggerUi = require("swagger-ui-express");
 const path = require("path");
 const morgan = require("morgan");
-const logger = require("./src/config/logger")
+// const logger = require("./src/config/logger")
 
 
 
@@ -29,7 +29,7 @@ const pagesRouter = require("./routes/mypage");
 const chatRouter = require("./routes/chat");
 const likeRouter = require("./routes/dogstaLike");
 const notificationRouter = require("./routes/notification");
-const accessLogStream = require('./src/config/log');
+// const accessLogStream = require('./src/config/log');
 const commentRouter = require("./routes/comment");
 
 //앱세팅
@@ -39,7 +39,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
 require("dotenv").config();
 app.use(morgan('dev')); //정규님이 하신것
-app.use(morgan("tiny", {stream : accessLogStream }))  //콘솔에 출력하기 위한 용도 //스트림은 데이터가 다니는 통로 //dev는 지정 가능 (Tokens) 
+app.use(morgan("tiny", {stream : accessLogStream }))  //콘솔에 출력하기 위한 용도 //스트림은 데이터가 다니는 통로 //dev는 지정 가능 (Tokens)
 // app.use(compression());
 // app.set('views', path.join(__dirname, 'views'));
 

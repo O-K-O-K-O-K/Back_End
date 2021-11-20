@@ -10,17 +10,17 @@ router.get('/outbox', auth, async(req, res, next) => {
     const userId= res.locals.user.userId;
     console.log(userId)
     const query = `SELECT 
-    chat.chatId, chat.message, chat.createdAt, chat.senderId, chat.receiverId, user.userNickname as receiverNickname, user.userImage as receiverImage 
-    from chat 
-    join user
-    on user.userId = chat.receiverId
+    chat.chatId, chat.message, chat.createdAt, chat.senderId, chat.receiverId, user.userNickname as receiverNickname, user.userImage as receiverImage, 
     (SELECT
       CASE
       WHEN TIMESTAMPDIFF(MINUTE,chat.createdAt,NOW())<=0 THEN '방금 전'
-      WHEN TIMEDIFF(NOW(),chat.createdAt)<1 THEN concat(MINUTE(TIMEDIFF(NOW(),chat.createdAt)),'분 전')
-      WHEN TIMEDIFF(NOW(),chat.createdAt)<24 THEN concat(HOUR(TIMEDIFF(NOW(),chat.createdAt)),'시간 전')
+      WHEN TIMESTAMPDIFF(MINUTE, chat.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, chat.createdAt, NOW()), '분 전')
+      WHEN TIMESTAMPDIFF(HOUR, 'chat.createdAt', NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, 'chat.createdAt', NOW()), '시간 전')
       ELSE concat(DATEDIFF(NOW(),chat.createdAt),'일 전')
       END) AS AGOTIME 
+    from chat 
+    join user
+    on user.userId = chat.receiverId
     WHERE (chat.chatId, ${userId}) NOT IN (select deleteChat.chatId, deleteChat.userId from deleteChat) AND chat.senderId = ${userId} ORDER BY createdAt DESC`;
     db.query(query, (error,rows) => {
         if (error) {
@@ -48,7 +48,14 @@ router.get('/inbox',auth, async(req, res, next) => {
   const userId= res.locals.user.userId;
   console.log(userId)
   const query = 
-  `SELECT chat.senderNickname, chat.chatId, chat.message, chat.createdAt, user.userImage  as senderImage, chat.senderId, chat.receiverId
+  `SELECT chat.senderNickname, chat.chatId, chat.message, chat.createdAt, user.userImage  as senderImage, chat.senderId, chat.receiverId,
+  (SELECT
+    CASE
+    WHEN TIMESTAMPDIFF(MINUTE,chat.createdAt,NOW())<=0 THEN '방금 전'
+    WHEN TIMESTAMPDIFF(MINUTE, chat.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, chat.createdAt, NOW()), '분 전')
+    WHEN TIMESTAMPDIFF(HOUR, 'chat.createdAt', NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, 'chat.createdAt', NOW()), '시간 전')
+    ELSE concat(DATEDIFF(NOW(),chat.createdAt),'일 전')
+    END) AS AGOTIME 
   from chat 
   join user
   on user.userId = chat.senderId
@@ -124,7 +131,15 @@ router.post('/:receiverId', auth, async (req,res,next) =>{
 router.get('/:chatId', auth, async(req, res, next) => {
   try { 
     const {chatId}= req.params;
-    const query = `SELECT * from chat where chatId = ${chatId} ORDER BY chat.createdAt DESC`;
+    const query = `SELECT * ,
+    (SELECT
+      CASE
+      WHEN TIMESTAMPDIFF(MINUTE,chat.createdAt,NOW())<=0 THEN '방금 전'
+      WHEN TIMESTAMPDIFF(MINUTE, chat.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, chat.createdAt, NOW()), '분 전')
+      WHEN TIMESTAMPDIFF(HOUR, 'chat.createdAt', NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, 'chat.createdAt', NOW()), '시간 전')
+      ELSE concat(DATEDIFF(NOW(),chat.createdAt),'일 전')
+      END) AS AGOTIME 
+    from chat where chatId = ${chatId} ORDER BY chat.createdAt DESC`;
   db.query(query, (error,rows) => {
     if (error) {
       console.log(error)
