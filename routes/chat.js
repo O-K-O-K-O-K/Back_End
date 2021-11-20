@@ -14,6 +14,13 @@ router.get('/outbox', auth, async(req, res, next) => {
     from chat 
     join user
     on user.userId = chat.receiverId
+    (SELECT
+      CASE
+      WHEN TIMESTAMPDIFF(MINUTE,chat.createdAt,NOW())<=0 THEN '방금 전'
+      WHEN TIMEDIFF(NOW(),chat.createdAt)<1 THEN concat(MINUTE(TIMEDIFF(NOW(),chat.createdAt)),'분 전')
+      WHEN TIMEDIFF(NOW(),chat.createdAt)<24 THEN concat(HOUR(TIMEDIFF(NOW(),chat.createdAt)),'시간 전')
+      ELSE concat(DATEDIFF(NOW(),chat.createdAt),'일 전')
+      END) AS AGOTIME 
     WHERE (chat.chatId, ${userId}) NOT IN (select deleteChat.chatId, deleteChat.userId from deleteChat) AND chat.senderId = ${userId} ORDER BY createdAt DESC`;
     db.query(query, (error,rows) => {
         if (error) {

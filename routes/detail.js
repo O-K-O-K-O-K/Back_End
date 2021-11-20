@@ -23,7 +23,15 @@ router.get('/olympicPark', function (req, res, next) {
     post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
     FROM post
     JOIN dog
-    ON dog.userId=post.userId 
+    ON dog.userId=post.userId
+       (SELECT
+      CASE
+      WHEN TIMESTAMPDIFF(MINUTE,post.createdAt,NOW())<=0 THEN '방금 전'
+      WHEN TIMEDIFF(NOW(),post.createdAt)<1 THEN concat(MINUTE(TIMEDIFF(NOW(),post.createdAt)),'분 전')
+      WHEN TIMEDIFF(NOW(),post.createdAt)<24 THEN concat(HOUR(TIMEDIFF(NOW(),post.createdAt)),'시간 전')
+      ELSE concat(DATEDIFF(NOW(),post.createdAt),'일 전')
+      END) AS AGOTIME 
+    where post.locationCategory =${location}
     ORDER BY post.createdAt DESC ` 
     console.log('query',query);
 
@@ -61,7 +69,14 @@ router.get('/banpoPark', function (req, res, next) {
     post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
     FROM post
     JOIN dog
-    ON dog.userId=post.userId 
+    ON dog.userId=post.userId
+    (SELECT
+      CASE
+      WHEN TIMESTAMPDIFF(MINUTE,post.createdAt,NOW())<=0 THEN '방금 전'
+      WHEN TIMEDIFF(NOW(),post.createdAt)<1 THEN concat(MINUTE(TIMEDIFF(NOW(),post.createdAt)),'분 전')
+      WHEN TIMEDIFF(NOW(),post.createdAt)<24 THEN concat(HOUR(TIMEDIFF(NOW(),post.createdAt)),'시간 전')
+      ELSE concat(DATEDIFF(NOW(),post.createdAt),'일 전')
+      END) AS AGOTIME 
     where post.locationCategory =${location}
     ORDER BY post.createdAt DESC ` 
     console.log('query', typeof query);
@@ -100,8 +115,15 @@ router.get('/seoulForest', function (req, res, next) {
     FROM post
     JOIN dog
     ON dog.userId=post.userId 
+    (SELECT
+      CASE
+      WHEN TIMESTAMPDIFF(MINUTE,post.createdAt,NOW())<=0 THEN '방금 전'
+      WHEN TIMEDIFF(NOW(),post.createdAt)<1 THEN concat(MINUTE(TIMEDIFF(NOW(),post.createdAt)),'분 전')
+      WHEN TIMEDIFF(NOW(),post.createdAt)<24 THEN concat(HOUR(TIMEDIFF(NOW(),post.createdAt)),'시간 전')
+      ELSE concat(DATEDIFF(NOW(),post.createdAt),'일 전')
+      END) AS AGOTIME
     where post.locationCategory ="서울숲"
-    ORDER BY post.createdAt DESC ` 
+    ORDER BY post.createdAt DESC` 
     console.log('query', typeof query);
 
     db.query(query, (error, rows) => {
@@ -190,6 +212,13 @@ router.get('/:postId', auth, function (req, res, next) {
     on post.userId = dog.userId
     join user
     on user.userId = dog.userId
+    (SELECT
+      CASE
+      WHEN TIMESTAMPDIFF(MINUTE,post.createdAt,NOW())<=0 THEN '방금 전'
+      WHEN TIMEDIFF(NOW(),post.createdAt)<1 THEN concat(MINUTE(TIMEDIFF(NOW(),post.createdAt)),'분 전')
+      WHEN TIMEDIFF(NOW(),post.createdAt)<24 THEN concat(HOUR(TIMEDIFF(NOW(),post.createdAt)),'시간 전')
+      ELSE concat(DATEDIFF(NOW(),post.createdAt),'일 전')
+      END) AS AGOTIME
     WHERE post.postId ='${postId}'`;
     db.query(query, (error, rows) => {
       console.log("들어가니",rows)
