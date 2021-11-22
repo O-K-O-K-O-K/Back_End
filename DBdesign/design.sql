@@ -184,6 +184,22 @@ CREATE TABLE `notification` (
   FOREIGN KEY (`senderId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+
+CREATE TABLE `walkRequest` (
+  `walkRequestId` int(11) NOT NULL AUTO_INCREMENT,
+  `receiverId` int(11) NOT NULL,
+  `senderId`  int(11) NOT NULL,
+  `type`  int(11) NOT NULL,
+  `acceptance,` TINYINT NOT NULL,
+  `senderNickname` VARCHAR(100) NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY(`walkRequestId`),
+  KEY `walkRequestId` (`walkRequestId`),
+  KEY `senderId` (`senderId`),
+  FOREIGN KEY (`senderId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `location` (
   `locationId` int(11) NOT NULL AUTO_INCREMENT,
   `points` JSON NOT NULL,
