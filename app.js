@@ -1,17 +1,19 @@
-const createError = require('http-errors');
-const express = require('express');
+const createError = require("http-errors");
+const express = require("express");
 // const socketIo = require("socket.io")
-// const logger = require('morgan');
+const logger = require('morgan');
 const app = express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
-const path = require('path');
+const path = require("path");
+// const passport = require('passport');
+const auth = require("./middlewares/auth");
 // const authMiddleware = require("./middlewares/auth");
-// app.use(logger('dev'));
+app.use(logger('dev'));
 
-const cors = require('cors');
+const cors = require("cors");
 const corsOptions = {
-  origin: "*", 
+  origin: "*",
   // methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
   // preflightContinue: false,
   credentials: true,
@@ -25,9 +27,9 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(bodyParser.json())
 // app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(express.static('public'));
+app.use(express.static("public"));
 
-require('dotenv').config();
+require("dotenv").config();
 
 // app.use(compression());
 // app.set('views', path.join(__dirname, 'views'));
@@ -54,10 +56,16 @@ app.use("/likes", likeRouter);
 app.use("/notification", notificationRouter);
 app.use("/comment", commentRouter);
 
+app.use("/dogs", dogsRouter);
+app.use("/posts", detailRouter);
+app.use("/users", infoRouter);
+app.use("/users", usersRouter);
+app.use("/dogsta", dogstaRouter);
+app.use("/mypage", pagesRouter);
+app.use("/auth", kakaoRouter);
+
+
 app.get("/",(_,res) => res.render("home"));
-
-const auth = require('./middlewares/auth');
-
 
 //swagger
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
@@ -75,6 +83,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
 
 module.exports = app;
