@@ -21,7 +21,7 @@ router.get("/myPost/:userId", async (req, res) => {
 
   //포스트가 없으면
   if (!existPost) {
-    //강아지와 유저 정보를 보내준다.
+    //빈값 보냄
     const query = `SELECT * FROM post WHERE post.userId= "${userId}"`;
 
     await db.query(query, (error, rows) => {

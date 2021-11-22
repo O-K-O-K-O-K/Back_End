@@ -3,136 +3,54 @@
 /**
  * Module dependencies.
  */
-
- const app = require('../app');
- const debug = require('debug')('clone-coding:server');
- const socketio = require('socket.io');
- const http = require('http');
- const webSocket = require('../socket')
-//  const socket = new webSocket('ws://localhost:3000')
- const { db } = require("../models/index");
-//  const cors = require("cors");
-
-//  app.use(cors());
- 
-
-//  const {addUser, removeUser, getUser, getUsersInRoom} =require('../users.js');
- const WebSocket = require('ws')
+//모듈 
+const app = require('../app');
+const http = require('http');
+const path = require('path')
+const socketIo =  require("socket.io")
  const server = http.createServer(app);
- const io = require('socket.io')(server);
- const port = normalizePort(process.env.PORT || '3000');
-//  const router = require('../router');
-const { connection } = require('mongoose');
-const { isObject } = require('util');
-//  const socket = new WebSocket(`ws://${window.location.host}`)
- app.set('port', port);
-//  const logger = require('../config/logger');
- require('dotenv').config();
-// const {Server} = require("socket.io")
+//  const { connection } = require('mongoose');
+//  const { isObject } = require('util');
+const io = socketIo({noServer:true});
+const webSocket = require('../socket')
 
-
-io.on('connection', (socket) =>{
-  console.log('연결이 되었습니다')
-  socket.send("Hello")
-  socket.emit("greeting", "Hey!")
-  socket.on("chat",(data) =>{
-    console.log(data);
-  })
-})
-
-// io.use(jwtAuth.authenticate({
-//   secret: process.env.SECRET_KEY,    // required, used to verify the token's signature
-//   algorithm: 'HS256'        // optional, default to be HS256
-// }, function(payload, done) {
-//   // done is a callback, you can use it as follows
-//   console.log('연결이 되었습니다22')
-//   const query = `SELECT * FROM user WHERE userId = ?`;
-//   db.query(query, (err,user) => {
-//   if (err) {
-//       // return error
-//     return done(err);}
-//       if (!user) {
-//         // return fail with an error message
-//         return done(null, false, 'user does not exist');}
-//         // return success with a user info
-//         return done(null, user);
-//     });
-// }))
-
-
-
-//사용자 인증 소켓
-// io.use(function(socket,next) {
-//   console.log(socket.handshake.auth.token) 
-//   next();
-// });
-//연결확인
-// io.on ('connection', function (con) {
-//   console.log(con.id)
-
-// })
-//대화내용 가져오기
-// const showChat = async () => {
-//   try {
-//     const {room} = req.body // 수정필요! 
-//     const userNickname = res.locals.user.userNickname; //미들웨어 auth 를 지나야함
-//     const query = `SELECT chat.message, chat.room, chat.createdAt, chat.readStatus, user.userNickname
-//     from chat 
-//     join user
-//     on chat.userId = user.userId
-//     WHERE chat.room = ${room}`
-//     db.query(query, (error, rows) => {
-//       if(error) {
-//         console.log(error)
-//         return res.sendStatus(400);
-//       }
-//       res.status(200).json({
-//         success:true,
-//         message: rows, //수정필요
-//       })
-//     })
-//   } catch (err) {
-//     return res.sendStatus(500);
-//   }
-// }
-// const currentOn =[]
-// const currentOnUserInfo =[]
-
+webSocket(server,app)
+//소켓때문에 cors 문제가 발생한다면 app.use(express.static("asset")) 과 비슷한 미들웨어 설정해두기!
+//socketIo
 // io.on('connection', (socket) => {
+//   console.log("누군가 연결 했어요!")
   
-  // socket.on('join', ({userNickname,room}, callback) => {
-  // const {error,user} = addUser({id:socket.id,userNickname,room});
-  //   if(error) return callback(error);
+//   //aaa 라는 이벤트에 반응 하는 코드 
+//   socket.on("클라이언트에서 보내준 이벤트", (data) => {
+//     const payload = {
+//       senderNickname: data.senderNickname,
+//       date: new Date().toISOString()
+//     } //수정해야함
+//     console.log("클라이언트에서 발생한 이벤트",data, new Date()) //gettingMessage
+//     socket.broadcast.emit("aaa", payload)
+//     //io는 모든 소켓을 관리해주는 역할! //broadcast 나를 제외한 모두에게 
+//   }) //특정 그 사람에게 어떻게 알람을 뜨게 할 것인가?
+//   //프론트 엔드에서 이벤트가 발생하는 경우, "aaa" 이벤트를 제대로 보내는지 확인하기
+//   socket.on("disconnect",() => {
+//     console.log("누군가 연결을 끊었어요!")
+//   })
 
-  //   socket.emit('message', {user: 'admin', text: `${user.name}, welcome to the room ${user.room}`});
-  //   socket.broadcast.to(user.room).emit('message',{user:'amdin', text:`${user.name}, has joined`});
-  //   socket.join(user.room);
-
-  //   io.to(user.room).emit('roomData', {room:user.room, users:getUsersInRoom(user.room)})
-  //   callback();
-  // });
 
   
-  // socket.on('sendMessage',(message,callback) => {
-  //   const user = getUser(socket.id)
-  //   connection.query("INSERT INTO chat (room,userNickname,message) Values (?,?,?)", [
-  //     user.room, user.name, message //이 부분 수정 필요! (변수 부분!)
-  //   ], function (){
-  //     console.log("데이터가 정상적으로 입력 되었습니다!")
-  //   })
-  //   io.to(user.room).emit('message', {user: user.name,text:message});
-  //   io.to(user.room).emit('message', {room: user.room,users:getUsersInRoom(user.room)});
-  //   callback()
-
-  // })
-  // socket.on('disconnect', () => {
-  //   const user = removeUser(socekt.id);
-  //   if(user) {
-  //     io.to(user.room).emit('message',{user:'admin',text:`${user.name} has left.`})
-  //   }
-  // })
 // });
-//여기까지
+
+ 
+ //라우터
+ const debug = require('debug')('clone-coding:server');
+
+ const { db } = require("../models/index");
+// const logger = require('../src/config/logger')
+
+ const port = normalizePort(process.env.PORT || '3000');
+
+
+ app.set('port', port);
+ require('dotenv').config();
 
 
 
@@ -165,7 +83,9 @@ io.on('connection', (socket) =>{
   * Listen on provided port, on all network interfaces.
   */
  
- server.listen(port);
+ server.listen(port, () => {
+  //  logger.info(`${port} 포트에서 서버가 가동되었습니다😆`)
+ });
  server.on('error', onError);
  server.on('listening', onListening);
 
@@ -225,4 +145,3 @@ io.on('connection', (socket) =>{
    const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
    debug('Listening on ' + bind);
  }
-
