@@ -71,7 +71,7 @@ router.patch("/:dogPostId/:commentId", auth, async (req, res) => {
     commentDesc: commentDesc,
   };
   try {
-    const post = `UPDATE comment SET ? WHERE comment.userId ='${userId}'`;
+    const post = `UPDATE comment SET ? WHERE comment.userId =${userId} and comment.commentId = ${commentId}`;
     await db.query(post, params, (error, results) => {
       if (error) {
         console.log(error);

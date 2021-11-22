@@ -20,11 +20,11 @@ router.post("/login", async (req, res) => {
   let users;
   const post = `SELECT * FROM user WHERE userEmail = ?`;
   const results = await db.query(post, [userEmail]);
+  // console.log("results", results[0].userEmail);
   users = results[0];
-  const hash = results[0].password;
-
   if (users) {
     // 유저가 존재한다면? (이미 가입했다면)
+    const hash = results[0].password;
     if (bcrypt.compareSync(password, hash)) {
       const token = jwt.sign(
         {
@@ -49,45 +49,6 @@ router.post("/login", async (req, res) => {
     res.status(400).send({result: "이메일을 확인해주세요." });
   }
 });
-
-//회원가입  여기 미들웨어(upload.single("userImage)
-// router.post("/signUp/:userImageId", async (req, res) => {
-//   const {userImageId} = req.params;
-//   const { userEmail, password, confirmPassword, userNickname, userGender, userAge, userLocation} = req.body;
-//   // const userImage = req.file.location;   //여기 따로 지정
-//   if (!await nicknameExist(userNickname)) {
-//     // 닉네임 중복 검사
-//     res.status(401).send({ result: "닉네임이 존재합니다." });
-//   } else if (!idCheck(userEmail)) {
-//     // id 정규식 검사
-//     res.sendStatus(401);
-//   } else if (!pwConfirm(password, confirmPassword)) {
-//     // 비밀번호와 비밀번호 확인이 맞는지 검사
-//     res.sendStatus(401);
-//   } else if (!pwLenCheck(password)) {
-//     // 비밀번호 최소길이 검사
-//     res.sendStatus(401);
-//   } else if (!pw_idCheck(userEmail, password)) {
-//     // 아이디가 비밀번호를 포함하는지 검사
-//     res.status(401).send({ result: "비밀번호 형식이 올바르지않습니다." });
-//   } else {
-//     const salt = await bcrypt.genSaltSync(setRounds);
-//     const hashPassword = bcrypt.hashSync(password, salt);
-//     const userParams = [userEmail, hashPassword, userNickname, userGender, userAge,userLocation, userImageId];
-//     const post =
-//       "INSERT INTO user (userEmail, password, userNickname, userGender, userAge, userLocation,userImageId) VALUES (?, ?, ? , ?, ?, ?, ?);";
-//     db.query(post, userParams, (error, results, fields) => {
-//       // db.query(쿼리문, 넣을 값, 콜백)
-//       if (error) {
-//         res.status(401).send(error);
-//         console.log(error);
-//       } else {
-//         console.log("누군가가 회원가입을 했습니다.");
-//         res.send({ results: "완료" });
-//       }
-//     });
-//   }
-// });
 
 //회원가입  여기 미들웨어(upload.single("userImage)
 router.post("/signUp", upload.single("userImage"), async (req, res) => {
@@ -219,5 +180,4 @@ module.exports = (passport) => {
 
 
 module.exports = router;
-
 

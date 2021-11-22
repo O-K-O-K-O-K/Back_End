@@ -5,16 +5,22 @@ const { db } = require("../models/index");
 
 
 //알람 조회하기
-//notification/:receiverId
+//notification/viewAlarm
 router.get('/:receiverId', auth, async(req, res) => {
   try {
     const {receiverId}= req.params;
     const senderId = res.locals.user.userId
-
-    const query = `SELECT *
+    const query = `SELECT notification.notificationId, notification.senderId, notification.type, notification.senderNickname, notification.createdAt, user.userImage as senderImage,
+    (SELECT
+      CASE
+      WHEN TIMESTAMPDIFF(MINUTE,notification.createdAt,NOW())<=0 THEN '방금 전'
+      WHEN TIMESTAMPDIFF(MINUTE, notification.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, notification.createdAt, NOW()), '분 전')
+      WHEN TIMESTAMPDIFF(HOUR, notification.createdAt, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, notification.createdAt, NOW()), '시간 전')
+      ELSE concat(DATEDIFF(NOW(), notification.createdAt),'일 전')
+      END) AS AGOTIME 
     FROM notification
     JOIN user
-    ON user.userId = "${senderId}"
+    ON user.userId = notification.senderId 
     WHERE notification.receiverId = "${receiverId}"`
 
     // SELECT *, (select count(*) from notification where notification.receiverId = "17")as count FROM notification WHERE notification.receiverId = "17"
@@ -23,6 +29,7 @@ router.get('/:receiverId', auth, async(req, res) => {
 
     await db.query(query, (error, rows) => {
       if (error) {
+        console.log(error)
         return res.status(400).json({
           success: false,
         });
@@ -41,67 +48,7 @@ router.get('/:receiverId', auth, async(req, res) => {
 
 })
 
-//알림 총 개수 조회하기
-//notification/:receiverId/countAlarm
-// router.get("/:receiverId/countAlarm", async (req, res) => {
-//   try {
-//     const { receiverId } = req.params;
-
-//     let alarmCount;
-//     const alarmUser = `SELECT * FROM notification WHERE receiverId ="${receiverId}"`;
-//     const results = await db.query(alarmUser);
-//     alarmCount = results[0];
-//     console.log("likeCount", likeCount);
-
-//     if (alarmCount) {
-//       let alarmNum;
-//       const likeQuery = `SELECT COUNT(notificationId) as count FROM notification WHERE receiverId ="${receiverId}"`;
-//       console.log("likeQuery", likeQuery)
-
-//       const results = await db.query(likeQuery)
-//       likeNum = results[0];  
-
-//       await db.query(likeQuery, (error, rows) => {
-//         if (error) {
-//           console.log(error);
-//           return res.status(400).json({
-//             success: false,
-//           });
-//         }
-//         return res.status(200).send({
-//           likeNum
-//         });
-//       });
-//     } else {
-//       let likeNum;
-//       const likeQuery = `SELECT COUNT(dogPostId) as count FROM likes WHERE dogPostId ="${dogPostId}"`;
-//       console.log("likeQuery", likeQuery)
-
-//       const results = await db.query(likeQuery)
-//       likeNum = results[0];  
-
-//       await db.query(likeQuery, (error, rows) => {
-//         if (error) {
-//           console.log(error);
-//           return res.status(400).json({
-//             success: false,
-//           });
-//         }
-//         return res.status(200).send({
-//           likeNum
-//         });
-//       });
-//     }
-//   } catch (err) {
-//     console.log(err);
-//     return res.status(500).send({
-//       msg: "관리자에게 문의하세요",
-//     });
-//   }
-// });
-
-
-// http://13.209.70.209/notification/:notificationId
+//notification/deleteAlarm
 router.delete("/:notificationId", auth, async (req, res) => {
   const userId = res.locals.user.userId;
   const { notificationId  } = req.params;
@@ -124,6 +71,7 @@ router.delete("/:notificationId", auth, async (req, res) => {
     });
   }
 });
+
 
 //쪽지 알람
 router.post('/:receiverId', auth, async (req,res,next) =>{
@@ -181,6 +129,17 @@ router.post('/:receiverId', auth, async (req,res,next) =>{
   }
 })
 
+
+
+// table 하나 추가- 수락여부 추가
+// 산책요청 알림 get
+// 수락 여부에 대한 알림 post
+
+// 산책요청 알림 post
+router.post('/:receiverId', auth, async (req,res,next) =>{
+  
+})
+ 
 
 
 
