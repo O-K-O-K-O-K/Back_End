@@ -16,6 +16,7 @@ router.post('/write', auth, async (req, res) => {
   const userId = res.locals.user.userId;
   try {
     const {meetingDate,wishDesc,locationCategory, dogCount,totalTime,startLocationAddress,endLocationAddress,totalDistance,routeColor,routeName} = req.body;
+    console.log(meetingDate)
     const params= [
       meetingDate,
       wishDesc,
@@ -84,9 +85,10 @@ router.get('/:postId', auth, function (req, res, next) {
       // logger.info('게시글을 성공적으로 조회했습니다.');
       res.status(200).json({
         success: true,
-        posts: rows,
+        posts: rows[0],
       });
       console.log("rows는", rows)
+      console.log("userId는",rows[0].userId)
     });
   } catch (err) {
     // logger.error('게시글 조회하기 중 발생한 예상하지 못한 에러: ', err);
@@ -105,11 +107,11 @@ router.get('/', function (req, res, next) {
   try {
 
     const query = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
-    post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  
+    post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
     FROM post
     JOIN dog
     ON dog.userId=post.userId 
-     by desc ` 
+    ORDER BY post.createdAt DESC ` 
     console.log('query', typeof query);
 
     db.query(query, (error, rows) => {
@@ -132,7 +134,6 @@ router.get('/', function (req, res, next) {
   }
 });
 
-//카테고리 포함 전체 조회
 router.get('/category', function (req, res, next) {
   let conditions = [];
   let where
@@ -165,10 +166,10 @@ router.get('/category', function (req, res, next) {
     post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory  
     FROM post
     JOIN dog
-    ON dog.userId=post.userId` 
+    ON dog.userId=post.userId
+    WHERE ` + where 
     console.log('query', typeof query);
     db.query(query, (error, rows) => {
-      console.log('6');
       if (error) {
         console.log(error)
         // logger.error('게시글 조회 중 발생한 DB관련 에러', error);
@@ -288,4 +289,5 @@ router.delete('/:postId', auth, async (req, res) => {
     res.status(500).json({ err: err });
   }
 });
+
 module.exports = router;

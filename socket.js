@@ -16,11 +16,10 @@ module.exports = (server) => {
     const room = io.of('/room');
     const chat = io.of('/chat');
 
-
-//  function handleConnection (socket) {
-//    console.log(socket);
-//  }
-//  wss.on("connection",handleConnection);
+//test
+io.on('connection', (socket) =>{
+    console.log('connected')
+})
 
 // using middleware
 io.use(jwtAuth.authenticate({

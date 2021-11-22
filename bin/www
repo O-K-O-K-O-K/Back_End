@@ -16,9 +16,10 @@
 //  app.use(cors());
  
 
- const {addUser, removeUser, getUser, getUsersInRoom} =require('../users.js');
+//  const {addUser, removeUser, getUser, getUsersInRoom} =require('../users.js');
  const WebSocket = require('ws')
  const server = http.createServer(app);
+ const io = require('socket.io')(server);
  const port = normalizePort(process.env.PORT || '3000');
 //  const router = require('../router');
 const { connection } = require('mongoose');
@@ -29,7 +30,36 @@ const { isObject } = require('util');
  require('dotenv').config();
 // const {Server} = require("socket.io")
 
-const io = socketio(server);
+
+io.on('connection', (socket) =>{
+  console.log('연결이 되었습니다')
+  socket.send("Hello")
+  socket.emit("greeting", "Hey!")
+  socket.on("chat",(data) =>{
+    console.log(data);
+  })
+})
+
+// io.use(jwtAuth.authenticate({
+//   secret: process.env.SECRET_KEY,    // required, used to verify the token's signature
+//   algorithm: 'HS256'        // optional, default to be HS256
+// }, function(payload, done) {
+//   // done is a callback, you can use it as follows
+//   console.log('연결이 되었습니다22')
+//   const query = `SELECT * FROM user WHERE userId = ?`;
+//   db.query(query, (err,user) => {
+//   if (err) {
+//       // return error
+//     return done(err);}
+//       if (!user) {
+//         // return fail with an error message
+//         return done(null, false, 'user does not exist');}
+//         // return success with a user info
+//         return done(null, user);
+//     });
+// }))
+
+
 
 //사용자 인증 소켓
 // io.use(function(socket,next) {

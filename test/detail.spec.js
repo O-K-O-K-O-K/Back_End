@@ -10,12 +10,20 @@
 
 //요구한 사항
 
-const {add} = require('./detail_function');
-test ("2+5는 7이다", () => {
-    expect(add(2,5)).toBe(7);
-})
+// onst {add} = require('./detail_function');
+// test ("2+5는 7이다", () => {
+//     expect(add(2,5)).toBe(7);
+// })
 
-const {add_post} = require('./detail_function');
-test ( "만나는날짜, 코멘트, 장소, 위도, 경도는 ~이다", () =>{
-    expect(add_post(11,11,11,11,11,11,11)).toBe("11,11,false,11,11,11,11,1")
-});
+// const {add_post} = require('./detail_function');
+// test ( "만나는날짜, 코멘트, 장소, 위도, 경도는 ~이다", () =>{
+//     expect(add_post(11,11,11,11,11,11,11)).toBe("11,11,false,11,11,11,11,1")
+// });c
+
+const DetailController = require('../controller/detail');
+
+describe("Detail controller create", () => {
+    it("should have a createdetail function", () => {
+        expect(typeof DetailController.createProduct).toBe("function");
+    })
+})
