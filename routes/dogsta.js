@@ -46,11 +46,11 @@ router.get("/recentFilter", async (req, res) => {
   const query = `SELECT *,
     (SELECT COUNT(likes.dogPostId) FROM likes WHERE likes.dogPostId = dogSta.dogPostId) as count
      FROM dogSta 
-         JOIN user
-         ON dogSta.userId = user.userId
-         LEFT JOIN dog
-         ON  dog.userId = user.userId
-         ORDER BY dogSta.createdAt DESC`;
+     JOIN user
+     ON dogSta.userId = user.userId
+     LEFT JOIN dog
+     ON dog.userId = user.userId
+     ORDER BY dogSta.createdAt DESC`;
 
   console.log("query", query);
 
@@ -105,15 +105,6 @@ router.post("/write", upload.single("dogPostImage"), auth, async (req, res) => {
   }
 });
 
-// `SELECT dogSta.dogPostId, dogSta.dogPostImage, dogSta.dogPostDesc, dogSta.createdAt, dogSta.userId,
-//     user.userNickname, user.userImage, user.userLocation,
-// 	(SELECT COUNT(likes.dogPostId) as count FROM likes WHERE dogPostId ="44") as count
-//     FROM dogSta
-//     LEFT JOIN user
-//     ON dogSta.userId = user.userId
-//     WHERE dogSta.userId= "29"
-//     ORDER BY dogSta.createdAt DESC`
-
 // 개스타그램 조회하기 -> 마이페이지 누르면 보이는 화면, dogPostId도 필요함
 router.get("/:userId", async (req, res) => {
   const { userId } = req.params;
@@ -149,11 +140,12 @@ router.get("/:userId", async (req, res) => {
     user.userNickname, user.userImage, user.userLocation,
     (SELECT
       CASE
-      WHEN TIMESTAMPDIFF(MINUTE,dogSta.createdAt,NOW())<=0 THEN '방금 전'
+      WHEN TIMESTAMPDIFF(MINUTE, dogSta.createdAt,NOW())<=0 THEN '방금 전'
       WHEN TIMESTAMPDIFF(MINUTE, dogSta.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, dogSta.createdAt, NOW()), '분 전')
-      WHEN TIMESTAMPDIFF(HOUR, 'dogSta.createdAt', NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, 'dogSta.createdAt', NOW()), '시간 전')
-      ELSE concat(DATEDIFF(NOW(),dogSta.createdAt),'일 전')
-      END) AS AGOTIME 
+      WHEN TIMESTAMPDIFF(HOUR, dogSta.createdAt, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, dogSta.createdAt, NOW()), '시간 전')
+      WHEN TIMESTAMPDIFF(DAY, dogSta.createdAt, NOW()) < 7 THEN CONCAT(TIMESTAMPDIFF(Day, dogSta.createdAt, NOW()), '일 전')
+      ELSE dogSta.createdAt
+      END) AS AGOTIME
     FROM dogSta
     LEFT JOIN user 
     ON dogSta.userId = user.userId
@@ -187,11 +179,12 @@ router.get("/:userId/:dogPostId", async (req, res) => {
 	user.userNickname, user.userImage, user.userLocation,
   (SELECT
     CASE
-    WHEN TIMESTAMPDIFF(MINUTE,dogSta.createdAt,NOW())<=0 THEN '방금 전'
+    WHEN TIMESTAMPDIFF(MINUTE, dogSta.createdAt,NOW())<=0 THEN '방금 전'
     WHEN TIMESTAMPDIFF(MINUTE, dogSta.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, dogSta.createdAt, NOW()), '분 전')
-    WHEN TIMESTAMPDIFF(HOUR, 'dogSta.createdAt', NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, 'dogSta.createdAt', NOW()), '시간 전')
-    ELSE concat(DATEDIFF(NOW(),dogSta.createdAt),'일 전')
-    END) AS AGOTIME 
+    WHEN TIMESTAMPDIFF(HOUR, dogSta.createdAt, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, dogSta.createdAt, NOW()), '시간 전')
+    WHEN TIMESTAMPDIFF(DAY, dogSta.createdAt, NOW()) < 7 THEN CONCAT(TIMESTAMPDIFF(Day, dogSta.createdAt, NOW()), '일 전')
+    ELSE dogSta.createdAt
+    END) AS AGOTIME
     FROM dogSta 
     LEFT JOIN user 
     ON dogSta.userId = user.userId 

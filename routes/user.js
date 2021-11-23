@@ -89,12 +89,15 @@ router.post("/signUp", upload.single("userImage"), async (req, res) => {
 });
 
 //이메일 중복확인 
-router.post("/checkDup", async  (req, res) => {
+router.post("/checkDup",async  (req, res) => {
   const { userEmail } = req.body;
+ if (idCheck(userEmail)) {
   if (!await emailExist(userEmail)) {
     res.status(401).send({ result: "이메일이 존재합니다." });
   } else {
     res.status(200).send({ result: "정상적인 이메일입니다."})
+  }} else {
+    res.status(400).send({ result: "이메일 형식이 맞지않습니다."})
   }
 });
 
@@ -102,7 +105,7 @@ router.post("/checkDup", async  (req, res) => {
 function idCheck(idGive) {
   console.log(idGive);
   const reg_name =
-    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 이메일 정규식표현 추후 프론트와 협의
+    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
   if (reg_name.test(idGive) && idGive.length >= 3) {
     return true;
   }

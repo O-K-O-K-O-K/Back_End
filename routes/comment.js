@@ -38,8 +38,9 @@ router.get("/:dogPostId", async (req, res) => {
       CASE
       WHEN TIMESTAMPDIFF(MINUTE,comment.createdAt,NOW())<=0 THEN '방금 전'
       WHEN TIMESTAMPDIFF(MINUTE, comment.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, comment.createdAt, NOW()), '분 전')
-      WHEN TIMESTAMPDIFF(HOUR, 'comment.createdAt', NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, 'comment.createdAt', NOW()), '시간 전')
-      ELSE concat(DATEDIFF(NOW(),comment.createdAt),'일 전')
+      WHEN TIMESTAMPDIFF(HOUR, comment.createdAt, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, comment.createdAt, NOW()), '시간 전')
+      WHEN TIMESTAMPDIFF(DAY, comment.createdAt, NOW()) < 7 THEN CONCAT(TIMESTAMPDIFF(Day, comment.createdAt, NOW()), '일 전')
+      ELSE comment.createdAt
       END) AS AGOTIME 
       FROM comment
       JOIN user
@@ -48,6 +49,7 @@ router.get("/:dogPostId", async (req, res) => {
 
     await db.query(commentQuery, (error, rows) => {
       if (error) {
+        console.log(error)
         return res.status(400).json({
           success: false,
         });
