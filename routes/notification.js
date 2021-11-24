@@ -101,10 +101,10 @@ router.patch("/:notificationId/:senderId",auth, async (req, res) => {
   const {notificationId,senderId} = req.params  
   const {type} = req.body; //수락하면 type3 // 거절하면 type 4
   const userId = res.locals.user.userId;
-  const receiverId = userId
-  const userNickname = res.locals.user.senderNickname;
+  const receiverId = senderId
+  const senderNickname = res.locals.user.userNickname;
   const data = {
-    senderNickname:userNickname,
+    senderNickname:senderNickname,
     senderId: userId,
     type:type
   }
@@ -125,6 +125,7 @@ router.patch("/:notificationId/:senderId",auth, async (req, res) => {
       });
     } else {
       req.app.get('io').of(`/notification/${receiverId}`).emit('getNotification', data);
+      console.log("data",data)
       console.log("rows",rows)
       // logger.info('산책 수락 결정을 성공적으로 마쳤습니다.');
       return res.status(200).json({

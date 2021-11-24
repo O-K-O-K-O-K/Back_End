@@ -40,7 +40,7 @@ const upload = multer({
           }
         },
         transform: (req, file, cb) => {
-          cb(null, sharp().resize({ width: 400 }).rotate());
+          cb(null, sharp().resize({width:parseInt(size[0]),height:parseInt(size[1]),fit:sharp.fit.contain}).rotate());
         },
       },
     ],
