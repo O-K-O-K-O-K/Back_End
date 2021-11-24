@@ -56,14 +56,6 @@ app.use("/likes", likeRouter);
 app.use("/notification", notificationRouter);
 app.use("/comment", commentRouter);
 
-app.use("/dogs", dogsRouter);
-app.use("/posts", detailRouter);
-app.use("/users", infoRouter);
-app.use("/users", usersRouter);
-app.use("/dogsta", dogstaRouter);
-app.use("/mypage", pagesRouter);
-app.use("/auth", kakaoRouter);
-
 
 app.get("/",(_,res) => res.render("home"));
 
