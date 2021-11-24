@@ -36,7 +36,7 @@ router.post("/login", async (req, res) => {
           image: users.userImage,
         },
         process.env.SECRET_KEY,
-        { expiresIn: "24h" } 
+        { expiresIn: "144h" } 
       );
       // res.cookie('user', token);  쿠키!
       res.json({ token, user: users.userId });
@@ -183,4 +183,3 @@ module.exports = (passport) => {
 
 
 module.exports = router;
-

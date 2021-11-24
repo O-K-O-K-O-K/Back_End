@@ -8,6 +8,7 @@ const { db } = require("../models/index");
 router.get('/outbox', auth, async(req, res, next) => {
   try { 
     const userId= res.locals.user.userId;
+    const senderImage = res.locals.user.userImage;
     console.log(userId)
     const query = `SELECT 
     chat.chatId, chat.message, chat.createdAt, chat.senderId, chat.receiverId, user.userNickname as receiverNickname, user.userImage as receiverImage, 
@@ -47,6 +48,7 @@ router.get('/outbox', auth, async(req, res, next) => {
 router.get('/inbox',auth, async(req, res, next) => {
   try { 
   const userId= res.locals.user.userId;
+  const senderImage = res.locals.user.userImage;
   console.log(userId)
   const query = 
   `SELECT chat.senderNickname, chat.chatId, chat.message, chat.createdAt, user.userImage  as senderImage, chat.senderId, chat.receiverId,
@@ -133,7 +135,9 @@ router.post('/:receiverId', auth, async (req,res,next) =>{
 router.get('/:chatId', auth, async(req, res, next) => {
   try { 
     const {chatId}= req.params;
-    const query = `SELECT * ,
+    const userId = res.locals.user.userId;
+    const query = `SELECT chat.chatId, chat.receiverId, chat.senderId, chat.senderNickname, chat.message,
+    user.userImage as senderImage,
     (SELECT
       CASE
       WHEN TIMESTAMPDIFF(MINUTE, chat.createdAt,NOW())<=0 THEN '방금 전'
@@ -142,7 +146,10 @@ router.get('/:chatId', auth, async(req, res, next) => {
       WHEN TIMESTAMPDIFF(DAY, chat.createdAt, NOW()) < 7 THEN CONCAT(TIMESTAMPDIFF(Day, chat.createdAt, NOW()), '일 전')
       ELSE chat.createdAt
       END) AS AGOTIME 
-    from chat where chatId = ${chatId} ORDER BY chat.createdAt DESC`;
+    from chat
+    join user
+    on user.userId = chat.senderId
+    where chatId = ${chatId} ORDER BY chat.createdAt DESC`;
   db.query(query, (error,rows) => {
     if (error) {
       console.log(error)
