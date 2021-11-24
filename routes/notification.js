@@ -140,7 +140,6 @@ router.patch("/:notificationId/:senderId",auth, async (req, res) => {
 }
 });
 
-
 //notification/deleteAlarm
 router.delete("/:notificationId", auth, async (req, res) => {
   const userId = res.locals.user.userId;
