@@ -10,8 +10,6 @@ dotenv.config();
 //   database: process.env.DB_DATABASE,
 // });
 
-<<<<<<< HEAD
-=======
 exports.db = mysql.createConnection({
     host: '127.0.0.1',
     user: 'root',
@@ -21,7 +19,6 @@ exports.db = mysql.createConnection({
     multipleStatements: true
   });
 
->>>>>>> sunhee
 // exports.db = mysql.createConnection({
 //     host: '127.0.0.1',
 //     user: 'root',
@@ -30,13 +27,6 @@ exports.db = mysql.createConnection({
 //     database: 'dogdogdog'
 //   });
 
-exports.db = mysql.createConnection({
-    host: '127.0.0.1',
-    user: 'root',
-    port: '3306',
-    password: '29053696',
-    database: 'dog'
-});
 
 
 // module.exports = {

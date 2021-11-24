@@ -190,8 +190,4 @@ router.delete("/:dogPostId", auth, async (req, res) => {
 });
 
 
-<<<<<<< HEAD
 module.exports = router;
-=======
-module.exports = router;
->>>>>>> sunhee

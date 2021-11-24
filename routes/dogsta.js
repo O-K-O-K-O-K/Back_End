@@ -176,11 +176,7 @@ router.get("/:userId/:dogPostId", async (req, res) => {
   try {
     //유정 정보와 개스타그램 post 정보를 다 보내준다.
     const query = `SELECT dogSta.dogPostId, dogSta.dogPostImage, dogSta.dogPostDesc, dogSta.createdAt, dogSta.userId, 
-<<<<<<< HEAD
-	user.userNickname, user.userImage, user.userLocation,
-=======
    user.userNickname, user.userImage, user.userLocation,
->>>>>>> sunhee
   (SELECT
     CASE
     WHEN TIMESTAMPDIFF(MINUTE, dogSta.createdAt,NOW())<=0 THEN '방금 전'
@@ -306,8 +302,4 @@ router.delete("/:dogPostId", auth, async (req, res) => {
     });
   }
 });
-<<<<<<< HEAD
 module.exports = router;
-=======
-module.exports = router;
->>>>>>> sunhee
