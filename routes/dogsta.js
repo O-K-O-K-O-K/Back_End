@@ -176,7 +176,7 @@ router.get("/:userId/:dogPostId", async (req, res) => {
   try {
     //유정 정보와 개스타그램 post 정보를 다 보내준다.
     const query = `SELECT dogSta.dogPostId, dogSta.dogPostImage, dogSta.dogPostDesc, dogSta.createdAt, dogSta.userId, 
-	user.userNickname, user.userImage, user.userLocation,
+   user.userNickname, user.userImage, user.userLocation,
   (SELECT
     CASE
     WHEN TIMESTAMPDIFF(MINUTE, dogSta.createdAt,NOW())<=0 THEN '방금 전'
@@ -208,26 +208,19 @@ router.get("/:userId/:dogPostId", async (req, res) => {
 });
 
 // 개스타그램 사진 수정하기
-router.patch(
-  "/changeImage",
-  upload.single("dogPostImage"),
-  auth,
-  async (req, res) => {
+router.patch("/changeImage/:dogPostId",upload.single("dogPostImage"), auth, async (req, res) => {
     const userId = res.locals.user.userId;
+    const { dogPostId } = req.params;
 
     const dogPostImage = req.file.location;
-
-    console.log("dogPostImage", dogPostImage);
 
     const escapeQuery = {
       dogPostImage: dogPostImage,
     };
 
-    console.log("escapeQuery", escapeQuery);
 
-    const userQuery = `UPDATE dogSta SET dogSta.dogPostImage = "${dogPostImage}" WHERE dogSta.userId = "${userId}"`;
-
-    console.log("query ", userQuery);
+    const userQuery = `UPDATE dogSta SET dogSta.dogPostImage = "${dogPostImage}" 
+    WHERE dogSta.dogPostId = "${dogPostId}" AND dogSta.userId = "${userId}"`;
 
     await db.query(userQuery, escapeQuery, async (err, user) => {
       if (err) {
