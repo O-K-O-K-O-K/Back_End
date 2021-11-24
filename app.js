@@ -6,7 +6,6 @@ const app = express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
 const path = require('path');
-// const authMiddleware = require("./middlewares/auth");
 // app.use(logger('dev'));
 
 const cors = require('cors');

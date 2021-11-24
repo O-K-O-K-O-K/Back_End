@@ -11,15 +11,12 @@ const { db } = require("../models/index");
 router.get("/likeFilter", async (req, res) => {
   try {
     const likeQuery = `SELECT *,
-      COUNT(likes.dogPostId) as count
-      FROM likes
-      JOIN dogSta
-      ON dogSta.dogPostId = likes.dogPostId
+    (SELECT COUNT(likes.dogPostId) FROM likes WHERE likes.dogPostId = dogSta.dogPostId) as count
+      FROM dogSta 
       JOIN user
-      ON user.userId = dogSta.userId
-      JOIN dog
-      ON dog.userId = user.userId
-      GROUP BY likes.dogPostId
+      ON dogSta.userId = user.userId
+      LEFT JOIN dog
+      ON  dog.userId = user.userId
       ORDER BY count DESC`;
 
     await db.query(likeQuery, (error, rows) => {
@@ -44,40 +41,37 @@ router.get("/likeFilter", async (req, res) => {
 
 // 개스타그램 메인 조회하기_최신순
 router.get("/recentFilter", async (req, res) => {
-  try {
-    //유저 정보와 개스타그램 post 정보를 다 보내준다.
-    const query = `SELECT *,
-    COUNT(likes.dogPostId) as count
-    FROM likes
-    JOIN dogSta
-    ON dogSta.dogPostId = likes.dogPostId
-    JOIN user
-    ON user.userId = dogSta.userId
-    JOIN dog
-    ON dog.userId = user.userId
-    GROUP BY likes.dogPostId
-    ORDER BY dogSta.createdAt DESC`;
+  // try {
+  //유저 정보와 개스타그램 post 정보를 다 보내준다.
+  const query = `SELECT *,
+    (SELECT COUNT(likes.dogPostId) FROM likes WHERE likes.dogPostId = dogSta.dogPostId) as count
+     FROM dogSta 
+     JOIN user
+     ON dogSta.userId = user.userId
+     LEFT JOIN dog
+     ON dog.userId = user.userId
+     ORDER BY dogSta.createdAt DESC`;
 
-    console.log("query", query);
+  console.log("query", query);
 
-    await db.query(query, (error, rows) => {
-      if (error) {
-        return res.status(400).json({
-          success: false,
-          msg: "메인 조회하기 실패",
-        });
-      }
-      return res.status(200).json({
-        success: true,
-        posts: rows,
+  await db.query(query, (error, rows) => {
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        msg: "메인 조회하기 실패",
       });
+    }
+    return res.status(200).json({
+      success: true,
+      posts: rows,
     });
-  } catch (err) {
-    return res.status(500).json({
-      success: false,
-      msg: "로그인 하세용",
-    });
-  }
+  });
+  // } catch (err) {
+  //   return res.status(500).json({
+  //     success: false,
+  //     msg: "로그인 하세용",
+  //   });
+  // }
 });
 
 // 개스타그램 글 등록하기
@@ -110,16 +104,6 @@ router.post("/write", upload.single("dogPostImage"), auth, async (req, res) => {
     });
   }
 });
-
-
-// `SELECT dogSta.dogPostId, dogSta.dogPostImage, dogSta.dogPostDesc, dogSta.createdAt, dogSta.userId, 
-//     user.userNickname, user.userImage, user.userLocation,
-// 	(SELECT COUNT(likes.dogPostId) as count FROM likes WHERE dogPostId ="44") as count
-//     FROM dogSta
-//     LEFT JOIN user 
-//     ON dogSta.userId = user.userId
-//     WHERE dogSta.userId= "29"
-//     ORDER BY dogSta.createdAt DESC`
 
 // 개스타그램 조회하기 -> 마이페이지 누르면 보이는 화면, dogPostId도 필요함
 router.get("/:userId", async (req, res) => {
@@ -156,11 +140,12 @@ router.get("/:userId", async (req, res) => {
     user.userNickname, user.userImage, user.userLocation,
     (SELECT
       CASE
-      WHEN TIMESTAMPDIFF(MINUTE,dogSta.createdAt,NOW())<=0 THEN '방금 전'
+      WHEN TIMESTAMPDIFF(MINUTE, dogSta.createdAt,NOW())<=0 THEN '방금 전'
       WHEN TIMESTAMPDIFF(MINUTE, dogSta.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, dogSta.createdAt, NOW()), '분 전')
-      WHEN TIMESTAMPDIFF(HOUR, 'dogSta.createdAt', NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, 'dogSta.createdAt', NOW()), '시간 전')
-      ELSE concat(DATEDIFF(NOW(),dogSta.createdAt),'일 전')
-      END) AS AGOTIME 
+      WHEN TIMESTAMPDIFF(HOUR, dogSta.createdAt, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, dogSta.createdAt, NOW()), '시간 전')
+      WHEN TIMESTAMPDIFF(DAY, dogSta.createdAt, NOW()) < 7 THEN CONCAT(TIMESTAMPDIFF(Day, dogSta.createdAt, NOW()), '일 전')
+      ELSE dogSta.createdAt
+      END) AS AGOTIME
     FROM dogSta
     LEFT JOIN user 
     ON dogSta.userId = user.userId
@@ -194,11 +179,12 @@ router.get("/:userId/:dogPostId", async (req, res) => {
 	user.userNickname, user.userImage, user.userLocation,
   (SELECT
     CASE
-    WHEN TIMESTAMPDIFF(MINUTE,dogSta.createdAt,NOW())<=0 THEN '방금 전'
+    WHEN TIMESTAMPDIFF(MINUTE, dogSta.createdAt,NOW())<=0 THEN '방금 전'
     WHEN TIMESTAMPDIFF(MINUTE, dogSta.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, dogSta.createdAt, NOW()), '분 전')
-    WHEN TIMESTAMPDIFF(HOUR, 'dogSta.createdAt', NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, 'dogSta.createdAt', NOW()), '시간 전')
-    ELSE concat(DATEDIFF(NOW(),dogSta.createdAt),'일 전')
-    END) AS AGOTIME 
+    WHEN TIMESTAMPDIFF(HOUR, dogSta.createdAt, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, dogSta.createdAt, NOW()), '시간 전')
+    WHEN TIMESTAMPDIFF(DAY, dogSta.createdAt, NOW()) < 7 THEN CONCAT(TIMESTAMPDIFF(Day, dogSta.createdAt, NOW()), '일 전')
+    ELSE dogSta.createdAt
+    END) AS AGOTIME
     FROM dogSta 
     LEFT JOIN user 
     ON dogSta.userId = user.userId 
@@ -316,49 +302,4 @@ router.delete("/:dogPostId", auth, async (req, res) => {
     });
   }
 });
-
-// 개스타그램 메인 조회하기- like 정렬
-// router.get("/likeFilter", async(req, res) => {
-//   `SELECT *,
-// COUNT(likes.dogPostId) as count
-// FROM likes
-// JOIN dogSta
-// ON dogSta.dogPostId = likes.dogPostId
-// GROUP BY likes.dogPostId
-// ORDER BY count DESC`
-
-// `SELECT *,
-// COUNT(likes.dogPostId) as count
-// FROM likes
-// JOIN dogSta
-// ON dogSta.dogPostId = likes.dogPostId
-// GROUP BY likes.dogPostId`
-
-// `SELECT dogSta.dogPostImage, dogSta.dogPostDesc, user.userNickname, user.userEmail, user.userImage,
-// COUNT(likes.dogPostId) as count
-// FROM likes
-// JOIN dogSta
-// ON dogSta.dogPostId = likes.dogPostId
-// JOIN user
-// ON user.userId = dogSta.userId`
-
-//   const likeQuery = `SELECT COUNT(dogPostId) as cnt FROM likes WHERE dogPostId ="${dogPostId}"`;
-//   console.log("likeQuery", likeQuery)
-
-//   const results = await db.query(likeQuery)
-//   likeNum = results[0];
-
-//   //그래서 ORBER BY likeNum
-
-//   const joinlikesanddogstaanduser =
-//   `SELECT dogSta.dogPostImage, dogSta.dogPostDesc, dogSta.userId, user.userNickname, user.userEmail, user.userImage,
-//   COUNT(likes.dogPostId) as count
-//   FROM likes
-//   JOIN dogSta
-//   ON dogSta.userId = likes.userId
-//   JOIN user
-//   ON dogSta.userId = user.userId`
-
-// })
-
 module.exports = router;
