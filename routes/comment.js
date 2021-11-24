@@ -87,7 +87,10 @@ router.patch("/:dogPostId/:commentId", auth, async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> sunhee
 //댓글 삭제
 router.delete("/:dogPostId/:commentId", auth, async (req, res) => {
     const { dogPostId, commentId } = req.params;

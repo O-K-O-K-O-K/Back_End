@@ -53,9 +53,6 @@ module.exports = (server, app) => {
       }
     );
   });
-<<<<<<< HEAD
-};
-=======
 
   // using middleware
   // io.use(jwtAuth.authenticate({
@@ -158,4 +155,3 @@ module.exports = (server, app) => {
 //userId를 받았나, userNickname을 받았나 체크 할 것!
 //강의 다시 보면서 변수 확인 할 것! 특히 이 페이지에 있는것
 //어떻게 수정할 것인가 생각해보기!
->>>>>>> sunhee

@@ -188,9 +188,17 @@ router.get('/:postId', auth, function (req, res, next) {
     user.userNickname, user.userGender, user.userAge, user.userImage,user.userId,
     (SELECT
       CASE
+<<<<<<< HEAD
       WHEN TIMESTAMPDIFF(MINUTE, post.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, post.createdAt, NOW()), '분 전')
       WHEN TIMESTAMPDIFF(HOUR, 'post.createdAt', NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, 'post.createdAt', NOW()), '시간 전')
       ELSE concat(DATEDIFF(NOW(),post.createdAt),'일 전')
+=======
+      WHEN TIMESTAMPDIFF(MINUTE, post.createdAt,NOW())<=0 THEN '방금 전'
+      WHEN TIMESTAMPDIFF(MINUTE, post.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, post.createdAt, NOW()), '분 전')
+      WHEN TIMESTAMPDIFF(HOUR, post.createdAt, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, post.createdAt, NOW()), '시간 전')
+      WHEN TIMESTAMPDIFF(DAY, post.createdAt, NOW()) < 7 THEN CONCAT(TIMESTAMPDIFF(Day, post.createdAt, NOW()), '일 전')
+      ELSE post.createdAt
+>>>>>>> sunhee
       END) AS AGOTIME 
     from post
     join dog
@@ -391,6 +399,56 @@ router.patch('/completion/:postId', auth, async (req, res) => {
   return res.sendStatus(500);
 }
 })
+
+//산책인원 카운트 하기 
+router.post('/completed/:postId', auth, async (req, res) => {
+  const {postId} =req.params;
+  //
+  const userId = res.locals.user.userId;
+  try {
+    const {meetingDate,wishDesc,locationCategory, dogCount,totalTime,startLocationAddress,endLocationAddress,totalDistance,routeColor,routeName} = req.body;
+    console.log(meetingDate)
+    const params= [
+      meetingDate,
+      wishDesc,
+      completed,
+      locationCategory,
+      dogCount,
+      totalTime,
+      startLocationAddress,
+      endLocationAddress,
+      totalDistance,
+      routeColor,
+      routeName,
+      userId,
+    ];  
+    const query =
+    'INSERT INTO post (meetingDate,wishDesc,completed,locationCategory,dogCount,totalTime,startLocationAddress,endLocationAddress,totalDistance,routeColor,routeName, userId) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)';
+      await db.query(query, params, (error, rows, fields) => {
+        console.log("row는",rows)
+        if (error) {
+          console.log(error)
+          // logger.error('게시글 저장 중 DB관련 에러가 발생 했습니다', error);
+          return res.status(400).json({
+            success: false,
+            errMessage: '400 에러 게시중 오류가 발생 하였습니다!.'
+          });
+        }
+        // logger.info(`${userNickname}님, 게시글 등록이 완료되었습니다.`);
+        return res.status(201).json({
+          success: true,
+          Message: '게시글이 성공적으로 포스팅 되었습니다!.'
+        });
+      });
+    } catch (err) {
+      // logger.error('게시글 작성 중 에러가 발생 했습니다: ', err);
+      return res.status(500).json({
+        success: false,
+        errMessage: '500 에러 게시중 오류가 발생 하였습니다!.'
+      });     
+    }
+  })
+
 
 
 // 게시글 삭제

@@ -122,7 +122,11 @@ router.post('/:receiverId', auth, async (req,res,next) =>{
         });
     })
     req.app.get('io').to(req.params.receiverId).emit('sendNotifcation',data);
+<<<<<<< HEAD
     res.send(오케이)
+=======
+    res.send(ok)
+>>>>>>> sunhee
   } catch (err) {
     // logger.error('쪽지 작성 중 에러가 발생 했습니다: ', err);
     return res.sendStatus(500);
@@ -200,7 +204,11 @@ router.post('/:receiverId/:senderId/:chatId', auth, async(req, res, next) => {
           Message: '게시글이 성공적으로 포스팅 되었습니다!.'
         });
     })
+<<<<<<< HEAD
     res.send(오케이)
+=======
+    res.send(ok)
+>>>>>>> sunhee
   } catch (err) {
     // logger.error('삭제된 쪽지 작성 중 에러가 발생 했습니다: ', err);
     return res.sendStatus(500);
