@@ -68,7 +68,7 @@ router.patch("/:dogPostId/:commentId", auth, async (req, res) => {
   const { dogPostId, commentId } = req.params;
   const { commentDesc } = req.body;
   //여기 한번 확인해야함 유저가 맞는지
-  const userId = res.locals.  user.userId;
+  const userId = res.locals.user.userId;
   let params = {
     commentDesc: commentDesc,
   };
@@ -86,6 +86,7 @@ router.patch("/:dogPostId/:commentId", auth, async (req, res) => {
     res.status(400).send({ err: err });
   }
 });
+
 
 //댓글 삭제
 router.delete("/:dogPostId/:commentId", auth, async (req, res) => {

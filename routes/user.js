@@ -50,6 +50,13 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// // 로그아웃 211124
+// router.post("/logout") , async (req, res) => {
+//   const post =`SELECT * FROM user WHERE userEmail =?`;
+//   const results = await db.query(post, [userEmail]);
+//   users.userId
+// }
+
 //회원가입  여기 미들웨어(upload.single("userImage)
 router.post("/signUp", upload.single("userImage"), async (req, res) => {
   const { userEmail, password, confirmPassword, userNickname, userGender, userAge,userLocation} = req.body;
@@ -168,6 +175,7 @@ async function nicknameExist(nickGive) {
     return true;
   }
 }
+
 
 //카카오 로그인
 module.exports = (passport) => {
