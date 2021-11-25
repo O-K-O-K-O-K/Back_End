@@ -6,6 +6,35 @@ dotenv.config();
 const upload = require("../S3/s3");
 const { db } = require("../models/index");
 
+
+//개스타그램 글 삭제하기
+router.delete("/:dogPostId", auth, async (req, res) => {
+  const userId = res.locals.user.userId;
+  const { dogPostId } = req.params;
+
+  console.log(dogPostId)
+  const query = `DELETE from dogSta where dogSta.dogPostId = '${dogPostId}' and dogSta.userId = '${userId}'`;
+
+  console.log(query)
+  try {
+    await db.query(query, (error, rows, fields) => {
+      if (error) {
+        return res.status(400).json({
+          success: false,
+        });
+      }
+      return res.status(200).json({
+        success: true,
+      });
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      msg: "로그인 하세요",
+    });
+  }
+});
+
 // 안 산뜻하게 보내려면 -> rows[0]
 // 개스타그램 메인 조회하기_추천순
 router.get("/likeFilter", async (req, res) => {
@@ -271,28 +300,4 @@ router.patch("/:dogPostId", auth, async (req, res) => {
   }
 });
 
-//개스타그램 글 삭제하기
-router.delete("/:dogPostId", auth, async (req, res) => {
-  const userId = res.locals.user.userId;
-  const { dogPostId } = req.params;
-
-  const query = `DELETE from dogSta where dogSta.dogPostId = '${dogPostId}' and dogSta.userId = '${userId}'`;
-  try {
-    await db.query(query, (error, rows, fields) => {
-      if (error) {
-        return res.status(400).json({
-          success: false,
-        });
-      }
-      return res.status(200).json({
-        success: true,
-      });
-    });
-  } catch (err) {
-    res.status(500).json({
-      success: false,
-      msg: "로그인 하세요",
-    });
-  }
-});
 module.exports = router;

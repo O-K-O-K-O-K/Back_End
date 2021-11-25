@@ -6,8 +6,8 @@ const app = express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
 const path = require('path');
+// const authMiddleware = require("./middlewares/auth");
 // app.use(logger('dev'));
-
 
 const cors = require('cors');
 const corsOptions = {
@@ -18,6 +18,8 @@ const corsOptions = {
   // optionsSuccessStatus: 204,
 };
 app.use(cors(corsOptions));
+
+app.set('views', path.join(__dirname, 'views'));
 
 //parser
 app.use(express.json());
@@ -30,7 +32,6 @@ app.use(express.static('public'));
 require('dotenv').config();
 
 // app.use(compression());
-// app.set('views', path.join(__dirname, 'views'));
 
 const dogsRouter = require("./routes/dog");
 const detailRouter = require("./routes/detail");
@@ -57,8 +58,6 @@ app.use("/comment", commentRouter);
 app.get("/",(_,res) => res.render("home"));
 
 const auth = require('./middlewares/auth');
-
-
 //swagger
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
