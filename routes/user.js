@@ -66,7 +66,7 @@ router.post("/signUp", upload.single("userImage"), async (req, res) => {
     res.status(401).send({ result: "닉네임이 존재합니다." });
   } else if (!idCheck(userEmail)) {
     // id 정규식 검사
-    res.sendStatus(401);
+    res.status(401).send({ result: "ID는 6자리 이상 입력해주세요."});
   } else if (!pwConfirm(password, confirmPassword)) {
     // 비밀번호와 비밀번호 확인이 맞는지 검사
     res.sendStatus(401);
@@ -108,16 +108,27 @@ router.post("/checkDup",async  (req, res) => {
   }
 });
 
-
+//id 정규식 처리
 function idCheck(idGive) {
   console.log(idGive);
-  const reg_name =
-    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-  if (reg_name.test(idGive) && idGive.length >= 3) {
+  const reg_name = /^[a-z]+[a-z0-9]{5,19}$/g;
+  if (reg_name.test(idGive) && idGive.length >= 6) {
     return true;
   }
   return false;
 }
+
+// //email 정규식 처리
+// function idCheck(idGive) {
+//   const reg_name =
+//     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+//   if (reg_name.test(idGive) && idGive.split('@')[0].length >= 6) {
+//     return true;
+//   }
+//   return false;
+// }
+
+
 
 function pwConfirm(pwGive, pw2Give) {
   console.log(pwGive,pw2Give);
@@ -154,7 +165,7 @@ function emailExist(userEmail) {
         return resolve(false);
       }
 
-      // 아무 값이 없기 때문에, 중복이 없다. (가능 하다는 얘기)
+      // 아무 값이 없기 때문에, 중복이 없다.2 (가능 하다는 얘기)
       if (results.length == 0) {
         return resolve(true);
       }

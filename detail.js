@@ -188,11 +188,17 @@ router.get('/:postId', auth, function (req, res, next) {
     user.userNickname, user.userGender, user.userAge, user.userImage,user.userId,
     (SELECT
       CASE
+<<<<<<< HEAD
+      WHEN TIMESTAMPDIFF(MINUTE, post.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, post.createdAt, NOW()), '분 전')
+      WHEN TIMESTAMPDIFF(HOUR, 'post.createdAt', NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, 'post.createdAt', NOW()), '시간 전')
+      ELSE concat(DATEDIFF(NOW(),post.createdAt),'일 전')
+=======
       WHEN TIMESTAMPDIFF(MINUTE, post.createdAt,NOW())<=0 THEN '방금 전'
       WHEN TIMESTAMPDIFF(MINUTE, post.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, post.createdAt, NOW()), '분 전')
       WHEN TIMESTAMPDIFF(HOUR, post.createdAt, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, post.createdAt, NOW()), '시간 전')
       WHEN TIMESTAMPDIFF(DAY, post.createdAt, NOW()) < 7 THEN CONCAT(TIMESTAMPDIFF(Day, post.createdAt, NOW()), '일 전')
       ELSE post.createdAt
+>>>>>>> sunhee
       END) AS AGOTIME 
     from post
     join dog
