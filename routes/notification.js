@@ -8,19 +8,20 @@ const { db } = require("../models/index");
 router.get('/', auth, async(req, res) => {
   try {
     const receiverId = res.locals.user.userId
-    const query = `SELECT notification.notificationId, notification.senderId, notification.type, notification.senderNickname, notification.createdAt, user.userImage as senderImage,
+    const query = `SELECT notification.notificationId, notification.senderId, notification.type, notification.senderNickname, notification.updatedAt as createdAt, user.userImage as senderImage,
     (SELECT
       CASE
-      WHEN TIMESTAMPDIFF(MINUTE,notification.createdAt,NOW())<=0 THEN '방금 전'
-      WHEN TIMESTAMPDIFF(MINUTE, notification.createdAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, notification.createdAt, NOW()), '분 전')
-      WHEN TIMESTAMPDIFF(HOUR, notification.createdAt, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, notification.createdAt, NOW()), '시간 전')
-      WHEN TIMESTAMPDIFF(DAY, notification.createdAt, NOW()) < 7 THEN CONCAT(TIMESTAMPDIFF(Day, notification.createdAt, NOW()), '일 전')
-      ELSE notification.createdAt
+      WHEN TIMESTAMPDIFF(MINUTE,notification.updatedAt,NOW())<=0 THEN '방금 전'
+      WHEN TIMESTAMPDIFF(MINUTE, notification.updatedAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, notification.updatedAt, NOW()), '분 전')
+      WHEN TIMESTAMPDIFF(HOUR, notification.updatedAt, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, notification.updatedAt, NOW()), '시간 전')
+      WHEN TIMESTAMPDIFF(DAY, notification.updatedAt, NOW()) < 7 THEN CONCAT(TIMESTAMPDIFF(Day, notification.updatedAt, NOW()), '일 전')
+      ELSE notification.updatedAt
       END) AS AGOTIME 
     FROM notification
     JOIN user
     ON user.userId = notification.senderId 
-    WHERE notification.receiverId = "${receiverId}"`
+    WHERE notification.receiverId = "${receiverId}
+    ORDER BY updatedAt DESC"`
     console.log("query", query);
     await db.query(query, (error, rows) => {
       if (error) {
@@ -82,13 +83,13 @@ router.get('/walkRequest', auth, async(req, res) => {
 
 // 쪽지,산책신청 알람
 // 402 에러가 뜨면 이미 누른 거로 모달 창 띄워주세요
-router.post('/:receiverId', auth, async (req,res,next) =>{
+router.post('/:postId/:receiverId', auth, async (req,res,next) =>{
   try {
     const userId = res.locals.user.userId;
-    const {receiverId} = req.params;
+    const {receiverId, postId} = req.params;
     //postId를 req.body로 보내주실 수 있나?
     //아니면 req.params로 가능하나?
-    const {type, postId} = req.body;
+    const {type} = req.body;
     const senderId = userId
     const senderNickname = res.locals.user.userNickname;
     console.log("userId는",senderId)
@@ -165,24 +166,27 @@ router.post('/:receiverId', auth, async (req,res,next) =>{
 })
 
 //수락여부 +소켓 
-router.patch("/:notificationId/:senderId",auth, async (req, res) => {
-  try{
+router.patch("/:notificationId/:senderId", auth, async (req, res) => {
+  try{ 
   const {notificationId,senderId} = req.params  
-  const {type} = req.body; //수락하면 type3 // 거절하면 type 4
-  const userId = res.locals.user.userId;
-  const receiverId = senderId
+  const {type, postId} = req.body; //수락하면 type3 // 거절하면 type 4
+
+  const changeReceiverId = senderId;
+  const changeSenderId = res.locals.user.userId;
+
   const senderNickname = res.locals.user.userNickname;
   const data = {
     senderNickname:senderNickname,
-    senderId: userId,
+    senderId:changeSenderId,
     type:type
   }
   const escapeQuery = {
     type:type,
-    senderId:userId,
-    receiverId:senderId
+    senderId:changeSenderId,
+    receiverId:changeReceiverId,
+    senderNickname:senderNickname,
   };
-  const query = `UPDATE notification SET ? WHERE notificationId = ${notificationId} and notification.receiverId = '${userId}'`;
+  const query = `UPDATE notification SET ? WHERE notificationId = '${notificationId}' and notification.receiverId = '${changeSenderId}'`;
   await db.query(query, escapeQuery, (error, rows, fields) => {
     console.log(rows)
     if (error) {

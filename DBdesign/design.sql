@@ -73,7 +73,7 @@ CREATE TABLE `post` (
   `userId` INT NOT NULL,
   PRIMARY KEY (`commentId`),
   FOREIGN KEY (`dogPostId`) REFERENCES `dogSta` (`dogPostId`) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE ON DELETE CASCADE,
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 
@@ -86,8 +86,8 @@ CREATE TABLE `likes` (
   KEY `likeId` (`likeId`),
   KEY `dogPostId` (`dogPostId`),
   KEY `userId` (`userId`),
-  FOREIGN KEY (`dogPostId`) REFERENCES `dogSta` (`dogPostId`) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (`dogPostId`) REFERENCES `dogSta` (`dogPostId`) ON DELETE CASCADE,
+  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE,
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
 
 --   CREATE TABLE `kakaoUser` (
