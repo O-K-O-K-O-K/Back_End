@@ -8,7 +8,7 @@ const { db } = require("../models/index");
 const dotenv = require("dotenv");
 dotenv.config();
 db.query = util.promisify(db.query);
-const upload = require("../S3/s3"); // 여기
+const upload = require("../S3/s3"); 
 
 //로그인
 router.post("/login", async (req, res) => {
