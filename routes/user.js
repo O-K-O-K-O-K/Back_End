@@ -66,7 +66,7 @@ router.post("/signUp", upload.single("userImage"), async (req, res) => {
     res.status(401).send({ result: "닉네임이 존재합니다." });
   } else if (!idCheck(userEmail)) {
     // id 정규식 검사
-    res.status(401).send({ result: "ID는 6자리 이상 입력해주세요."});
+    res.status(401).send({ result: "이메일 형식이 맞지 않습니다."});
   } else if (!pwConfirm(password, confirmPassword)) {
     // 비밀번호와 비밀번호 확인이 맞는지 검사
     res.sendStatus(401);

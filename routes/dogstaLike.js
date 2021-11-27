@@ -5,38 +5,6 @@ const dotenv = require("dotenv");
 dotenv.config();
 const { db } = require("../models/index");
 
-//likes/myLike
-router.get("/myLike", auth, async(req, res) => {
-  const userId = res.locals.user.userId;
-
-  let myLike;
-  const mylikeExist = `SELECT * FROM likes WHERE likeId = likes.likeId AND userId = "${userId}"`;
-  const results = await db.query(mylikeExist)
-  myLike = results;  
-
-  await db.query(mylikeExist, (error, rows) => {
-    if (error) {
-      console.log(error);
-      return res.status(400).json({
-        success: false,
-      });
-    }
-    return res.status(200).send({
-      myLike
-    });
-  });
-
-  // const mylikeExist = `SELECT * FROM likes WHERE likeId = likes.likeId AND userId = "${userId}"`;
-  // const results = await db.query(mylikeExist);
-  
-  // if (results.length) {
-  //   res.send(true);
-  // } else {
-  //   res.send(false);
-  // }
-})
-
-
 // likes/:dogPostId/like
 router.post("/:dogPostId", auth, async (req, res) => {
   try {
