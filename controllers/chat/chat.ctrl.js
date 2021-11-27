@@ -1,5 +1,5 @@
 "user strict";
-const { db } = require("../models/index");
+const { db } = require("../../models/index");
 const sendMessages = async (req,res,next) =>{
     try {
       const {receiverId}= req.params;

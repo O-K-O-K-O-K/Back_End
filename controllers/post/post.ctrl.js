@@ -1,5 +1,5 @@
 "user strict";
-const { db } = require("../models/index");
+const { db } = require("../../models/index");
 
 const putUpPosts = async (req, res) => {
     console.log("write post 연결완료!")

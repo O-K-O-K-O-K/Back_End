@@ -96,7 +96,7 @@ router.post("/signUp", upload.single("userImage"), async (req, res) => {
 });
 
 //이메일 중복확인 
-router.post("/checkDup",async  (req, res) => {
+router.post("/checkDup", async (req, res) => {
   const { userEmail } = req.body;
  if (idCheck(userEmail)) {
   if (!await emailExist(userEmail)) {
