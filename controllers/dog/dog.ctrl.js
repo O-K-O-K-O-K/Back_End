@@ -1,6 +1,7 @@
 "user strict";
 const { db } = require("../../models/index");
 
+
 const addDog = async (req, res) => {
   const userId = res.locals.user.userId;
   try {
