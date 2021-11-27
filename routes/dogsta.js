@@ -6,7 +6,6 @@ dotenv.config();
 const upload = require("../S3/s3");
 const { db } = require("../models/index");
 
-
 //개스타그램 글 삭제하기
 router.delete("/:dogPostId", auth, async (req, res) => {
   const userId = res.locals.user.userId;
