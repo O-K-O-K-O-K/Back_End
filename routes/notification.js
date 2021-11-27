@@ -5,10 +5,11 @@ const { db } = require("../models/index");
 
 
 //알람 조회하기 //receiverNickname 보내기
+    //알람 조회하기
 router.get('/', auth, async(req, res) => {
   try {
     const receiverId = res.locals.user.userId
-    const query = `SELECT notification.notificationId, notification.senderId, notification.type, notification.senderNickname, notification.updatedAt as createdAt, user.userImage as senderImage,
+    const query = `SELECT notification.notificationId, notification.senderId, notification.type, notification.senderNickname, notification.updatedAt as createdAt, notification.postId, user.userImage as senderImage, 
     (SELECT
       CASE
       WHEN TIMESTAMPDIFF(MINUTE,notification.updatedAt,NOW())<=0 THEN '방금 전'
@@ -20,7 +21,8 @@ router.get('/', auth, async(req, res) => {
     FROM notification
     JOIN user
     ON user.userId = notification.senderId 
-    WHERE notification.receiverId = "${receiverId}"`
+    WHERE notification.receiverId = "${receiverId}
+    ORDER BY updatedAt DESC"`
     console.log("query", query);
     await db.query(query, (error, rows) => {
       if (error) {
@@ -41,7 +43,6 @@ router.get('/', auth, async(req, res) => {
     });
   }
 })
-
 
 
 //쪽지 알람 
@@ -101,6 +102,7 @@ router.post('/:postId/:receiverId', auth, async (req,res,next) =>{
           }
           // logger.info(`${senderNickname}님, 쪽지 등록이 완료되었습니다.`);
           req.app.get('io').of(`/notification/${receiverId}`).emit('getNotification', data);
+          console.log('io')
           // req.app.get('io').of('/notification').to(req.params.receiverId).emit('getNotification', {senderNickname, type});
           // req.app.get('io').of('/notification').emit('getNotification',data);
           

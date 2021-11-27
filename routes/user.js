@@ -108,25 +108,25 @@ router.post("/checkDup",async  (req, res) => {
   }
 });
 
-//id 정규식 처리
-function idCheck(idGive) {
-  console.log(idGive);
-  const reg_name = /^[a-z]+[a-z0-9]{5,19}$/g;
-  if (reg_name.test(idGive) && idGive.length >= 6) {
-    return true;
-  }
-  return false;
-}
-
-// //email 정규식 처리
+// //id 정규식 처리
 // function idCheck(idGive) {
-//   const reg_name =
-//     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-//   if (reg_name.test(idGive) && idGive.split('@')[0].length >= 6) {
+//   console.log(idGive);
+//   const reg_name = /^[a-z]+[a-z0-9]{5,19}$/g;
+//   if (reg_name.test(idGive) && idGive.length >= 6) {
 //     return true;
 //   }
 //   return false;
 // }
+
+//email 정규식 처리
+function idCheck(idGive) {
+  const reg_name =
+    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+  if (reg_name.test(idGive) && idGive.split('@')[0].length >= 6) {
+    return true;
+  }
+  return false;
+}
 
 
 

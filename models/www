@@ -4,17 +4,25 @@
  * Module dependencies.
  */
 //모듈 
-const app = require('../app');
-const https = require('https');
-const path = require('path')
-const socketIo =  require("socket.io")
-const server = https.createServer(app);
-//  const { connection } = require('mongoose');
-//  const { isObject } = require('util');
-const io = socketIo({noServer:true});
-const webSocket = require('../socket')
+const app = require("../app");
+// const http = require('http');
+const http = require("http");
+const path = require("path");
+const socketIo = require("socket.io");
+const server = http.createServer(app);
+// const { connection } = require("mongoose");
+// const { isObject } = require("util");
+const io = socketIo({ noServer: true });
+// const webSocket = require("../socket");
 
-webSocket(server,app)
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({
+    server: server
+});
+wss.on('connection', (ws, req) => {
+});
+
+WebSocket(server,app)
 //소켓때문에 cors 문제가 발생한다면 app.use(express.static("asset")) 과 비슷한 미들웨어 설정해두기!
 //socketIo
 // io.on('connection', (socket) => {
