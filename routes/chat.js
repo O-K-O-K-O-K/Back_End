@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middlewares/auth'); 
-const ctrl = require("../controller/chat.ctrl")
+const ctrl = require("../controllers/chat/chat.ctrl")
 // const logger = require("../src/config/logger")
-
 
 //쪽지 보내기 
 router.post('/:receiverId', auth, ctrl.sendMessages)
