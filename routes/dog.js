@@ -21,7 +21,8 @@ router.post("/dogInfo", upload.single("dogImage"), auth, async (req, res, next) 
           dogComment
         } = req.body;
     
-        const dogImage = req.file.location;
+        // const dogImage = req.file.location;
+        const dogImage = req.file.transforms[0].location;
     
         const params = [
           dogGender,
@@ -85,24 +86,13 @@ router.get("/", auth, async (req, res) => {
 });
 
 // dog 사진 수정하기
-// url: /dogs/changeImage
 router.patch('/changeImage', upload.single("dogImage"), auth, async (req, res) => {
   const userId = res.locals.user.userId;
-
-  const dogImage = req.file.location;
-
-  console.log("dogImage", dogImage)
-
+  const dogImage = req.file.transforms[0].location;
   const escapeQuery = {
     dogImage : dogImage
   }
-
-  console.log("escapeQuery", escapeQuery)
-
   const userQuery = `UPDATE dog SET dogImage = "${dogImage}" WHERE dog.userId = "${userId}"`
-
-  console.log("query ", userQuery)
-
   await db.query(userQuery, escapeQuery, async(err, user)=> {
     if(err){
       return res.status(400).json({
@@ -121,7 +111,6 @@ router.patch('/changeImage', upload.single("dogImage"), auth, async (req, res) =
 router.patch('/', auth, async (req, res) => {
   const userId =  res.locals.user.userId;
 
-  console.log("reqbody:", req.body)
   const {
     dogGender,
     dogName,
@@ -131,9 +120,6 @@ router.patch('/', auth, async (req, res) => {
     neutral,
     dogComment,
   } = req.body;
-
-  // const dogImage = req.file.location;
-  // console.log("이미지 타입:",typeof(dogImage));
 
   const escapeQuery = {
     dogGender : dogGender,
@@ -146,15 +132,10 @@ router.patch('/', auth, async (req, res) => {
     // dogImage : dogImage,
   };
 
-  console.log(escapeQuery)
-
   const userQuery = `UPDATE dog 
   SET dogGender="${dogGender}", dogName="${dogName}", dogSize="${dogSize}", dogBreed="${dogBreed}", 
   dogAge = "${dogAge}", neutral="${neutral}", dogComment ="${dogComment}"
   WHERE dog.userId = '${userId}'`;
-
-  console.log(userQuery)
-
   await db.query(userQuery, escapeQuery, async (err, user) => {
     if (err) {
       return res.status(400).json({

@@ -139,7 +139,7 @@ router.post("/write", upload.single("dogPostImage"), auth, async (req, res) => {
 
   try {
     const { dogPostDesc } = req.body;
-    const dogPostImage = req.file.location;
+    const dogPostImage = req.file.transforms[0].location;
     const params = [dogPostDesc, dogPostImage, userId];
 
     const query = `INSERT INTO dogSta(dogPostDesc, dogPostImage, userId) VALUES(?,?,?)`;
@@ -271,7 +271,7 @@ router.patch("/changeImage/:dogPostId",upload.single("dogPostImage"), auth, asyn
     const userId = res.locals.user.userId;
     const { dogPostId } = req.params;
 
-    const dogPostImage = req.file.location;
+    const dogPostImage = req.file.transforms[0].location;
 
     const escapeQuery = {
       dogPostImage: dogPostImage,
