@@ -8,7 +8,8 @@ const { db } = require("../models/index");
 const dotenv = require("dotenv");
 dotenv.config();
 db.query = util.promisify(db.query);
-const upload = require("../S3/s3"); 
+const upload = require("../S3/s3");
+const imageThumbnail = require('image-thumbnail'); 
 
 //로그인
 router.post("/login", async (req, res) => {
