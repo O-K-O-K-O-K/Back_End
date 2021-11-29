@@ -3,7 +3,6 @@ const router = express.Router();
 const auth = require('../middlewares/auth');
 const { db } = require("../models/index");
 
-
 //알람 조회하기
 router.get('/', auth, async(req, res) => {
   try {
