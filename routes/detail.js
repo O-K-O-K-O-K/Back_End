@@ -11,11 +11,15 @@ dotenv.config();
 // const { JsonWebTokenError } = require('jsonwebtoken');
 
 //메인 페이지 조회하기 - 올림픽 공원
-router.get('/main/olympicPark', function (req, res, next) {
+router.get('/main/olympicPark', async (req, res) => {
   console.log("get method 연결완료!")
   const location = "올림픽공원"
   try {
-
+    const postCount = `SELECT count(*) as count FROM post where post.locationCategory = '${location}'`;
+    const results = await db.query(postCount);
+    console.log("results", results); //[ RowDataPacket { count: 13 } ]
+    const totalCount = results[0].count; // NOTE: 전체 글 개수.
+    console.log("totoal",totalCount)
     const query = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
     post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory,
     (select count(*) from post where post.locationCategory ='${location}') as length
@@ -25,18 +29,18 @@ router.get('/main/olympicPark', function (req, res, next) {
     where post.locationCategory ='${location}'
     ORDER BY post.createdAt DESC 
     LIMIT 4`
-    console.log('query', typeof query);
-
-    db.query(query, (error, rows) => {
+    await db.query(query, (error, rows) => {
       if (error) {
         console.log(error)
         // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
         return res.sendStatus(400);
       }
       // logger.info('게시글을 성공적으로 조회했습니다.');
+      console.log(totalCount)
       res.status(200).json({
         success: true,
         posts: rows,
+        totalCount
       });
       console.log("rows는", rows)
     });
@@ -48,9 +52,14 @@ router.get('/main/olympicPark', function (req, res, next) {
 });
 
 //메인 페이지 조회하기 - 반포 공원
-router.get('/main/banpoPark', function (req, res, next) {
+router.get('/main/banpoPark', async (req, res, next) => {
   console.log("get method 연결완료!")
   const location = "반포한강공원"
+  const postCount = `SELECT count(*) as count FROM post where post.locationCategory = '${location}'`;
+    const results = await db.query(postCount);
+    console.log("results", results); //[ RowDataPacket { count: 13 } ]
+    const totalCount = results[0].count; // NOTE: 전체 글 개수.
+    console.log("totoal",totalCount)
   try {
     const query = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
     post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory,
@@ -63,7 +72,7 @@ router.get('/main/banpoPark', function (req, res, next) {
     LIMIT 4`
     console.log('query', typeof query);
 
-    db.query(query, (error, rows) => {
+    await db.query(query, (error, rows) => {
       if (error) {
         console.log(error)
         // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
@@ -73,6 +82,7 @@ router.get('/main/banpoPark', function (req, res, next) {
       res.status(200).json({
         success: true,
         posts: rows,
+        totalCount
       });
       console.log("rows는", rows)
     });
@@ -81,14 +91,19 @@ router.get('/main/banpoPark', function (req, res, next) {
     // logger.error('게시글 조회 중 에러가 발생 했습니다: ', err);
     return res.sendStatus(500);
   }
+  
 });
 
 //메인 페이지 조회하기 - 서울 숲
-router.get('/main/seoulForest', function (req, res, next) {
+router.get('/main/seoulForest', async (req, res, next) => {
   console.log("get method 연결완료!")
   const location = "서울숲"
+  const postCount = `SELECT count(*) as count FROM post where post.locationCategory = '${location}'`;
+  const results = await db.query(postCount);
+  console.log("results", results); //[ RowDataPacket { count: 13 } ]
+  const totalCount = results[0].count; // NOTE: 전체 글 개수.
+  console.log("totoal",totalCount)
   try {
-
     const query = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
     post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory,
     (select count(*) from post where post.locationCategory ='${location}') as length
@@ -100,7 +115,7 @@ router.get('/main/seoulForest', function (req, res, next) {
     LIMIT 4`
     console.log('query', typeof query);
 
-    db.query(query, (error, rows) => {
+    await db.query(query, (error, rows) => {
       if (error) {
         console.log(error)
         // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
@@ -109,6 +124,7 @@ router.get('/main/seoulForest', function (req, res, next) {
       res.status(200).json({
         success: true,
         posts: rows,
+        totalCount
       });
       console.log("rows는", rows)
       // logger.info('게시글을 성공적으로 조회했습니다.');
@@ -119,7 +135,6 @@ router.get('/main/seoulForest', function (req, res, next) {
     return res.sendStatus(500);
   }
 });
-
 
 //메인 조회하기 - 올림픽 공원
 router.get('/olympicPark', function (req, res, next) {
@@ -225,64 +240,358 @@ router.get('/seoulForest', function (req, res, next) {
   }
 });
 
-// router.get('/olympicPark', function (req, res, next) {
-//   const resultsPerPage =10;
-//   console.log("get method 연결완료!")
-//   const pageNum = Number(req.query.pageNum) || 1; // NOTE: 쿼리스트링으로 받을 페이지 번호 값, 기본값은 1
-//   const contentSize = 10; // NOTE: 페이지에서 보여줄 컨텐츠 수.
-//   const pnSize = 10; // NOTE: 페이지네이션 개수 설정.
-//   const skipSize = (pageNum - 1) * contentSize; // NOTE: 다음 페이지 갈 때 건너뛸 리스트 개수.
-//   const location = "올림픽공원"
-//   const query = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
-//     post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
-//     FROM post
-//     JOIN dog
-//     ON dog.userId=post.userId
-//     where post.locationCategory ='${location}'
-//     ORDER BY post.createdAt DESC `
-//     console.log('query',query);
+//메인 조회하기 - 전체 조회하기
+router.get('/', function (req, res, next) {
+  let conditions = [];
+  let where
+  console.log("get method 연결완료!")
+  const {dogSize, dogGender, dogAge, locationCategory, completed} = req.body;
+  console.log(dogSize, dogGender, dogAge, locationCategory, completed)
+  try {
 
-//     db.query(query, (error, rows) => {
-//       if (error) {
-//         console.log(error)
-//         // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
-//         return res.sendStatus(400);
-//       }
-//       // logger.info('게시글을 성공적으로 조회했습니다.');
-//       const totalCount = Number(countQueryResult[0].count); // NOTE: 전체 글 개수.
-//       const pnTotal = Math.ceil(totalCount / contentSize); // NOTE: 페이지네이션의 전체 카운트
-//       const pnStart = ((Math.ceil(pageNum / pnSize) - 1) * pnSize) + 1; // NOTE: 현재 페이지의 페이지네이션 시작 번호.
-//       let pnEnd = (pnStart + pnSize) - 1; // NOTE: 현재 페이지의 페이지네이션 끝 번호.
-//       const query2 = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
-//       post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
-//       FROM post
-//       JOIN dog
-//       ON dog.userId=post.userId
-//       where post.locationCategory ='${location}'
-//       ORDER BY post.createdAt DESC 
-//       LIMIT ${skipSize},${contentSize}`
-//       db.query(query2, (error, results) => {
-//         if (error) {
-//           console.log(error)
-//           // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
-//           return res.sendStatus(400);
-//         }
-//         if (pnEnd>pnTotal) pnEnd = pnTotal; 
-//         const result = {
-//           pageNum,
-//           pnStart,
-//           pnEnd,
-//           pnTotal,
-//           contents : results
-//         };
-//         res.status(200).json({
-//           success: true,
-//           posts: result,
-//         })
-//       console.log("rows는", rows)
-//     }); 
-//   });  
-// });
+    const query = `SELECT
+    dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
+    post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
+    FROM post
+    JOIN dog
+    ON dog.userId=post.userId
+    ORDER BY post.createdAt DESC`
+    console.log('query', typeof query);
+    db.query(query, (error, rows) => {
+      if (error) {
+        console.log(error)
+        // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
+        return res.sendStatus(400);
+      }
+      // logger.info('게시글을 성공적으로 조회했습니다.');
+      res.status(200).json({
+        success: true,
+        posts: rows,
+      });
+      console.log("rows는", rows)
+    });
+
+  } catch (err) {
+    // logger.error('게시글 조회 중 에러가 발생 했습니다: ', err);
+    return res.sendStatus(500);
+  }
+});
+
+//메인 조회하기 - 전체 조회하기(테스트)
+router.get('/test', function (req, res, next) {
+  console.log("get method 연결완료!")
+  const pageNum = Number(req.query.pageNum) || 1; // NOTE: 쿼리스트링으로 받을 페이지 번호 값, 기본값은 1
+  console.log(pageNum)
+  const contentSize = 10; // NOTE: 페이지에서 보여줄 컨텐츠 수.
+  const pnSize = 10; // NOTE: 페이지네이션 개수 설정.
+  const skipSize = (pageNum - 1) * contentSize; // NOTE: 다음 페이지 갈 때 건너뛸 리스트 개수.
+  console.log("다음 페이지 갈 때 건너뛸 리스트 개수.", skipSize)
+  const query = `SELECT count(*) as count
+    FROM post`
+    db.query(query, (error, rows) => {
+      if (error) {
+        console.log(error)
+        // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
+        return res.sendStatus(400);
+      }
+      // logger.info('게시글을 성공적으로 조회했습니다.');
+      const totalCount = Number(rows[0].count); // NOTE: 전체 글 개수.
+      console.log("전체 글 개수",totalCount)
+      const pnTotal = Math.ceil(totalCount / contentSize); // NOTE: 페이지네이션의 전체 카운트
+      console.log("페이지네이션의 전체 카운트 ",pnTotal)
+      const pnStart = ((Math.ceil(pageNum / pnSize) - 1) * pnSize); // NOTE: 현재 페이지의 페이지네이션 시작 번호.
+      console.log("현재 페이지의 페이지네이션 시작 번호", pnStart)
+      let pnEnd = (pnStart + pnSize) - 1; // NOTE: 현재 페이지의 페이지네이션 끝 번호.
+      console.log("현재 페이지의 페이지네이션 끝 번호",pnEnd)
+      const query2 = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
+      post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
+      FROM post
+      JOIN dog
+      ON dog.userId=post.userId
+      ORDER BY post.createdAt DESC 
+      LIMIT ${skipSize},${contentSize}`
+      console.log(query2)
+      db.query(query2, (error, results) => {
+        console.log("들어오니")
+        if (error) {
+          console.log(error)
+          // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
+          return res.sendStatus(400);
+        }
+        console.log("찐결과",results)
+        if (pnEnd>pnTotal) pnEnd = pnTotal; 
+        console.log(pnEnd,pnTotal)
+        const result = {
+          pageNum,
+          pnStart,
+          pnEnd,
+          pnTotal,
+          contents : results
+        };
+        res.status(200).json({
+          success: true,
+          posts: result,
+        })
+      console.log("rows는", rows)
+    }); 
+  });  
+});
+
+//메인 조회하기 - 올림픽 공원(테스트)
+router.get('/test/olympicPark', function (req, res, next) {
+  console.log("get method 연결완료!")
+  const pageNum = Number(req.query.pageNum) || 1; // NOTE: 쿼리스트링으로 받을 페이지 번호 값, 기본값은 1
+  console.log(pageNum)
+  const contentSize = 10; // NOTE: 페이지에서 보여줄 컨텐츠 수.
+  const pnSize = 10; // NOTE: 페이지네이션 개수 설정.
+  const skipSize = (pageNum-1) * contentSize; // NOTE: 다음 페이지 갈 때 건너뛸 리스트 개수.
+  console.log("다음 페이지 갈 때 건너뛸 리스트 개수.", skipSize)
+  const location = "올림픽공원"
+  const query = `SELECT count(*) as count
+    FROM post
+    where post.locationCategory ='${location}'
+    ORDER BY post.createdAt DESC `
+    db.query(query, (error, rows) => {
+      if (error) {
+        console.log(error)
+        // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
+        return res.sendStatus(400);
+      }
+      // logger.info('게시글을 성공적으로 조회했습니다.');
+      const totalCount = Number(rows[0].count); // NOTE: 전체 글 개수.
+      console.log("전체 글 개수",totalCount)
+      const pnTotal = Math.ceil(totalCount / contentSize); // NOTE: 페이지네이션의 전체 카운트
+      console.log("페이지네이션의 전체 카운트 ",pnTotal)
+      const pnStart = ((Math.ceil(pageNum / pnSize) - 1) * pnSize) + 1; // NOTE: 현재 페이지의 페이지네이션 시작 번호.
+      console.log("현재 페이지의 페이지네이션 시작 번호", pnStart)
+      let pnEnd = (pnStart + pnSize) - 1; // NOTE: 현재 페이지의 페이지네이션 끝 번호.
+      console.log("현재 페이지의 페이지네이션 끝 번호",pnEnd)
+      const query2 = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
+      post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
+      FROM post
+      JOIN dog
+      ON dog.userId=post.userId
+      where post.locationCategory ='${location}'
+      ORDER BY post.createdAt DESC 
+      LIMIT ${skipSize},${contentSize}`
+      console.log(query2)
+      db.query(query2, (error, results) => {
+        console.log("들어오니")
+        if (error) {
+          console.log(error)
+          // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
+          return res.sendStatus(400);
+        }
+        console.log("찐결과",results)
+        if (pnEnd>pnTotal) pnEnd = pnTotal; 
+        console.log(pnEnd,pnTotal)
+        const result = {
+          pageNum,
+          pnStart,
+          pnEnd,
+          pnTotal,
+          contents : results
+        };
+        res.status(200).json({
+          success: true,
+          posts: result,
+        })
+      console.log("rows는", rows)
+    }); 
+  });  
+});
+
+//메인 조회하기 - 서울숲(테스트)
+router.get('/test/seoulForest', function (req, res, next) {
+  console.log("get method 연결완료!")
+  const pageNum = Number(req.query.pageNum) || 1; // NOTE: 쿼리스트링으로 받을 페이지 번호 값, 기본값은 1
+  console.log(pageNum)
+  const contentSize = 10; // NOTE: 페이지에서 보여줄 컨텐츠 수.
+  const pnSize = 10; // NOTE: 페이지네이션 개수 설정.
+  const skipSize = (pageNum - 1) * contentSize; // NOTE: 다음 페이지 갈 때 건너뛸 리스트 개수.
+  console.log("다음 페이지 갈 때 건너뛸 리스트 개수.", skipSize)
+  const location = "서울숲"
+  const query = `SELECT count(*) as count
+    FROM post
+    where post.locationCategory ='${location}'
+    ORDER BY post.createdAt DESC `
+    db.query(query, (error, rows) => {
+      if (error) {
+        console.log(error)
+        // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
+        return res.sendStatus(400);
+      }
+      // logger.info('게시글을 성공적으로 조회했습니다.');
+      const totalCount = Number(rows[0].count); // NOTE: 전체 글 개수.
+      console.log("전체 글 개수",totalCount)
+      const pnTotal = Math.ceil(totalCount / contentSize); // NOTE: 페이지네이션의 전체 카운트
+      console.log("페이지네이션의 전체 카운트 ",pnTotal)
+      const pnStart = ((Math.ceil(pageNum / pnSize) - 1) * pnSize) + 1; // NOTE: 현재 페이지의 페이지네이션 시작 번호.
+      console.log("현재 페이지의 페이지네이션 시작 번호", pnStart)
+      let pnEnd = (pnStart + pnSize) - 1; // NOTE: 현재 페이지의 페이지네이션 끝 번호.
+      console.log("현재 페이지의 페이지네이션 끝 번호",pnEnd)
+      const query2 = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
+      post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
+      FROM post
+      JOIN dog
+      ON dog.userId=post.userId
+      where post.locationCategory ='${location}'
+      ORDER BY post.createdAt DESC 
+      LIMIT ${skipSize},${contentSize}`
+      console.log(query2)
+      db.query(query2, (error, results) => {
+        console.log("들어오니")
+        if (error) {
+          console.log(error)
+          // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
+          return res.sendStatus(400);
+        }
+        console.log("찐결과",results)
+        if (pnEnd>pnTotal) pnEnd = pnTotal; 
+        console.log(pnEnd,pnTotal)
+        const result = {
+          pageNum,
+          pnStart,
+          pnEnd,
+          pnTotal,
+          contents : results
+        };
+        res.status(200).json({
+          success: true,
+          posts: result,
+        })
+      console.log("rows는", rows)
+    }); 
+  });  
+});
+
+//메인 조회하기 - 반포한강공원(테스트)
+router.get('/test/banpoPark', function (req, res, next) {
+  console.log("get method 연결완료!")
+  const pageNum = Number(req.query.pageNum) || 1; // NOTE: 쿼리스트링으로 받을 페이지 번호 값, 기본값은 1
+  console.log(pageNum)
+  const contentSize = 10; // NOTE: 페이지에서 보여줄 컨텐츠 수.
+  const pnSize = 10; // NOTE: 페이지네이션 개수 설정.
+  const skipSize = (pageNum - 1) * contentSize; // NOTE: 다음 페이지 갈 때 건너뛸 리스트 개수.
+  console.log("다음 페이지 갈 때 건너뛸 리스트 개수.", skipSize)
+  const location = "반포한강공원"
+  const query = `SELECT count(*) as count
+    FROM post
+    where post.locationCategory ='${location}'
+    ORDER BY post.createdAt DESC `
+    db.query(query, (error, rows) => {
+      if (error) {
+        console.log(error)
+        // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
+        return res.sendStatus(400);
+      }
+      // logger.info('게시글을 성공적으로 조회했습니다.');
+      const totalCount = Number(rows[0].count); // NOTE: 전체 글 개수.
+      console.log("전체 글 개수",totalCount)
+      const pnTotal = Math.ceil(totalCount / contentSize); // NOTE: 페이지네이션의 전체 카운트
+      console.log("페이지네이션의 전체 카운트 ",pnTotal)
+      const pnStart = ((Math.ceil(pageNum / pnSize) - 1) * pnSize) + 1; // NOTE: 현재 페이지의 페이지네이션 시작 번호.
+      console.log("현재 페이지의 페이지네이션 시작 번호", pnStart)
+      let pnEnd = (pnStart + pnSize) - 1; // NOTE: 현재 페이지의 페이지네이션 끝 번호.
+      console.log("현재 페이지의 페이지네이션 끝 번호",pnEnd)
+      const query2 = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
+      post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
+      FROM post
+      JOIN dog
+      ON dog.userId=post.userId
+      where post.locationCategory ='${location}'
+      ORDER BY post.createdAt DESC 
+      LIMIT ${skipSize},${contentSize}`
+      console.log(query2)
+      db.query(query2, (error, results) => {
+        console.log("들어오니")
+        if (error) {
+          console.log(error)
+          // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
+          return res.sendStatus(400);
+        }
+        console.log("찐결과",results)
+        if (pnEnd>pnTotal) pnEnd = pnTotal; 
+        console.log(pnEnd,pnTotal)
+        const result = {
+          pageNum,
+          pnStart,
+          pnEnd,
+          pnTotal,
+          contents : results
+        };
+        res.status(200).json({
+          success: true,
+          posts: result,
+        })
+      console.log("rows는", rows)
+    }); 
+  });  
+});
+
+//(테스트)
+router.get('/page/olympicPark', function (req, res, next) {
+  console.log("get method 연결완료!")
+  const pageNum = Number(req.query.pageNum) || 1; // NOTE: 쿼리스트링으로 받을 페이지 번호 값, 기본값은 1
+  console.log(pageNum)
+  const contentSize = 10; // NOTE: 페이지에서 보여줄 컨텐츠 수.
+  const pnSize = 10; // NOTE: 페이지네이션 개수 설정.
+  const skipSize = (pageNum - 1) * contentSize; // NOTE: 다음 페이지 갈 때 건너뛸 리스트 개수.
+  console.log("다음 페이지 갈 때 건너뛸 리스트 개수.", skipSize)
+  const location = "올림픽공원"
+  const query = `SELECT count(*) as count
+    FROM post
+    where post.locationCategory ='${location}'
+    ORDER BY post.createdAt DESC `
+    db.query(query, (error, rows) => {
+      if (error) {
+        console.log(error)
+        // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
+        return res.sendStatus(400);
+      }
+      // logger.info('게시글을 성공적으로 조회했습니다.');
+      const totalCount = Number(rows[0].count); // NOTE: 전체 글 개수.
+      console.log("전체 글 개수",totalCount)
+      const pnTotal = Math.ceil(totalCount / contentSize); // NOTE: 페이지네이션의 전체 카운트
+      console.log("페이지네이션의 전체 카운트 ",pnTotal)
+      const pnStart = ((Math.ceil(pageNum / pnSize) - 1) * pnSize); // NOTE: 현재 페이지의 페이지네이션 시작 번호.
+      console.log("현재 페이지의 페이지네이션 시작 번호", pnStart)
+      let pnEnd = (pnStart + pnSize) - 1; // NOTE: 현재 페이지의 페이지네이션 끝 번호.
+      console.log("현재 페이지의 페이지네이션 끝 번호",pnEnd)
+      const query2 = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
+      post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
+      FROM post
+      JOIN dog
+      ON dog.userId=post.userId
+      where post.locationCategory ='${location}'
+      ORDER BY post.createdAt DESC 
+      LIMIT ${skipSize},${contentSize}`
+      console.log(query2)
+      db.query(query2, (error, results) => {
+        console.log("들어오니")
+        if (error) {
+          console.log(error)
+          // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
+          return res.sendStatus(400);
+        }
+        console.log("찐결과",results)
+        if (pnEnd>pnTotal) pnEnd = pnTotal; 
+        console.log(pnEnd,pnTotal)
+        const result = {
+          pageNum,
+          pnStart,
+          pnEnd,
+          pnTotal,
+          contents : results
+        };
+        res.status(200).json({
+          success: true,
+          posts: result,
+        })
+      console.log("rows는", rows)
+    }); 
+  });  
+});
 
 //산책 약속페이지 등록하기
 router.post('/write', auth, async (req, res) => {
@@ -379,42 +688,10 @@ router.get('/:postId', auth, function (req, res, next) {
 });
 
 
-//메인 조회하기 - 전체 조회하기
-router.get('/', function (req, res, next) {
-  let conditions = [];
-  let where
-  console.log("get method 연결완료!")
-  const {dogSize, dogGender, dogAge, locationCategory, completed} = req.body;
-  console.log(dogSize, dogGender, dogAge, locationCategory, completed)
-  try {
 
-    const query = `SELECT
-    dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
-    post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
-    FROM post
-    JOIN dog
-    ON dog.userId=post.userId
-    ORDER BY post.createdAt DESC`
-    console.log('query', typeof query);
-    db.query(query, (error, rows) => {
-      if (error) {
-        console.log(error)
-        // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
-        return res.sendStatus(400);
-      }
-      // logger.info('게시글을 성공적으로 조회했습니다.');
-      res.status(200).json({
-        success: true,
-        posts: rows,
-      });
-      console.log("rows는", rows)
-    });
 
-  } catch (err) {
-    // logger.error('게시글 조회 중 에러가 발생 했습니다: ', err);
-    return res.sendStatus(500);
-  }
-});
+
+
 
 //카테고리 전체 조회
 router.get('/category', function (req, res, next) {
