@@ -5,6 +5,18 @@ const dotenv = require("dotenv");
 dotenv.config();
 const upload = require("../S3/s3");
 const { db } = require("../models/index");
+// const ctrl = require("../controllers/dog/dogsta.ctrl");
+
+// // 개스타그램 글 등록하기
+// router.post('/write', upload.single("dogPostImage"), auth, ctrl.addDogsta);
+// // 강아지 정보 조회하기
+// router.get("/", auth, ctrl.getDog);
+// // 강아지 사진 수정하기
+// router.patch('/changeImage', upload.single("dog_image"), auth, ctrl.updateDogPic);
+// // 강아지 정보 수정하기
+// router.patch('/', auth, ctrl.updateDogInfo);
+
+// module.exports = router;
 
 //개스타그램 글 삭제하기
 router.delete("/:dogPostId", auth, async (req, res) => {
@@ -69,8 +81,6 @@ router.get("/likeFilter", async (req, res) => {
 
 // 개스타그램 메인 조회하기_최신순
 router.get("/recentFilter", async (req, res) => {
-  // try {
-  //유저 정보와 개스타그램 post 정보를 다 보내준다.
   const query = `SELECT *,
     (SELECT COUNT(likes.dogPostId) FROM likes WHERE likes.dogPostId = dogSta.dogPostId) as count
      FROM dogSta 
@@ -94,12 +104,33 @@ router.get("/recentFilter", async (req, res) => {
       posts: rows,
     });
   });
-  // } catch (err) {
-  //   return res.status(500).json({
-  //     success: false,
-  //     msg: "로그인 하세용",
-  //   });
-  // }
+});
+
+// 선희님 !! 이겁니다 !! 메인페이지 최신순
+router.get("/mainFilter", async (req, res) => {
+  const query = `SELECT *,
+    (SELECT COUNT(likes.dogPostId) FROM likes WHERE likes.dogPostId = dogSta.dogPostId) as count
+     FROM dogSta 
+     JOIN user
+     ON dogSta.userId = user.userId
+     LEFT JOIN dog
+     ON dog.userId = user.userId
+     ORDER BY dogSta.createdAt DESC`;
+
+  console.log("query", query);
+
+  await db.query(query, (error, rows) => {
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        msg: "메인 조회하기 실패",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      posts: rows,
+    });
+  });
 });
 
 // 개스타그램 글 등록하기

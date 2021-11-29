@@ -1,7 +1,6 @@
 const AWS = require("aws-sdk");
-const path = require("path");
 const multer = require("multer");
-const multerS3 = require("multer-s3");
+const multerS3 = require('multer-s3')
 const sharp = require("sharp"); 
 
 const s3 = new AWS.S3({
@@ -10,8 +9,7 @@ const s3 = new AWS.S3({
   region: process.env.region,
 });
 
-const upload = multer({
-  storage: multerS3({
+const storage = multerS3({
     s3: s3,
     bucket: "doggy-project-bucket",
     contentType: multerS3.AUTO_CONTENT_TYPE,
@@ -23,7 +21,6 @@ const upload = multer({
           try {
             const fileType = file.mimetype.split("/")[0] != "image";
             if (fileType) {
-              // 이미지 타입 아님
               return cb(new Error("Only images are allowed"));
             }
             let ex = file.originalname.split(".");
@@ -40,13 +37,13 @@ const upload = multer({
           }
         },
         transform: (req, file, cb) => {
-          cb(null, sharp().resize({width:parseInt(size[0]),height:parseInt(size[1])}).rotate());
+          cb(null, sharp().resize({ width: 100, height: 100}).rotate());
         },
       },
     ],
     acl: "public-read-write",
-  }),
 });
 
-
-module.exports = upload;
+module.exports = multer({
+  storage:storage
+});
