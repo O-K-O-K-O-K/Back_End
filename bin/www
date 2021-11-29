@@ -5,10 +5,10 @@
  */
 //모듈 
 const app = require('../app');
-const https = require('https');
+const http = require('http');
 const path = require('path')
 const socketIo =  require("socket.io")
-const server = https.createServer(app);
+const server = http.createServer(app);
 //  const { connection } = require('mongoose');
 //  const { isObject } = require('util');
 const io = socketIo({noServer:true});

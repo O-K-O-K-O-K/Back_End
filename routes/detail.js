@@ -1,7 +1,12 @@
 const express = require('express');
 const router = express.Router();
+<<<<<<< HEAD
 const auth = require('../middlewares/auth');
 const { db } = require("../models/index");
+=======
+const auth = require('../middlewares/auth'); 
+const ctrl = require("../controllers/post/post.ctrl");
+>>>>>>> eujeong
 const dotenv = require('dotenv');
 // const { ConnectContactLens } = require('aws-sdk');
 // const logger = require("../src/config/logger")

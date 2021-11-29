@@ -1,6 +1,5 @@
 CREATE TABLE `user` (
   `userId` INT NOT NULL AUTO_INCREMENT,
-  -- `kakaoId` INT NOT NULL AUTO_INCREMENT,
   `userEmail` VARCHAR(45) NOT NULL,
   `password` varchar(255) NOT NULL,
   `userNickname` VARCHAR(45) NOT NULL,
@@ -9,8 +8,16 @@ CREATE TABLE `user` (
   `userImage` TEXT NOT NULL,
   `userLocation` varchar(45) NOT NULL,
   PRIMARY KEY (`userId`),
-  KEY `userId` (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+  KEY `userId` (`userId`),
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4
+
+
+CREATE TABLE `userImage` (
+  `userImageId` INT NOT NULL AUTO_INCREMENT,
+  `userImage` TEXT NOT NULL,
+  PRIMARY KEY (`userImageId`),
+  KEY `userImageId` (`userImageId`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4
 
 create table `dog`(
   `dogId` INT NOT NULL AUTO_INCREMENT,
