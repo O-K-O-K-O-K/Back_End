@@ -44,61 +44,87 @@ router.get('/', auth, async(req, res) => {
 })
 
 
-//쪽지,산책신청 알람
+// 쪽지,산책신청 알람
+// 402 에러가 뜨면 이미 누른 거로 모달 창 띄워주세요
 router.post('/:receiverId', auth, async (req,res,next) =>{
   try {
-    const {receiverId}= req.params;
+    const {receiverId} = req.params;
+    //postId를 req.body로 보내주실 수 있나?
+    //아니면 req.params로 가능하나?
     const {type,postId} = req.body;
     const senderId = res.locals.user.userId;
     const senderNickname = res.locals.user.userNickname;
     console.log("userId는",senderId)
-    const data = {
-      senderNickname:senderNickname,
-      senderId: senderId,
-      type:type
-    }
-    const params = [
-        receiverId,
-        senderId,
-        senderNickname,
-        type
-    ];
-    const query =
-    `INSERT INTO notification(receiverId,senderId,senderNickname,type) VALUES(?,?,?,?)`;
-    await db.query(query, params,(error,rows,fieclds) => {
-      console.log("row는",rows)
-        if (error) {
-          console.log(error)
-          // logger.error('쪽지 저장 중 DB관련 에러가 발생 했습니다', error);
-          return res.status(400).json({
-            success: false,
-            errMessage: '400 에러 게시중 오류가 발생 하였습니다!.'
-          });
-        }
-        // logger.info(`${senderNickname}님, 쪽지 등록이 완료되었습니다.`);
-        // req.app.get('io').of(`/notification/${receiverId}`).emit('getNotification', data); 이거
-        // console.log(req.app.get('io')) 이거
-        // req.app.get('io').of('/notification').to(req.params.receiverId).emit('getNotification', {senderNickname, type});
-        // req.app.get('io').of('/notification').emit('getNotification',data);
 
-        console.log("req.params", req.params.receiverId)
-        console.log("req.app", req.app)
-        console.log("data", data)
-        return res.status(201).json({
-          success: true,
-          Message: '성공적으로 보내졌습니다!.'
-        });
-    })
-    res.send(오케이)
-    console.log("ok",ok)
+    let existData;
+    const isExist = `SELECT * 
+    FROM notification 
+    WHERE notification.postId = "${postId}" 
+    AND notification.receiverId = "${receiverId}"`;
+    console.log("isExist", isExist);
+
+    const results = await db.query(isExist);
+    existData = results[0];
+    console.log("existData", existData);
+
+    //만약에 data가 존재하지 않는다면
+    if(!existData){
+      const data = {
+        senderNickname:senderNickname,
+        senderId: senderId,
+        type:type
+      }
+      const params = [
+          receiverId, 
+          senderId,
+          senderNickname,
+          type,
+          postId
+      ];
+      const query = 
+      `INSERT INTO notification(receiverId,senderId,senderNickname,type,postId) VALUES(?,?,?,?,?)`;
+      await db.query(query, params,(error,rows,fieclds) => {
+        console.log("row는",rows)
+          if (error) {
+            console.log(error)
+            // logger.error('쪽지 저장 중 DB관련 에러가 발생 했습니다', error);
+            return res.status(400).json({
+              success: false,
+              errMessage: '400 에러 게시중 오류가 발생 하였습니다!.'
+            });
+          }
+          // logger.info(`${senderNickname}님, 쪽지 등록이 완료되었습니다.`);
+          req.app.get('io').of(`/notification/${receiverId}`).emit('getNotification', data);
+          // req.app.get('io').of('/notification').to(req.params.receiverId).emit('getNotification', {senderNickname, type});
+          // req.app.get('io').of('/notification').emit('getNotification',data);
+          
+          // console.log("req.params", req.params.receiverId)
+          // console.log("req.app", req.app)
+          // console.log("data", data)
+          return res.status(201).json({
+            success: true,
+            Message: '성공적으로 보내졌습니다!.'
+          });
+      })
+      // res.send(오케이)
+      // console.log("ok",ok)
+    }
+    else{
+      //만약 데이터가 존재한다면
+      return res.status(402).send({
+        msg: "신청 버튼을 이미 누르셨습니다!",
+      });
+    }
   } catch (err) {
     // logger.error('쪽지 작성 중 에러가 발생 했습니다: ', err);
-    return res.sendStatus(500);
+    return res.sendStatus(500).send({
+      msg: "로그인 하세요",
+    });;
   }
 })
 
-//수락여부 +소켓
 
+//수락여부 +소켓
 router.patch("/:notificationId/:senderId", auth, async (req, res) => {
   try{
   const {notificationId,senderId} = req.params
