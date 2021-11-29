@@ -21,7 +21,8 @@ router.post("/dogInfo", upload.single("dogImage"), auth, async (req, res, next) 
           dogComment
         } = req.body;
     
-        const dogImage = req.file.location;
+        // const dogImage = req.file.location;
+        const dogImage = req.file.transforms[0].location;
     
         const params = [
           dogGender,
@@ -89,7 +90,7 @@ router.get("/", auth, async (req, res) => {
 router.patch('/changeImage', upload.single("dogImage"), auth, async (req, res) => {
   const userId = res.locals.user.userId;
 
-  const dogImage = req.file.location;
+  const dogImage = req.file.transforms[0].location;
 
   console.log("dogImage", dogImage)
 

@@ -11,14 +11,6 @@ CREATE TABLE `user` (
   KEY `userId` (`userId`),
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4
 
-
-CREATE TABLE `userImage` (
-  `userImageId` INT NOT NULL AUTO_INCREMENT,
-  `userImage` TEXT NOT NULL,
-  PRIMARY KEY (`userImageId`),
-  KEY `userImageId` (`userImageId`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4
-
 create table `dog`(
   `dogId` INT NOT NULL AUTO_INCREMENT,
   `dogGender` VARCHAR(45) NOT NULL,

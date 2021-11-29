@@ -9,7 +9,6 @@ const dotenv = require("dotenv");
 dotenv.config();
 db.query = util.promisify(db.query);
 const upload = require("../S3/s3");
-const imageThumbnail = require('image-thumbnail'); 
 
 //로그인
 router.post("/login", async (req, res) => {
@@ -52,9 +51,11 @@ router.post("/login", async (req, res) => {
 router.post("/signUp",  upload.single("userImage"), (req, res) => {
   console.log("회원가입 들어오니?")
   const { userEmail, password, confirmPassword, userNickname, userGender, userAge,userLocation} = req.body;
-  console.log("회원가입", userEmail, password, confirmPassword, userNickname, userGender, userAge,userLocation)
 
-  const userImage =  req.file.location;   //여기 따로 지정
+  // console.log("req.file", req.file)
+  const userImage =   req.file.transforms[0].location; 
+  console.log("userImage", userImage)
+
   const salt =  bcrypt.genSaltSync(setRounds);
   const hashPassword = bcrypt.hashSync(password, salt);
   const userParams = [userEmail, hashPassword, userNickname, userGender, userAge, userImage,userLocation];
