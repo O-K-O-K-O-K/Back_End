@@ -2,7 +2,7 @@ const AWS = require("aws-sdk");
 const path = require("path");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
-const sharp = require("sharp"); 
+const sharp = require("sharp");
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.S3_KEYID,
@@ -40,12 +40,13 @@ const upload = multer({
           }
         },
         transform: (req, file, cb) => {
-          cb(null, sharp().resize({width:parseInt(size[0]),height:parseInt(size[1])}).rotate());
+          cb(null, sharp().resize({width:100, height:100}).rotate());
         },
       },
     ],
     acl: "public-read-write",
   }),
 });
+
 
 module.exports = upload;
