@@ -13,13 +13,8 @@ router.post("/:dogPostId", auth, async (req, res) => {
 
     let existLike;
     const isLiked = `SELECT * FROM likes WHERE dogPostId ="${dogPostId}" AND userId= "${userId}"`;
-    console.log("isLiked", isLiked);
-
     const results = await db.query(isLiked);
-    console.log("results", results);
-
     existLike = results[0];
-    console.log("exsitLike", existLike);
 
     //좋아요 생성 전
     if (!existLike) {
