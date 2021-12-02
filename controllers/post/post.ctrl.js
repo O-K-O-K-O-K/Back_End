@@ -437,17 +437,17 @@ const getAllPosts = (req, res, next) => {
 //         }
 //       }
 
-  module.exports = {
-    getAllPosts,
-    putUpPosts,
-    showOlympicParkPosts,
-    showBanpoParkPosts, 
-    showSeoulForestPosts,
-    showAllPosts,
-    showSpecificPage,
-    sortPosts,
-    editPosts,
-    completePlans,
-    deletePost
+  // module.exports = {
+  //   getAllPosts,
+  //   putUpPosts,
+  //   showOlympicParkPosts,
+  //   showBanpoParkPosts, 
+  //   showSeoulForestPosts,
+  //   showAllPosts,
+  //   showSpecificPage,
+  //   sortPosts,
+  //   editPosts,
+  //   completePlans,
+  //   deletePost
 
-  }
+  // }
