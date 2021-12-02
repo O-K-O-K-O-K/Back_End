@@ -42,7 +42,7 @@ const storage = multerS3({
       },
       transform: function (req, file, cb) {
         console.log("????????????????")
-        cb(null, sharp().resize(300,300));
+        cb(null, sharp().resize(300,300).rotate());
       },
     },
   ],

@@ -4,6 +4,7 @@ const auth = require('../middlewares/auth');
 const { db } = require("../models/index");
 const dotenv = require('dotenv');
 const { restart } = require('pm2');
+const { request } = require('express');
 // const { ConnectContactLens } = require('aws-sdk');
 // const logger = require("../src/config/logger")
 dotenv.config();
@@ -644,15 +645,23 @@ router.post('/write', auth, async (req, res) => {
 
 
 //산책 약속 상세 조회하기
-router.get('/:postId', auth, function (req, res, next) {
+router.get('/:postId', auth, async function (req, res, next) {
   const {postId} = req.params;
-  // const userId = res.locals.user.userId;
-  console.log("get method 연결완료!")
+  const userId = res.locals.user.userId;
   try {
+    let existRequest
+    const check = `SELECT notification.checkRequest from notification 
+    where notification.postId =${postId} and notification.senderId = ${userId}`
+    let requestCheck = await db.query(check)
+    existRequest = requestCheck[0]
+    if (!existRequest) {
+      existRequest = 0
+    } else existRequest = 1
+    // const requestCheck = request[0].checkRequest
     const query =
     `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage,
     post.userId, post.postId, post.meetingDate, post.wishDesc, post.locationCategory, post.dogCount, post.createdAt, post.completed, post.totalTime, post.startLocationAddress, post.endLocationAddress, post.totalDistance, post.routeColor, post.routeName,
-    user.userNickname, user.userGender, user.userAge, user.userImage,user.userId,
+    user.userNickname, user.userGender, user.userAge, user.userImage,user.userId, 
     (SELECT
       CASE
       WHEN TIMESTAMPDIFF(MINUTE, post.createdAt,NOW())<=0 THEN '방금 전'
@@ -678,8 +687,8 @@ router.get('/:postId', auth, function (req, res, next) {
       res.status(200).json({
         success: true,
         posts: rows[0],
+        existRequest
       });
-      console.log("rows는", rows)
     });
   } catch (err) {
     // logger.error('게시글 조회 중 에러가 발생 했습니다: ', err);

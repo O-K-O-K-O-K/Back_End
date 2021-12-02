@@ -85,8 +85,8 @@ CREATE TABLE `likes` (
   KEY `likeId` (`likeId`),
   KEY `dogPostId` (`dogPostId`),
   KEY `userId` (`userId`),
-  FOREIGN KEY (`dogPostId`) REFERENCES `dogSta` (`dogPostId`) ON DELETE CASCADE,
-  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
+  FOREIGN KEY (`dogPostId`) REFERENCES `dogSta` (`dogPostId`) UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4
 
 -- CREATE TABLE `image` (
