@@ -642,6 +642,7 @@ router.post('/write', auth, async (req, res) => {
       });
     }
   })
+  
 
 
 //산책 약속 상세 조회하기
