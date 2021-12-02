@@ -1,9 +1,6 @@
 const SocketIO = require("socket.io");
-// const jwtAuth = require('socketio-jwt-auth');
-// const dotenv = require("dotenv");
-// const { db } = require('./models');
-const app = require("./app");
-const { default: axios } = require("axios");
+// const app = require("./app");
+// const { default: axios } = require("axios");
 require("dotenv").config();
 
 module.exports = (server, app) => {

@@ -8,7 +8,6 @@ const { db } = require("../models/index");
 
 ///////// 나중에 user.js router로 합쳐야 함/////////////////////
 ////////강아지 등록 여부, 내 정보 조회, 내 정보 수정////////////
-
 // 강아지 등록 여부
 router.get("/dogExist", auth, async (req, res) => {
   const userId = res.locals.user.userId;
