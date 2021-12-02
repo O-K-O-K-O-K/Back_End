@@ -162,6 +162,7 @@ CREATE TABLE `notification` (
   `postId`  int(11),
   `acceptanace`  int(11),
   `senderNickname` VARCHAR(100) NOT NULL,
+  `checkRequest` TINYINT NOT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY(`notificationId`),
