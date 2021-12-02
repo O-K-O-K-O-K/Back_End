@@ -8,6 +8,7 @@ router.get('/', auth, async(req, res) => {
   try {
     const receiverId = res.locals.user.userId
     const query = `SELECT notification.notificationId, notification.senderId, notification.type, notification.senderNickname, notification.updatedAt as createdAt, user.userImage as senderImage,
+  
     (SELECT
       CASE
       WHEN TIMESTAMPDIFF(MINUTE,notification.updatedAt,NOW())<=0 THEN '방금 전'
@@ -51,15 +52,14 @@ router.post('/:receiverId', auth, async (req,res,next) =>{
     const {type,postId} = req.body;
     const senderId = res.locals.user.userId;
     const senderNickname = res.locals.user.userNickname;
+    const checkRequest = 1
     console.log("userId는",senderId)
-
     let existData;
     const isExist = `SELECT * 
     FROM notification 
     WHERE notification.postId = "${postId}" 
     AND notification.senderId = "${senderId}"`;
     console.log("isExist", isExist);
-
     const results = await db.query(isExist);
     existData = results[0];
     console.log("existData", existData);
@@ -76,10 +76,11 @@ router.post('/:receiverId', auth, async (req,res,next) =>{
           senderId,
           senderNickname,
           type,
-          postId
+          postId,
+          checkRequest
       ];
       const query = 
-      `INSERT INTO notification(receiverId,senderId,senderNickname,type,postId) VALUES(?,?,?,?,?)`;
+      `INSERT INTO notification(receiverId,senderId,senderNickname,type,postId,checkRequest) VALUES(?,?,?,?,?,?)`;
       await db.query(query, params,(error,rows,fieclds) => {
         console.log("row는",rows)
           if (error) {

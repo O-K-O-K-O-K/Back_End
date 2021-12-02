@@ -1,13 +1,13 @@
 const createError = require('http-errors');
 const express = require('express');
-// const socketIo = require("socket.io")
-// const logger = require('morgan');
 const app = express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
 const path = require('path');
 // const authMiddleware = require("./middlewares/auth");
 // app.use(logger('dev'));
+// const socketIo = require("socket.io")
+// const logger = require('morgan');
 
 const cors = require('cors');
 const corsOptions = {
@@ -44,6 +44,7 @@ const likeRouter = require("./routes/dogstaLike");
 const notificationRouter = require("./routes/notification");
 const commentRouter = require("./routes/comment");
 
+
 app.use("/dogs", dogsRouter); // 유정
 app.use("/posts", detailRouter); // 선희님
 app.use("/users", infoRouter); // 유정
@@ -54,7 +55,6 @@ app.use("/chat", chatRouter); // 선희님
 app.use("/likes", likeRouter); // 유정
 app.use("/notification", notificationRouter); //선희님
 app.use("/comment", commentRouter); //선희님
-
 app.get("/",(_,res) => res.render("home"));
 
 const auth = require('./middlewares/auth');

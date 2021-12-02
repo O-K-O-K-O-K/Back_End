@@ -85,8 +85,8 @@ CREATE TABLE `likes` (
   KEY `likeId` (`likeId`),
   KEY `dogPostId` (`dogPostId`),
   KEY `userId` (`userId`),
-  FOREIGN KEY (`dogPostId`) REFERENCES `dogSta` (`dogPostId`) ON DELETE CASCADE,
-  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
+  FOREIGN KEY (`dogPostId`) REFERENCES `dogSta` (`dogPostId`) UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4
 
 -- CREATE TABLE `image` (
@@ -162,6 +162,7 @@ CREATE TABLE `notification` (
   `postId`  int(11),
   `acceptanace`  int(11),
   `senderNickname` VARCHAR(100) NOT NULL,
+  `checkRequest` TINYINT NOT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `checkRequest` TINYINT NOT NULL,
