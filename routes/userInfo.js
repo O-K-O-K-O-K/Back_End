@@ -5,8 +5,6 @@ const upload = require("../S3/s3");
 const dotenv = require("dotenv");
 dotenv.config();
 const { db } = require("../models/index");
-const _ = require("lodash");  //lodash library
-
 
 ///////// 나중에 user.js router로 합쳐야 함/////////////////////
 ////////강아지 등록 여부, 내 정보 조회, 내 정보 수정////////////

@@ -26,7 +26,6 @@ module.exports = (server, app) => {
   const addNewUser = (userId, socketId) => {
     !users.some((user) => user.userId === userId) &&
       users.push({ userId, socketId });
-      console.log("socket.Id", socketId)
   };
 
   const getUser = (userId) => {
@@ -36,9 +35,8 @@ module.exports = (server, app) => {
   notification.on("connect", (socket) => {
     socket.on("postUser", (userId) => {
       addNewUser(userId, socket.id);
-      console.log("socket.Id", socket.id)
-      console.log("userId!!!!!!!!!!!", userId);
     });
+    
     socket.on(
       "sendNotification",
       ({ senderName, senderUsername, receiverName, type }) => {

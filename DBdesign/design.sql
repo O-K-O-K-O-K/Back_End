@@ -8,7 +8,7 @@ CREATE TABLE `user` (
   `userImage` TEXT NOT NULL,
   `userLocation` varchar(45) NOT NULL,
   PRIMARY KEY (`userId`),
-  KEY `userId` (`userId`),
+  KEY `userId` (`userId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4
 
 create table `dog`(
@@ -164,6 +164,7 @@ CREATE TABLE `notification` (
   `senderNickname` VARCHAR(100) NOT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `checkRequest` TINYINT NOT NULL,
   PRIMARY KEY(`notificationId`),
   KEY `notificationId` (`notificationId`),
   KEY `senderId` (`senderId`),
