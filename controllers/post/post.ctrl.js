@@ -1,55 +1,55 @@
-"user strict";
-const { db } = require("../../models/index");
+// "user strict";
+// const { db } = require("../../models/index");
 
 
-const getAllPosts = (req, res, next) => {
-    const pageNum = Number(req.query.pageNum) || 1; // NOTE: 쿼리스트링으로 받을 페이지 번호 값, 기본값은 1
-    const contentSize = 10; // NOTE: 페이지에서 보여줄 컨텐츠 수.
-    const pnSize = 10; // NOTE: 페이지네이션 개수 설정.
-    const skipSize = (pageNum - 1) * contentSize; // NOTE: 다음 페이지 갈 때 건너뛸 리스트 개수.
-    const query = `SELECT count(*) as count
-      FROM post`
-      db.query(query, (error, rows) => {
-        if (error) {
-          logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
-          return res.sendStatus(400);
-        }
-            logger.info('게시글을 성공적으로 조회했습니다.');
-        const totalCount = Number(rows[0].count); // NOTE: 전체 글 개수.
-        const pnTotal = Math.ceil(totalCount / contentSize); // NOTE: 페이지네이션의 전체 카운트
-        const pnStart = ((Math.ceil(pageNum / pnSize) - 1) * pnSize); // NOTE: 현재 페이지의 페이지네이션 시작 번호.
-        let pnEnd = (pnStart + pnSize) - 1; // NOTE: 현재 페이지의 페이지네이션 끝 번호.
-        const query2 = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, 
-        dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
-        post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
-        FROM post
-        JOIN dog
-        ON dog.userId=post.userId
-        ORDER BY post.createdAt DESC 
-        LIMIT ${skipSize},${contentSize}`
-        db.query(query2, (error, results) => {
-          if (error) {
-            logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
-            return res.sendStatus(400);
-          }
-          if (pnEnd>pnTotal) pnEnd = pnTotal; 
-          res.status(200).json({
-            success: true,
-            posts: getAllPostsData,
-          })
-      }); 
-    });  
-  }
+// const getAllPosts = (req, res, next) => {
+//     const pageNum = Number(req.query.pageNum) || 1; // NOTE: 쿼리스트링으로 받을 페이지 번호 값, 기본값은 1
+//     const contentSize = 10; // NOTE: 페이지에서 보여줄 컨텐츠 수.
+//     const pnSize = 10; // NOTE: 페이지네이션 개수 설정.
+//     const skipSize = (pageNum - 1) * contentSize; // NOTE: 다음 페이지 갈 때 건너뛸 리스트 개수.
+//     const query = `SELECT count(*) as count
+//       FROM post`
+//       db.query(query, (error, rows) => {
+//         if (error) {
+//           logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
+//           return res.sendStatus(400);
+//         }
+//             logger.info('게시글을 성공적으로 조회했습니다.');
+//         const totalCount = Number(rows[0].count); // NOTE: 전체 글 개수.
+//         const pnTotal = Math.ceil(totalCount / contentSize); // NOTE: 페이지네이션의 전체 카운트
+//         const pnStart = ((Math.ceil(pageNum / pnSize) - 1) * pnSize); // NOTE: 현재 페이지의 페이지네이션 시작 번호.
+//         let pnEnd = (pnStart + pnSize) - 1; // NOTE: 현재 페이지의 페이지네이션 끝 번호.
+//         const query2 = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, 
+//         dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
+//         post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
+//         FROM post
+//         JOIN dog
+//         ON dog.userId=post.userId
+//         ORDER BY post.createdAt DESC 
+//         LIMIT ${skipSize},${contentSize}`
+//         db.query(query2, (error, results) => {
+//           if (error) {
+//             logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
+//             return res.sendStatus(400);
+//           }
+//           if (pnEnd>pnTotal) pnEnd = pnTotal; 
+//           res.status(200).json({
+//             success: true,
+//             posts: getAllPostsData,
+//           })
+//       }); 
+//     });  
+//   }
 
-  function getAllPostsData(results) {
-      return {
-        pageNum,
-        pnStart,
-        pnEnd,
-        pnTotal,
-        contents : results
-      };
-  }
+//   function getAllPostsData(results) {
+//       return {
+//         pageNum,
+//         pnStart,
+//         pnEnd,
+//         pnTotal,
+//         contents : results
+//       };
+//   }
 
 
 // const putUpPosts = async (req, res) => {
