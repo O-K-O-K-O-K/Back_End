@@ -54,6 +54,7 @@ router.post("/signUp",  upload.single("userImage"), (req, res) => {
 
   // console.log("req.file", req.file)
   const userImage =   req.file.transforms[0].location; 
+  // const userImage =   req.file.location;
   console.log("userImage", userImage)
 
   const salt =  bcrypt.genSaltSync(setRounds);

@@ -1,9 +1,6 @@
 const SocketIO = require("socket.io");
-// const jwtAuth = require('socketio-jwt-auth');
-// const dotenv = require("dotenv");
-// const { db } = require('./models');
-const app = require("./app");
-const { default: axios } = require("axios");
+// const app = require("./app");
+// const { default: axios } = require("axios");
 require("dotenv").config();
 
 module.exports = (server, app) => {
@@ -26,7 +23,6 @@ module.exports = (server, app) => {
   const addNewUser = (userId, socketId) => {
     !users.some((user) => user.userId === userId) &&
       users.push({ userId, socketId });
-      console.log("socket.Id", socketId)
   };
 
   const getUser = (userId) => {
@@ -36,9 +32,8 @@ module.exports = (server, app) => {
   notification.on("connect", (socket) => {
     socket.on("postUser", (userId) => {
       addNewUser(userId, socket.id);
-      console.log("socket.Id", socket.id)
-      console.log("userId!!!!!!!!!!!", userId);
     });
+    
     socket.on(
       "sendNotification",
       ({ senderName, senderUsername, receiverName, type }) => {
@@ -54,3 +49,4 @@ module.exports = (server, app) => {
     );
   });
 };
+//내일 협력사 오시면, socket 때문에 어제 서버가 터저 급하게 서버를 복구했고, web socket 없앰

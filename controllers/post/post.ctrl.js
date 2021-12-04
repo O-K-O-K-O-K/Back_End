@@ -1,5 +1,5 @@
-// "user strict";
-// const { db } = require("../../models/index");
+"use strict";
+const { db } = require("../../models/index");
 
 
 // const getAllPosts = (req, res, next) => {
