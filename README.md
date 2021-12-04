@@ -1,44 +1,50 @@
 # 🐶 산책할게  
 
 나도 강아지도 혼자였던 산책에서 벗어나, 산책 메이트와 일상을 공유하고 같이 산책하는 서비스 '산책할개'입니다.
-
 ![KakaoTalk_Photo_2021-12-04-12-08-02](https://user-images.githubusercontent.com/88166362/144694893-52789e67-866c-4ead-b9a0-f63069c7dfbf.png)
 
-<br>
-
-1. [산책할개 사이트](https://togaether.shop/)  
-2. [시연 영상](https://www.youtube.com/watch?v=dKcawThqUME&t=16s)  
-
-<br>
+[산책할개 사이트](https://togaether.shop/)  
+[시연 영상](https://www.youtube.com/watch?v=dKcawThqUME&t=16s)  
 
 # :family_man_woman_boy_boy: 멤버구성
 - Front-end : [김다원](https://github.com/DawonEllaKim), [김효진](https://github.com/hyojin-k),[이수창](https://github.com/eternalclash) 
-- Back-end : [황유정](https://github.com/eujeong-hwang), [탁정규](https://github.com/tak-codes),[허선희](https://github.com/SunHeeHeo) 
+- Back-end : [황유정](https://github.com/hj2bf), [탁정규](https://github.com/tak-codes),[허선희](https://github.com/SunHeeHeo) 
 - Designer : 서연수, 이성원 
-
-<br>
 
 # :bookmark_tabs: 개발기간
 2021.10.25 - 2021.12.03 (총 6주)
 
-<br>
-
 # :sparkles: 아키텍쳐
-<img width="772" alt="아키텍쳐최종" src="https://user-images.githubusercontent.com/59908525/144704514-deab5694-7f8e-42a2-b8b0-15d5c8fb2dcc.png">
-
-<br>
-
-# 🖥: ERD 설계
-
-![1차배포table](https://user-images.githubusercontent.com/59908525/144704387-becfbb9d-40b0-4891-a36e-35bb73167dc4.png)
-
-<br>
+<img width="772" alt="KakaoTalk_Photo_2021-12-04-12-08-16" src="https://user-images.githubusercontent.com/88166362/144694918-ab86d1e8-c61d-461a-92ca-e77a10ffc9cf.png">
 
 # :hammer_and_wrench: 기술스택
+# :hammer_and_wrench: 기술스택
+기술스택|설명
+:---|:---:
+Node.js | JS 런타임
+MySQL | MySQL
+Express | 웹 프레임워크
+MySQL | MySQL
+Gitaction | CI/CD 툴
+Nginx | 프록시 서버
 
-<br>
+# : : 라이브러리
+|라이브러리|설명|
+---|:---
+<img src='https://img.shields.io/badge/express-1.7.9-lightgrey'> | 웹 프레임워크
+<img src='https://img.shields.io/badge/bcrypt-5.0.1-lightgrey'> | 비밀번호 암호화
+<img src='https://img.shields.io/badge/cors-2.8.5-lightgrey'> | 교차 출처 리소스 공유
+<img src='https://img.shields.io/badge/dotenv-10.0.0-lightgrey'>  | 환경변수 설정
+<img src='https://img.shields.io/badge/helmet-4.6.0-lightgrey'>  | HTTP 헤더 보안
+<img src='https://img.shields.io/badge/jest-27.3.1-lightgrey'>  | 테스트 코드
+<img src='https://img.shields.io/badge/jsonwebtoken-8.5.1-lightgrey'>  | 토큰 기반 인증
+<img src='https://img.shields.io/badge/morgan-1.10.0-lightgrey'> | 로거 미들웨어
+<img src='https://img.shields.io/badge/mysql-2.3.2-lightgrey'> | MySQL
+<img src='https://img.shields.io/badge/swagger--ui--express-4.1.6-lightgrey'> | API 문서편집기
+<img src='https://img.shields.io/badge/winston-3.3.3-lightgrey'> | Log 파일 관리
+<img src='https://img.shields.io/badge/sharp-0.29.3-lightgrey'> | 이미지 처리
+<img src='https://img.shields.io/badge/multer-1.4.3-lightgrey'> | 파일 업로드
 
-# :computer: 주요기능 
 - 로그인 / 회원가입 / 강아지 정보 등록 (jwt 인증)
 
 - 메인페이지
@@ -75,10 +81,9 @@
   - 받은 산책 신청 수락/거절
   - 쪽지 보내기, 답장하기
 
-<br>
 
 # :writing_hand: 개발 일지
-- [Team Notion](https://togaether.shop/)
+- [Tim Notion](https://togaether.shop/)
 - [Front-end github](https://github.com/O-K-O-K-O-K/Front-end)
 - [Back-end github](https://github.com/O-K-O-K-O-K/Back_End)
 
