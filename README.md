@@ -5,19 +5,19 @@
 [산책할개 사이트](https://togaether.shop/)  
 [시연 영상](https://www.youtube.com/watch?v=dKcawThqUME&t=16s)  
 
-# 멤버구성
+# :family_man_woman_boy_boy: 멤버구성
 - Front-end : [김다원](https://github.com/DawonEllaKim), [김효진](https://github.com/hyojin-k),[이수창](https://github.com/eternalclash) 
 - Back-end : [황유정](https://github.com/hj2bf), [탁정규](https://github.com/tak-codes),[허선희]](https://github.com/SunHeeHeo) 
 - Designer : 서연수, 이성원 
 
-# 개발기간
+# :bookmark_tabs: 개발기간
 2021.10.25 - 2021.12.03 (총 6주)
 
-# 아키텍쳐
+# ::sparkles: 아키텍쳐
 
-# 기술스택
+# :hammer_and_wrench: 기술스택
 
-# 주요기능 
+# :computer: 주요기능 
 - 로그인 / 회원가입 / 강아지 정보 등록 (jwt 인증)
 
 - 메인페이지
@@ -54,7 +54,7 @@
   - 받은 산책 신청 수락/거절
   - 쪽지 보내기, 답장하기
 
-# 개발 일지
+# :writing_hand: 개발 일지
 - [Tim Notion](https://togaether.shop/)
 - [Front-end github](https://github.com/O-K-O-K-O-K/Front-end)
 - [Back-end github](https://github.com/O-K-O-K-O-K/Back_End)
