@@ -2,6 +2,8 @@
 
 나도 강아지도 혼자였던 산책에서 벗어나, 산책 메이트와 일상을 공유하고 같이 산책하는 서비스 '산책할개'입니다.
 
+![KakaoTalk_Photo_2021-12-04-12-08-02](https://user-images.githubusercontent.com/88166362/144694782-08b53f54-f3b5-4bce-81b7-53d888625268.png)
+
 [산책할개 사이트](https://togaether.shop/)  
 [시연 영상](https://www.youtube.com/watch?v=dKcawThqUME&t=16s)  
 
@@ -14,6 +16,7 @@
 2021.10.25 - 2021.12.03 (총 6주)
 
 # ::sparkles: 아키텍쳐
+<img width="772" alt="KakaoTalk_Photo_2021-12-04-12-08-16" src="https://user-images.githubusercontent.com/88166362/144694789-6e1baffc-eca5-483b-b4f7-cf22274a15b2.png">
 
 # :hammer_and_wrench: 기술스택
 
