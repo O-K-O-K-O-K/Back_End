@@ -11,6 +11,8 @@ const s3 = new AWS.S3({
   region: process.env.region,
 });
 
+// 확장자에 대해서 
+// test code에 대해서
 const storage = multerS3({
   s3: s3,
   bucket: 'doggy-project-bucket',

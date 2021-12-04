@@ -49,3 +49,4 @@ module.exports = (server, app) => {
     );
   });
 };
+//내일 협력사 오시면, socket 때문에 어제 서버가 터저 급하게 서버를 복구했고, web socket 없앰
