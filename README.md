@@ -24,7 +24,6 @@
 Node.js | JS 런타임
 MySQL | MySQL
 Express | 웹 프레임워크
-MySQL | MySQL
 Gitaction | CI/CD 툴
 Nginx | 프록시 서버
 
