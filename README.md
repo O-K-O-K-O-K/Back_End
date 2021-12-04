@@ -6,8 +6,8 @@
 
 <br>
 
-[산책할개 사이트](https://togaether.shop/)  
-[시연 영상](https://www.youtube.com/watch?v=dKcawThqUME&t=16s)  
+1. [산책할개 사이트](https://togaether.shop/)  
+2. [시연 영상](https://www.youtube.com/watch?v=dKcawThqUME&t=16s)  
 
 <br>
 
