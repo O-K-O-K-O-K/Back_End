@@ -18,7 +18,6 @@
 <img width="772" alt="KakaoTalk_Photo_2021-12-04-12-08-16" src="https://user-images.githubusercontent.com/88166362/144694918-ab86d1e8-c61d-461a-92ca-e77a10ffc9cf.png">
 
 # :hammer_and_wrench: 기술스택
-# :hammer_and_wrench: 기술스택
 기술스택|설명
 :---|:---:
 Node.js | JS 런타임
