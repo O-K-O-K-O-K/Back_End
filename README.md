@@ -60,9 +60,3 @@
 - [Front-end github](https://github.com/O-K-O-K-O-K/Front-end)
 - [Back-end github](https://github.com/O-K-O-K-O-K/Back_End)
 
-
-# 개발 일지
-- [Tim Notion](https://togaether.shop/)
-- [Front-end github](https://github.com/O-K-O-K-O-K/Front-end)
-- [Back-end github](https://github.com/O-K-O-K-O-K/Back_End)
-
