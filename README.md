@@ -2,8 +2,6 @@
 
 나도 강아지도 혼자였던 산책에서 벗어나, 산책 메이트와 일상을 공유하고 같이 산책하는 서비스 '산책할개'입니다.
 
-![KakaoTalk_Photo_2021-12-04-12-08-02](https://user-images.githubusercontent.com/88166362/144694782-08b53f54-f3b5-4bce-81b7-53d888625268.png)
-
 [산책할개 사이트](https://togaether.shop/)  
 [시연 영상](https://www.youtube.com/watch?v=dKcawThqUME&t=16s)  
 
@@ -15,8 +13,7 @@
 # :bookmark_tabs: 개발기간
 2021.10.25 - 2021.12.03 (총 6주)
 
-# ::sparkles: 아키텍쳐
-<img width="772" alt="KakaoTalk_Photo_2021-12-04-12-08-16" src="https://user-images.githubusercontent.com/88166362/144694789-6e1baffc-eca5-483b-b4f7-cf22274a15b2.png">
+# :sparkles: 아키텍쳐
 
 # :hammer_and_wrench: 기술스택
 
@@ -57,10 +54,15 @@
   - 받은 산책 신청 수락/거절
   - 쪽지 보내기, 답장하기
 
+<<<<<<< HEAD
 # :writing_hand: 개발 일지
 - [Tim Notion](https://togaether.shop/)
 - [Front-end github](https://github.com/O-K-O-K-O-K/Front-end)
 - [Back-end github](https://github.com/O-K-O-K-O-K/Back_End)
 
 
+# 개발 일지
+- [Tim Notion](https://togaether.shop/)
+- [Front-end github](https://github.com/O-K-O-K-O-K/Front-end)
+- [Back-end github](https://github.com/O-K-O-K-O-K/Back_End)
 
