@@ -11,16 +11,17 @@ const s3 = new AWS.S3({
   region: process.env.region,
 });
 
+// 확장자에 대해서 
+// test code에 대해서
 const storage = multerS3({
   s3: s3,
-  bucket: "doggy-project-bucket",
+  bucket: 'doggy-project-bucket',
   contentType: multerS3.AUTO_CONTENT_TYPE,
   shouldTransform: true,
   transforms: [
     {
       id: "resized",
       key: function (req, file, cb) {
-        console.log("!!!!!!!!!!!!!!!!!!!!")
         try {
           const fileType = file.mimetype.split("/")[0] != "image";
           if (fileType) {
@@ -41,7 +42,6 @@ const storage = multerS3({
         }
       },
       transform: function (req, file, cb) {
-        console.log("????????????????")
         cb(null, sharp().resize(300,300).rotate());
       },
     },

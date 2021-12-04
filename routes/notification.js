@@ -45,7 +45,7 @@ router.get('/', auth, async(req, res) => {
 
 
 // 쪽지,산책신청 알람
-// 402 에러가 뜨면 이미 누른 거로 모달 창 띄워주세요
+// 403 에러가 뜨면 이미 누른 거로 모달 창 띄워주세요
 router.post('/:receiverId', auth, async (req,res,next) =>{
   try {
     const {receiverId} = req.params;
