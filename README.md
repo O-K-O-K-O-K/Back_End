@@ -54,7 +54,7 @@
   - 받은 산책 신청 수락/거절
   - 쪽지 보내기, 답장하기
 
-<<<<<<< HEAD
+
 # :writing_hand: 개발 일지
 - [Tim Notion](https://togaether.shop/)
 - [Front-end github](https://github.com/O-K-O-K-O-K/Front-end)
