@@ -13,7 +13,7 @@
 # :bookmark_tabs: 개발기간
 2021.10.25 - 2021.12.03 (총 6주)
 
-# ::sparkles: 아키텍쳐
+# :sparkles: 아키텍쳐
 
 # :hammer_and_wrench: 기술스택
 
