@@ -1,4 +1,4 @@
-# 🐶산책할게  
+# 🐶 산책할게  
 
 나도 강아지도 혼자였던 산책에서 벗어나, 산책 메이트와 일상을 공유하고 같이 산책하는 서비스 '산책할개'입니다.
 
@@ -7,7 +7,7 @@
 
 # :family_man_woman_boy_boy: 멤버구성
 - Front-end : [김다원](https://github.com/DawonEllaKim), [김효진](https://github.com/hyojin-k),[이수창](https://github.com/eternalclash) 
-- Back-end : [황유정](https://github.com/hj2bf), [탁정규](https://github.com/tak-codes),[허선희]](https://github.com/SunHeeHeo) 
+- Back-end : [황유정](https://github.com/hj2bf), [탁정규](https://github.com/tak-codes),[허선희](https://github.com/SunHeeHeo) 
 - Designer : 서연수, 이성원 
 
 # :bookmark_tabs: 개발기간
@@ -58,5 +58,6 @@
 - [Tim Notion](https://togaether.shop/)
 - [Front-end github](https://github.com/O-K-O-K-O-K/Front-end)
 - [Back-end github](https://github.com/O-K-O-K-O-K/Back_End)
+
 
 
