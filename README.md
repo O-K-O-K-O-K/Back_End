@@ -25,6 +25,12 @@
 
 <br>
 
+# 🖥: ERD 설계
+
+![1차배포table](https://user-images.githubusercontent.com/59908525/144704387-becfbb9d-40b0-4891-a36e-35bb73167dc4.png)
+
+<br>
+
 # :hammer_and_wrench: 기술스택
 
 <br>
