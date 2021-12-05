@@ -123,6 +123,7 @@ async function nicknameExist(nickGive) {
 }
 
 
+
 // //email 정규식 처리
 // function idCheck(idGive) {
 //     const reg_name =

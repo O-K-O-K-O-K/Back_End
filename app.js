@@ -44,7 +44,6 @@ const likeRouter = require("./routes/dogstaLike");
 const notificationRouter = require("./routes/notification");
 const commentRouter = require("./routes/comment");
 
-
 app.use("/dogs", dogsRouter); // 유정
 app.use("/posts", detailRouter); // 선희님
 app.use("/users", infoRouter); // 유정

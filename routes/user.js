@@ -13,4 +13,5 @@ router.post("/singUp", upload.single("userImage"), ctrl.postUser);
 //이메일 중복확인]
 router.post("/checkDup", ctrl.checkDup);
 
+
 module.exports = router;
