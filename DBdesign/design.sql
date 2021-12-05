@@ -25,7 +25,7 @@ create table `dog`(
   PRIMARY KEY(`dogId`),
   KEY `dogId` (`dogId`),
   FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4
 
 CREATE TABLE `post` (
   `postId` INT NOT NULL AUTO_INCREMENT,
@@ -61,7 +61,7 @@ CREATE TABLE `post` (
    KEY `userId` (`userId`),
    FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE ON DELETE CASCADE
   )
-  ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+  ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4
 
 
   CREATE TABLE `comment` (
@@ -85,8 +85,13 @@ CREATE TABLE `likes` (
   KEY `likeId` (`likeId`),
   KEY `dogPostId` (`dogPostId`),
   KEY `userId` (`userId`),
+<<<<<<< HEAD
   FOREIGN KEY (`dogPostId`) REFERENCES `dogSta` (`dogPostId`) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE ON DELETE CASCADE
+=======
+  FOREIGN KEY (`dogPostId`) REFERENCES `dogSta` (`dogPostId`) ON DELETE CASCADE,
+  FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
+>>>>>>> 28065b32714a8508c871b96fad8d97b78d65ed5a
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4
 
 -- CREATE TABLE `image` (

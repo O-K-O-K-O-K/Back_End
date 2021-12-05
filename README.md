@@ -18,8 +18,31 @@
 <img width="772" alt="KakaoTalk_Photo_2021-12-04-12-08-16" src="https://user-images.githubusercontent.com/88166362/144694918-ab86d1e8-c61d-461a-92ca-e77a10ffc9cf.png">
 
 # :hammer_and_wrench: 기술스택
+기술스택|설명
+:---|:---:
+Node.js | JS 런타임
+MySQL | MySQL
+Express | 웹 프레임워크
+Gitaction | CI/CD 툴
+Nginx | 프록시 서버
 
-# :computer: 주요기능 
+# : : 라이브러리
+|라이브러리|설명|
+---|:---
+<img src='https://img.shields.io/badge/express-1.7.9-lightgrey'> | 웹 프레임워크
+<img src='https://img.shields.io/badge/bcrypt-5.0.1-lightgrey'> | 비밀번호 암호화
+<img src='https://img.shields.io/badge/cors-2.8.5-lightgrey'> | 교차 출처 리소스 공유
+<img src='https://img.shields.io/badge/dotenv-10.0.0-lightgrey'>  | 환경변수 설정
+<img src='https://img.shields.io/badge/helmet-4.6.0-lightgrey'>  | HTTP 헤더 보안
+<img src='https://img.shields.io/badge/jest-27.3.1-lightgrey'>  | 테스트 코드
+<img src='https://img.shields.io/badge/jsonwebtoken-8.5.1-lightgrey'>  | 토큰 기반 인증
+<img src='https://img.shields.io/badge/morgan-1.10.0-lightgrey'> | 로거 미들웨어
+<img src='https://img.shields.io/badge/mysql-2.3.2-lightgrey'> | MySQL
+<img src='https://img.shields.io/badge/swagger--ui--express-4.1.6-lightgrey'> | API 문서편집기
+<img src='https://img.shields.io/badge/winston-3.3.3-lightgrey'> | Log 파일 관리
+<img src='https://img.shields.io/badge/sharp-0.29.3-lightgrey'> | 이미지 처리
+<img src='https://img.shields.io/badge/multer-1.4.3-lightgrey'> | 파일 업로드
+
 - 로그인 / 회원가입 / 강아지 정보 등록 (jwt 인증)
 
 - 메인페이지
@@ -61,3 +84,8 @@
 - [Tim Notion](https://togaether.shop/)
 - [Front-end github](https://github.com/O-K-O-K-O-K/Front-end)
 - [Back-end github](https://github.com/O-K-O-K-O-K/Back_End)
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 28065b32714a8508c871b96fad8d97b78d65ed5a
