@@ -84,8 +84,3 @@ Nginx | 프록시 서버
 - [Tim Notion](https://togaether.shop/)
 - [Front-end github](https://github.com/O-K-O-K-O-K/Front-end)
 - [Back-end github](https://github.com/O-K-O-K-O-K/Back_End)
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 28065b32714a8508c871b96fad8d97b78d65ed5a
