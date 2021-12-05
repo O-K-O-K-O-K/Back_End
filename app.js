@@ -55,7 +55,6 @@ app.use("/chat", chatRouter); // 선희님
 app.use("/likes", likeRouter); // 유정
 app.use("/notification", notificationRouter); //선희님
 app.use("/comment", commentRouter); //선희님
-app.get("/",(_,res) => res.render("home"));
 
 const auth = require('./middlewares/auth');
 //swagger
@@ -72,8 +71,10 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json({ 
+    message: err.message,
+    error: err
+  });
 });
-
 
 module.exports = app;
