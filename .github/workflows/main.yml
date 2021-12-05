@@ -21,5 +21,6 @@ jobs:
             cd /home/ubuntu/togaedog
             sudo git pull
             cd /home/ubuntu/togaedog
+            rm -rf package-lock.json
             npm i
             sudo pm2 reload all
