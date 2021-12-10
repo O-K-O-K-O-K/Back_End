@@ -6,7 +6,6 @@ const sendMessages = async (req,res,next) =>{
       const {receiverId}= req.params;
       const senderNickname =res.locals.user.userNickname
       const senderId = res.locals.user.userId
-      console.log("userId는",senderId)
       const {message} = req.body;
       const data = {
         senderNickname:senderNickname,
