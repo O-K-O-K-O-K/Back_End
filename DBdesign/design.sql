@@ -89,42 +89,6 @@ CREATE TABLE `likes` (
   FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4
 
--- CREATE TABLE `image` (
---   `imageId` INT NOT NULL AUTO_INCREMENT,
---   `userImage` VARCHAR(45),
---   `dogImage` VARCHAR(45),
---   `dogPostImage` VARCHAR(45),
---   `userId` INT NOT NULL,
---   PRIMARY KEY(`imageId`),
---   KEY `imageId` (`imageId`),
---   KEY `userId` (`userId`),
---   FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
--- )  ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 
-
-
--- CREATE TABLE `userImage` (
---   `userImageId` INT NOT NULL AUTO_INCREMENT,
---   `userImage` TEXT,
---   -- `userId` INT NOT NULL,
---   PRIMARY KEY(`userImageId`),
---   KEY `userImageId` (`userImageId`),
---   -- KEY `userId` (`userId`),
---   -- FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
--- ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4
-
---   CREATE TABLE `kakaoUser` (
---   `kakaoUserId` INT NOT NULL AUTO_INCREMENT,
---   `userEmail` VARCHAR(45) NOT NULL,
---   `password` varchar(255) NOT NULL,
---   `userNickname` VARCHAR(45) NOT NULL,
---   `userGender` VARCHAR(45) NOT NULL,
---   `userAge` VARCHAR(45) NOT NULL,
---   `userImage` TEXT NOT NULL,
---   `userLocation` varchar(45) NOT NULL,
---   PRIMARY KEY (`userId`),
---   KEY `userId` (`userId`)
--- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
-
 
 CREATE TABLE `chat` (
   `chatId` int(11) NOT NULL AUTO_INCREMENT,

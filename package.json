@@ -17,6 +17,7 @@
     "debug": "~2.6.9",
     "dotenv": "^10.0.0",
     "express": "~4.16.1",
+    "fs": "^0.0.1-security",
     "http-errors": "~1.6.3",
     "image-thumbnail": "^1.0.14",
     "jsonwebtoken": "^8.5.1",
@@ -27,12 +28,14 @@
     "multer-s3": "^2.10.0",
     "multer-s3-transform": "^2.10.3",
     "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
     "nodemon": "^2.0.14",
     "passport": "^0.5.0",
     "passport-kakao": "^1.0.1",
     "path": "^0.12.7",
     "pm2": "^5.1.2",
     "pug": "^3.0.2",
+    "sequelize": "^6.12.0-beta.2",
     "sharp": "^0.29.3",
     "socket.io": "^4.3.2",
     "swagger": "^0.7.5",
@@ -45,7 +48,8 @@
   "devDependencies": {
     "artillery": "^2.0.0-4",
     "jest": "^27.3.1",
-    "mocha": "^2.5.3"
+    "mocha": "^2.5.3",
+    "sequelize-cli": "^6.3.0"
   },
   "repository": {
     "type": "git",

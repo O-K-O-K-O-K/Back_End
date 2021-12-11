@@ -1,53 +1,37 @@
-const mysql = require('mysql');
-const dotenv = require("dotenv");
-dotenv.config();
+'use strict';
 
-// exports.db = mysql.createConnection({
-//   host: process.env.DB_HOST,
-//   user: process.env.DB_USER,
-//   // port: process.env.DB_PORT,
-//   password: process.env.DB_PASSWORD,
-//   database: process.env.DB_DATABASE,
-// });
+const fs = require('fs');
+const path = require('path');
+const Sequelize = require('sequelize');
+const basename = path.basename(__filename);
+const env = process.env.NODE_ENV || 'development';
+const config = require(__dirname + '/../config/config.json')[env];
+const db = {};
 
-exports.db = mysql.createConnection({
-    host: '127.0.0.1',
-    user: 'root',
-    port: '3306',
-    password: 'test',
-    database: 'dogdogdog',
-    multipleStatements: true
+let sequelize;
+if (config.use_env_variable) {
+  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+} else {
+  sequelize = new Sequelize(config.database, config.username, config.password, config);
+}
+
+fs
+  .readdirSync(__dirname)
+  .filter(file => {
+    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+  })
+  .forEach(file => {
+    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+    db[model.name] = model;
   });
 
-// exports.db = mysql.createConnection({
-//     host: '127.0.0.1',
-//     user: 'root',
-//     port: '3306',
-//     password: 'test',
-//     database: 'dogdogdog'
-//   });
+Object.keys(db).forEach(modelName => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
 
-// exports.db = mysql.createConnection({
-//     host: '127.0.0.1',
-//     user: 'root',
-//     port: '3306',
-//     password: '29053696',
-//     database: 'dog'
-// });
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
 
-
-// module.exports = {
-//   init: function () {
-//     return  mysql.createConnection(db_info);
-//   },
-//   connect: function(conn) {
-//     conn.connect(function(err)                      {
-//       if(err) console.error('mysql connection error : '+err);
-//       else console.log('mysql is connected successfully!');
-//     });
-//   }
-// }
-
-// const dbTest =async () => {
-//   const connection = await db_info.getConnection(async conn => conn);
-// };
+module.exports = db;
