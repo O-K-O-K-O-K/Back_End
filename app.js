@@ -44,7 +44,6 @@ const likeRouter = require("./routes/dogstaLike");
 const notificationRouter = require("./routes/notification");
 const commentRouter = require("./routes/comment");
 
-
 app.use("/dogs", dogsRouter); // 유정
 app.use("/posts", detailRouter); // 선희님
 app.use("/users", infoRouter); // 유정
@@ -55,7 +54,6 @@ app.use("/chat", chatRouter); // 선희님
 app.use("/likes", likeRouter); // 유정
 app.use("/notification", notificationRouter); //선희님
 app.use("/comment", commentRouter); //선희님
-app.get("/",(_,res) => res.render("home"));
 
 const auth = require('./middlewares/auth');
 //swagger
@@ -77,6 +75,5 @@ app.use(function(err, req, res, next) {
     error: err
   });
 });
-
 
 module.exports = app;
