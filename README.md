@@ -8,7 +8,7 @@
 
 # :family_man_woman_boy_boy: 멤버구성
 - Front-end : [김다원](https://github.com/DawonEllaKim), [김효진](https://github.com/hyojin-k),[이수창](https://github.com/eternalclash) 
-- Back-end : [황유정](https://github.com/hj2bf), [탁정규](https://github.com/tak-codes),[허선희](https://github.com/SunHeeHeo) 
+- Back-end : [황유정](https://github.com/eujeong-hwang), [탁정규](https://github.com/tak-codes),[허선희](https://github.com/SunHeeHeo) 
 - Designer : 서연수, 이성원 
 
 # :bookmark_tabs: 개발기간
@@ -81,6 +81,6 @@ Nginx | 프록시 서버
 
 
 # :writing_hand: 개발 일지
-- [Tim Notion](https://togaether.shop/)
+- [Team Notion](https://togaether.shop/)
 - [Front-end github](https://github.com/O-K-O-K-O-K/Front-end)
 - [Back-end github](https://github.com/O-K-O-K-O-K/Back_End)
