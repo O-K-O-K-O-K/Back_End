@@ -3,7 +3,6 @@ const { db } = require("../../models/index");
 
 
 const putUpPosts = async (req, res) => {
-    console.log("write post 연결완료!")
     const completed = 0;
     const userId = res.locals.user.userId;
     try {
@@ -53,6 +52,7 @@ const getDetailPosts = async (req, res, next) => {
     const {postId} = req.params;
     const userId = res.locals.user.userId;
     try {
+      //산책 신청 여부 판단 코드 
       let existRequest
       const check = `SELECT notification.checkRequest from notification 
       where notification.postId =${postId} and notification.senderId = ${userId}`
@@ -61,7 +61,6 @@ const getDetailPosts = async (req, res, next) => {
       if (!existRequest) {
         existRequest = 0
       } else existRequest = 1
-      // const requestCheck = request[0].checkRequest
       const query =
       `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage,
       post.userId, post.postId, post.meetingDate, post.wishDesc, post.locationCategory, post.dogCount, post.createdAt, post.completed, post.totalTime, post.startLocationAddress, post.endLocationAddress, post.totalDistance, post.routeColor, post.routeName,
@@ -81,7 +80,6 @@ const getDetailPosts = async (req, res, next) => {
       on user.userId = dog.userId
       WHERE post.postId ='${postId}'`;
       db.query(query, (error, rows) => {
-        console.log("들어가니",rows)
         if (error) {
           console.log(error)
           // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
@@ -121,7 +119,6 @@ const modifyPosts = async (req, res) => {
     };
     const query = `UPDATE post SET ? WHERE postId = ${postId} and userId = '${userId}'`;
     await db.query(query, escapeQuery, (error, rows, fields) => {
-      console.log(rows)
       if (error) {
         console.log(error)
         // logger.error('게시글 수정 중 DB관련 에러가 발생했습니다', error);
@@ -130,7 +127,6 @@ const modifyPosts = async (req, res) => {
           error,
         });
       } else {
-        console.log("rows",rows)
         // logger.info('게시글을 성공적으로 수정하였습니다.');
         return res.status(200).json({
           success: true,
@@ -144,11 +140,9 @@ const modifyPosts = async (req, res) => {
   }
   }
 const completePlans = async (req, res) => {
-    console.log("마감여부 접속 완료 ")
     try {
     const postId = req.params.postId;
     const userEmail = res.locals.user.userEmail;
-    console.log("user_email",userEmail)
     const userId = res.locals.user.userId;
     const {completed} = req.body;
     const escapeQuery = {
@@ -177,7 +171,6 @@ const completePlans = async (req, res) => {
 const deletePosts =async (req, res) => {
     const  postId  = req.params.postId;
     const userId = res.locals.user.userId;
-  
     const query = `DELETE from post where postId = ${postId} and userId = '${userId}'`;
     try {
       await db.query(query, (error, rows, fields) => {
