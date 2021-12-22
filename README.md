@@ -1,8 +1,9 @@
 # 🐶 산책할게  
 
-### 나도 강아지도 혼자였던 산책에서 벗어나, 산책 메이트와 일상을 공유하고 같이 산책하는 서비스 '산책할개'입니다.  
+#### 나도 강아지도 혼자였던 산책에서 벗어나, 
+#### 산책 메이트와 일상을 공유하고 같이 산책하는 서비스 '산책할개'입니다.  
 
-<img src="https://user-images.githubusercontent.com/88166362/144694893-52789e67-866c-4ead-b9a0-f63069c7dfbf.png" width="800" height="400">
+<img src="https://user-images.githubusercontent.com/88166362/144694893-52789e67-866c-4ead-b9a0-f63069c7dfbf.png" width="772" height="400">
 
 [산책할개 사이트](https://togaether.shop/)  
 [시연 영상](https://www.youtube.com/watch?v=dKcawThqUME&t=16s)  
@@ -43,8 +44,6 @@ Nginx | 프록시 서버
 <img src='https://img.shields.io/badge/bcrypt-5.0.1-lightgrey'> | 비밀번호 암호화
 <img src='https://img.shields.io/badge/cors-2.8.5-lightgrey'> | 교차 출처 리소스 공유
 <img src='https://img.shields.io/badge/dotenv-10.0.0-lightgrey'>  | 환경변수 설정
-<img src='https://img.shields.io/badge/helmet-4.6.0-lightgrey'>  | HTTP 헤더 보안
-<img src='https://img.shields.io/badge/jest-27.3.1-lightgrey'>  | 테스트 코드
 <img src='https://img.shields.io/badge/jsonwebtoken-8.5.1-lightgrey'>  | 토큰 기반 인증
 <img src='https://img.shields.io/badge/morgan-1.10.0-lightgrey'> | 로거 미들웨어
 <img src='https://img.shields.io/badge/mysql-2.3.2-lightgrey'> | MySQL
