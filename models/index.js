@@ -9,7 +9,6 @@ exports.db = mysql.createConnection({
   database: process.env.DB_DATABASE,
 });
 
-
 //local db
 // exports.db = mysql.createConnection({
 //     host: '127.0.0.1',
