@@ -1,6 +1,4 @@
 const SocketIO = require("socket.io");
-// const app = require("./app");
-// const { default: axios } = require("axios");
 require("dotenv").config();
 
 module.exports = (server, app) => {
@@ -37,9 +35,7 @@ module.exports = (server, app) => {
     socket.on(
       "sendNotification",
       ({ senderName, senderUsername, receiverName, type }) => {
-        console.log("!!!", senderName, senderUsername, receiverName, type);
         const receiver = getUser(receiverName);
-        console.log("receiver: ", receiver);
         notification.emit("getNotification", {
           senderName,
           senderUsername,
@@ -49,4 +45,3 @@ module.exports = (server, app) => {
     );
   });
 };
-//내일 협력사 오시면, socket 때문에 어제 서버가 터저 급하게 서버를 복구했고, web socket 없앰

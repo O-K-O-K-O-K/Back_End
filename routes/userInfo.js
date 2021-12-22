@@ -15,5 +15,4 @@ router.patch("/me", auth, ctrl.updateMyInfo);
 // 강아지 등록 여부
 router.get("/dogExist", auth, ctrl.getDogExist);
 
-
 module.exports = router;

@@ -84,11 +84,9 @@ const updateMyInfo = async (req, res) => {
 
 const getDogExist = async (req, res) => {
   const userId = res.locals.user.userId;
-
   const dog = `SELECT * FROM dog WHERE dog.userId ="${userId}"`;
   const results = await db.query(dog);
-  console.log("results:", results);
-
+  
   if (results.length) {
     res.send(true);
   } else {

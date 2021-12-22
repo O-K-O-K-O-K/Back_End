@@ -4,34 +4,24 @@ const app = express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
 const path = require('path');
-// const authMiddleware = require("./middlewares/auth");
-// app.use(logger('dev'));
-// const socketIo = require("socket.io")
-// const logger = require('morgan');
 
+// cors 
 const cors = require('cors');
 const corsOptions = {
   origin: "*",
-  // methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
-  // preflightContinue: false,
   credentials: true,
-  // optionsSuccessStatus: 204,
 };
 app.use(cors(corsOptions));
 
+// views
 app.set('views', path.join(__dirname, 'views'));
 
 //parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// app.use(bodyParser.json())
-// app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static('public'));
-
 require('dotenv').config();
-
-// app.use(compression());
 
 const dogsRouter = require("./routes/dog");
 const detailRouter = require("./routes/detail");
@@ -44,18 +34,17 @@ const likeRouter = require("./routes/dogstaLike");
 const notificationRouter = require("./routes/notification");
 const commentRouter = require("./routes/comment");
 
-app.use("/dogs", dogsRouter); // 유정
-app.use("/posts", detailRouter); // 선희님
-app.use("/users", infoRouter); // 유정
-app.use("/users", usersRouter); // 정규님
-app.use("/dogsta", dogstaRouter); // 유정
-app.use("/mypage", pagesRouter); // 유정
-app.use("/chat", chatRouter); // 선희님
-app.use("/likes", likeRouter); // 유정
-app.use("/notification", notificationRouter); //선희님
-app.use("/comment", commentRouter); //선희님
+app.use("/dogs", dogsRouter); 
+app.use("/posts", detailRouter); 
+app.use("/users", infoRouter); 
+app.use("/users", usersRouter); 
+app.use("/dogsta", dogstaRouter); 
+app.use("/mypage", pagesRouter); 
+app.use("/chat", chatRouter); 
+app.use("/likes", likeRouter); 
+app.use("/notification", notificationRouter); 
+app.use("/comment", commentRouter); 
 
-const auth = require('./middlewares/auth');
 //swagger
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 

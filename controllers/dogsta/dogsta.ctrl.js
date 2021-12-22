@@ -134,7 +134,6 @@ const getDetailDogsta = async (req, res) => {
 const updateDogstaPic = async (req, res) => {
   const userId = res.locals.user.userId;
   const { dogPostId } = req.params;
-
   const dogPostImage = req.file.transforms[0].location;
 
   const escapeQuery = {
@@ -143,7 +142,6 @@ const updateDogstaPic = async (req, res) => {
 
   const userQuery = `UPDATE dogSta SET dogSta.dogPostImage = "${dogPostImage}" 
     WHERE dogSta.dogPostId = "${dogPostId}" AND dogSta.userId = "${userId}"`;
-
   await db.query(userQuery, escapeQuery, async (err, user) => {
     if (err) {
       return res.status(400).json({
@@ -161,15 +159,12 @@ const updateDogstaInfo = async (req, res) => {
   try {
     const userId = res.locals.user.userId;
     const { dogPostId } = req.params;
-
     const { dogPostDesc } = req.body;
 
     const escapeQuery = {
       dogPostDesc: dogPostDesc,
     };
-
     const query = `UPDATE dogSta SET ? WHERE dogSta.dogPostId = ${dogPostId} and dogSta.userId = '${userId}'`;
-
     await db.query(query, escapeQuery, (error, rows, fields) => {
       if (error) {
         return res.status(400).json({
@@ -194,11 +189,8 @@ const updateDogstaInfo = async (req, res) => {
 const deleteDogsta = async (req, res) => {
   const userId = res.locals.user.userId;
   const { dogPostId } = req.params;
-
-  console.log(dogPostId);
   const query = `DELETE from dogSta where dogSta.dogPostId = '${dogPostId}' and dogSta.userId = '${userId}'`;
 
-  console.log(query);
   try {
     await db.query(query, (error, rows, fields) => {
       if (error) {

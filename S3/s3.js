@@ -1,7 +1,6 @@
 const AWS = require("aws-sdk");
 const multer = require("multer");
 const multerS3 = require('multer-s3-transform');
-// const multerS3 = require('multer-s3'); // 이걸 쓰면 console.log가 안들어옴 
 const path = require('path');
 const sharp = require("sharp"); 
 
@@ -11,8 +10,7 @@ const s3 = new AWS.S3({
   region: process.env.region,
 });
 
-// 확장자에 대해서 
-// test code에 대해서
+// 확장자에 대해서 고민하기
 const storage = multerS3({
   s3: s3,
   bucket: 'doggy-project-bucket',

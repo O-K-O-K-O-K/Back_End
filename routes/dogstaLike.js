@@ -5,7 +5,6 @@ const dotenv = require("dotenv");
 dotenv.config();
 const ctrl = require("../controllers/like/dogstaLike.ctrl")
 
-
 // 개스타그램 좋아요 누르기
 router.post('/:dogPostId', auth, ctrl.addDogstaLike);
 // 개스타그램 좋아요 본인이 눌렀냐 안 눌렀냐 여부

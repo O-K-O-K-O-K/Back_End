@@ -9,7 +9,7 @@ const ctrl = require("../controllers/user/user.ctrl");
 router.post("/login", ctrl.loginUser);
 // 회원가입 
 router.post("/signUp", upload.single("userImage"), ctrl.postUser);
-//이메일 중복확인]
+//이메일 중복확인
 router.post("/checkDup", ctrl.checkDup);
 
 module.exports = router;

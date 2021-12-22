@@ -123,53 +123,6 @@ async function nicknameExist(nickGive) {
 }
 
 
-
-// //email 정규식 처리
-// function idCheck(idGive) {
-//     const reg_name =
-//       /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-//     if (reg_name.test(idGive) && idGive.split("@")[0].length >= 3) {
-//       return true;
-//     }
-//     return false;
-// }
-
-// function emailExist(userEmail) {
-//     return new Promise((resolve, reject) => {
-//         const query = `select userEmail from user where user.userEmail = ?`;
-//         const params = [userEmail];
-//         db.query(query, params, (error, results, fields) => {
-//         console.log(results);
-//         if (error) {
-//             // logger.error(`Msg: raise Error in checkValidationEmail => ${error}`);
-//             console.log(error);
-//             return resolve(false);
-//         }
-//         // 아무 값이 없기 때문에, 중복이 없다.2 (가능 하다는 얘기)
-//         if (results.length == 0) {
-//             return resolve(true);
-//         }
-
-//         // 존재하다면, 이메일 중복으로 인지
-//         resolve(false);
-//         });
-//     });
-// }
-
-// async function nicknameExist(nickGive) {
-//     const post = `SELECT * FROM user WHERE userNickname = ?;`;
-//     const results = await db.query(post, [nickGive]);
-//     if (results.length) {
-//         // Boolean([])  true이다.
-//         return false;
-//     } else {
-//         return true;
-//     }
-// }
-
-
-
-
 module.exports = {
     loginUser,
     postUser,

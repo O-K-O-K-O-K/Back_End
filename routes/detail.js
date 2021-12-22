@@ -5,10 +5,6 @@ const auth = require('../middlewares/auth');
 const ctrl = require("../controllers/post/mainPost.ctrl")
 const ctrlPosts = require("../controllers/post/post.ctrl")
 dotenv.config();
-// const { ConnectContactLens } = require('aws-sdk');
-// const logger = require("../src/config/logger")
-// const util = require('util'); //현재시간을 찍어주는 모듈
-// const { JsonWebTokenError } = require('jsonwebtoken');
 
 //메인 조회하기 - 전체 조회하기(테스트)
 router.get('/test', ctrl.getAllPosts);
