@@ -89,7 +89,6 @@ CREATE TABLE `likes` (
   FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4
 
-
 CREATE TABLE `chat` (
   `chatId` int(11) NOT NULL AUTO_INCREMENT,
   `receiverId` int(11) NOT NULL,
@@ -103,7 +102,6 @@ CREATE TABLE `chat` (
   FOREIGN KEY (`receiverId`) REFERENCES `user` (`userId`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4
 
-
 CREATE TABLE `deleteChat` (
   `deleteChatId` int(11) NOT NULL AUTO_INCREMENT,
   `chatId` int(11) NOT NULL,
@@ -116,7 +114,6 @@ CREATE TABLE `deleteChat` (
   KEY `chatId` (`chatId`),
   FOREIGN KEY (`chatId`) REFERENCES `chat` (`chatId`) ON UPDATE CASCADE 
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4
-
 
 CREATE TABLE `notification` (
   `notificationId` int(11) NOT NULL AUTO_INCREMENT,
