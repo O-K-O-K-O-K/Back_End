@@ -2,7 +2,7 @@
 
 ### 나도 강아지도 혼자였던 산책에서 벗어나, 산책 메이트와 일상을 공유하고 같이 산책하는 서비스 '산책할개'입니다.  
 
-![KakaoTalk_Photo_2021-12-04-12-08-02](https://user-images.githubusercontent.com/88166362/144694893-52789e67-866c-4ead-b9a0-f63069c7dfbf.png) 
+![KakaoTalk_Photo_2021-12-04-12-08-02](https://user-images.githubusercontent.com/88166362/144694893-52789e67-866c-4ead-b9a0-f63069c7dfbf.png) {: width="100" height="100"}
 
 [산책할개 사이트](https://togaether.shop/)  
 [시연 영상](https://www.youtube.com/watch?v=dKcawThqUME&t=16s)  
