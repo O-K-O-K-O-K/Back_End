@@ -15,4 +15,8 @@ router.patch('/me', auth, ctrl.updateMyInfo)
 // 강아지 등록 여부
 router.get('/dogExist', auth, ctrl.getDogExist)
 
+<<<<<<< HEAD
 module.exports = router
+=======
+module.exports = router;
+>>>>>>> 37868d6110b3ecf6ede9343d8d37e07e89cd023f

@@ -3,6 +3,7 @@ const mysql = require('mysql')
 // dotenv.config();
 
 exports.db = mysql.createConnection({
+<<<<<<< HEAD
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     // port: process.env.DB_PORT,
@@ -10,16 +11,15 @@ exports.db = mysql.createConnection({
     database: process.env.DB_DATABASE,
     // multipleStatements: true,
 })
+=======
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+});
+>>>>>>> 37868d6110b3ecf6ede9343d8d37e07e89cd023f
 
-// exports.db = mysql.createConnection({
-//     host: '127.0.0.1',
-//     user: 'root',
-//     port: '3306',
-//     password: 'test',
-//     database: 'dogdogdog',
-//     multipleStatements: true
-//   });
-
+//local db
 // exports.db = mysql.createConnection({
 //     host: '127.0.0.1',
 //     user: 'root',
@@ -27,6 +27,7 @@ exports.db = mysql.createConnection({
 //     password: 'test',
 //     database: 'dogdogdog'
 //   });
+<<<<<<< HEAD
 
 // exports.db = mysql.createConnection({
 //     host: '127.0.0.1',
@@ -51,3 +52,5 @@ exports.db = mysql.createConnection({
 // const dbTest =async () => {
 //   const connection = await db_info.getConnection(async conn => conn);
 // };
+=======
+>>>>>>> 37868d6110b3ecf6ede9343d8d37e07e89cd023f

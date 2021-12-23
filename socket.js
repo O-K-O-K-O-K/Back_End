@@ -1,7 +1,12 @@
+<<<<<<< HEAD
 const SocketIO = require('socket.io')
 // const app = require("./app");
 // const { default: axios } = require("axios");
 require('dotenv').config()
+=======
+const SocketIO = require("socket.io");
+require("dotenv").config();
+>>>>>>> 37868d6110b3ecf6ede9343d8d37e07e89cd023f
 
 module.exports = (server, app) => {
     const io = SocketIO(server, {
@@ -33,6 +38,7 @@ module.exports = (server, app) => {
             addNewUser(userId, socket.id)
         })
 
+<<<<<<< HEAD
         socket.on(
             'sendNotification',
             ({ senderName, senderUsername, receiverName, type }) => {
@@ -55,3 +61,23 @@ module.exports = (server, app) => {
     })
 }
 //내일 협력사 오시면, socket 때문에 어제 서버가 터저 급하게 서버를 복구했고, web socket 없앰
+=======
+  notification.on("connect", (socket) => {
+    socket.on("postUser", (userId) => {
+      addNewUser(userId, socket.id);
+    });
+    
+    socket.on(
+      "sendNotification",
+      ({ senderName, senderUsername, receiverName, type }) => {
+        const receiver = getUser(receiverName);
+        notification.emit("getNotification", {
+          senderName,
+          senderUsername,
+          type,
+        });
+      }
+    );
+  });
+};
+>>>>>>> 37868d6110b3ecf6ede9343d8d37e07e89cd023f

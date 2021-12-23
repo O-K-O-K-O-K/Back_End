@@ -1,26 +1,26 @@
-name: SERVER togaedog
+# name: SERVER togaedog
 
-on:
-  push:
-    branches: [main]
+# on:
+#   push:
+#     branches: [main]
 
-jobs:
-  build:
-    runs-on: ubuntu-18.04
+# jobs:
+#   build:
+#     runs-on: ubuntu-18.04
 
-    steps:
-      - name: Deploy
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.STUDY_IP }}
-          username: ${{ secrets.STUDY_SSH_ID }}
-          key: ${{ secrets.STUDY_SSH_KEY }}
-          port: ${{ secrets.STUDY_SSH_PORT }}
-          script: |
-            sudo -s
-            cd /home/ubuntu/togaedog
-            sudo git pull
-            cd /home/ubuntu/togaedog
-            rm -rf package-lock.json
-            npm i
-            sudo pm2 reload all
+#     steps:
+#       - name: Deploy
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.STUDY_IP }}
+#           username: ${{ secrets.STUDY_SSH_ID }}
+#           key: ${{ secrets.STUDY_SSH_KEY }}
+#           port: ${{ secrets.STUDY_SSH_PORT }}
+#           script: |
+#             sudo -s
+#             cd /home/ubuntu/togaedog
+#             sudo git pull
+#             cd /home/ubuntu/togaedog
+#             rm -rf package-lock.json
+#             npm i
+#             sudo pm2 reload all

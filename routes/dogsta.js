@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const express = require('express')
 const router = express.Router()
 const auth = require('../middlewares/auth')
@@ -6,6 +7,16 @@ dotenv.config()
 const upload = require('../S3/s3')
 const ctrl = require('../controllers/dogsta/dogsta.ctrl')
 const ctrl2 = require('../controllers/dogsta/dogstaFilter.ctrl')
+=======
+const express = require("express");
+const router = express.Router();
+const auth = require("../middlewares/auth");
+const dotenv = require("dotenv");
+dotenv.config();
+const upload = require("../S3/s3");
+const ctrl = require("../controllers/dogsta/dogsta.ctrl");
+const ctrl2 = require("../controllers/dogsta/dogstaFilter.ctrl");
+>>>>>>> 37868d6110b3ecf6ede9343d8d37e07e89cd023f
 
 // 개스타그램 글 등록하기
 router.post('/write', upload.single('dogPostImage'), auth, ctrl.addDogsta)
@@ -34,6 +45,7 @@ router.get('/mainFilter', ctrl2.getMainFilter)
 
 module.exports = router
 
+<<<<<<< HEAD
 // // 안 산뜻하게 보내려면 -> rows[0]
 // // 개스타그램 메인 조회하기_추천순
 // router.get("/likeFilter", async (req, res) => {
@@ -93,3 +105,6 @@ module.exports = router
 //     });
 //   });
 // });
+=======
+
+>>>>>>> 37868d6110b3ecf6ede9343d8d37e07e89cd023f
