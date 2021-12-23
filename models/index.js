@@ -1,14 +1,15 @@
-const mysql = require('mysql');
-const dotenv = require("dotenv");
-dotenv.config();
+const mysql = require('mysql')
+// const dotenv = require("dotenv");
+// dotenv.config();
 
 exports.db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  // port: process.env.DB_PORT,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
-});
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    // port: process.env.DB_PORT,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
+    // multipleStatements: true,
+})
 
 // exports.db = mysql.createConnection({
 //     host: '127.0.0.1',
@@ -34,8 +35,6 @@ exports.db = mysql.createConnection({
 //     password: '29053696',
 //     database: 'dog'
 // });
-
-
 
 // module.exports = {
 //   init: function () {

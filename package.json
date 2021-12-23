@@ -5,6 +5,7 @@
   "scripts": {
     "start": "nodemon ./bin/www",
     "stop": "taskkill -f -im node.exe",
+    "prettify": "prettier --write *.js **/*.js",
     "test": "jest"
   },
   "dependencies": {
@@ -45,7 +46,8 @@
   "devDependencies": {
     "artillery": "^2.0.0-4",
     "jest": "^27.3.1",
-    "mocha": "^2.5.3"
+    "mocha": "^2.5.3",
+    "prettier": "^2.5.1"
   },
   "repository": {
     "type": "git",

@@ -24,7 +24,7 @@
 //         routeColor,
 //         routeName,
 //         userId,
-//       ];  
+//       ];
 //       const query =
 //       'INSERT INTO post (meetingDate,wishDesc,completed,locationCategory,dogCount,totalTime,startLocationAddress,endLocationAddress,totalDistance,routeColor,routeName, userId) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)';
 //         await db.query(query, params, (error, rows, fields) => {
@@ -48,8 +48,8 @@
 //         return res.status(500).json({
 //           success: false,
 //           errMessage: '500 에러 게시중 오류가 발생 하였습니다!.'
-//         });     
+//         });
 //       }
 //     })
-  
+
 // module.exports = router;
