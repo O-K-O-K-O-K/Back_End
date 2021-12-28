@@ -15,7 +15,7 @@ const addDog = async (req, res) => {
       dogComment
     } = req.body;
 
-    const dogImage = req.file.location;
+    const dogImage = req.file.transforms[0].location;
 
     const params = [
       dogGender,
@@ -75,7 +75,7 @@ const getDog = async (req, res) => {
 
 const updateDogPic = async (req, res) => {
   const userId = res.locals.user.userId;
-  const dogImage = req.file.location;
+  const dogImage = req.file.transforms[0].location;
 
   const escapeQuery = {
     dogImage: dogImage,
