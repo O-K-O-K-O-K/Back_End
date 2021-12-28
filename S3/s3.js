@@ -1,17 +1,9 @@
-<<<<<<< HEAD
 const AWS = require('aws-sdk')
 const multer = require('multer')
 const multerS3 = require('multer-s3-transform')
 // const multerS3 = require('multer-s3'); // 이걸 쓰면 console.log가 안들어옴
 const path = require('path')
 const sharp = require('sharp')
-=======
-const AWS = require("aws-sdk");
-const multer = require("multer");
-const multerS3 = require('multer-s3-transform');
-const path = require('path');
-const sharp = require("sharp"); 
->>>>>>> 37868d6110b3ecf6ede9343d8d37e07e89cd023f
 
 const s3 = new AWS.S3({
     accessKeyId: process.env.S3_KEYID,
@@ -19,12 +11,8 @@ const s3 = new AWS.S3({
     region: process.env.region,
 })
 
-<<<<<<< HEAD
 // 확장자에 대해서
 // test code에 대해서
-=======
-// 확장자에 대해서 고민하기
->>>>>>> 37868d6110b3ecf6ede9343d8d37e07e89cd023f
 const storage = multerS3({
     s3: s3,
     bucket: 'doggy-project-bucket',
