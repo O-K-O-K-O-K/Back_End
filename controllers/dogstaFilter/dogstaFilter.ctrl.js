@@ -163,6 +163,6 @@ const getRecentFilter = async (req, res) => {
 
 module.exports = {
   getLikeFilter,
-  getRecentFilter,
   getMainFilter,
+  getRecentFilter,
 };

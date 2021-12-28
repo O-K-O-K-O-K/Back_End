@@ -1,18 +1,9 @@
-<<<<<<< HEAD
 const express = require('express')
 const router = express.Router()
 const auth = require('../middlewares/auth')
 const dotenv = require('dotenv')
 dotenv.config()
 const ctrl = require('../controllers/like/dogstaLike.ctrl')
-=======
-const express = require("express");
-const router = express.Router();
-const auth = require("../middlewares/auth");
-const dotenv = require("dotenv");
-dotenv.config();
-const ctrl = require("../controllers/like/dogstaLike.ctrl")
->>>>>>> 37868d6110b3ecf6ede9343d8d37e07e89cd023f
 
 // 개스타그램 좋아요 누르기
 router.post('/:dogPostId', auth, ctrl.addDogstaLike)

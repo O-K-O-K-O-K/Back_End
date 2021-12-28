@@ -5,6 +5,7 @@ const multerS3 = require('multer-s3-transform')
 const path = require('path')
 const sharp = require('sharp')
 
+// AWS의 내 아이디의 S3 버킷을 이용하기 위해, 액세스 키와 비밀키 그리고 region을 적었다. (환경변수로)
 const s3 = new AWS.S3({
     accessKeyId: process.env.S3_KEYID,
     secretAccessKey: process.env.S3_PRIVATE_KEY,

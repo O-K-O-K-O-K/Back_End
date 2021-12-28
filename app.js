@@ -25,36 +25,32 @@ app.set('view engine', 'pug')
 //parser
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-// app.use(bodyParser.json())
-// app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static('public'))
 
-require('dotenv').config()
+const dogsRouter = require("./routes/dog");
+const detailRouter = require("./routes/detail");
+const infoRouter = require("./routes/userInfo");
+const usersRouter = require("./routes/user");
+const dogstaRouter = require("./routes/dogsta");
+const dogstaFilterRouter = require("./routes/dogstaFilter");
+const pagesRouter = require("./routes/mypage");
+const chatRouter = require("./routes/chat");
+const likeRouter = require("./routes/dogstaLike");
+const notificationRouter = require("./routes/notification");
+const commentRouter = require("./routes/comment");
 
-// app.use(compression());
-
-const dogsRouter = require('./routes/dog')
-const detailRouter = require('./routes/detail')
-const infoRouter = require('./routes/userInfo')
-const usersRouter = require('./routes/user')
-const dogstaRouter = require('./routes/dogsta')
-const pagesRouter = require('./routes/mypage')
-const chatRouter = require('./routes/chat')
-const likeRouter = require('./routes/dogstaLike')
-const notificationRouter = require('./routes/notification')
-const commentRouter = require('./routes/comment')
-
-app.use('/dogs', dogsRouter) // 유정
-app.use('/posts', detailRouter) // 선희님
-app.use('/users', infoRouter) // 유정
-app.use('/users', usersRouter) // 정규님
-app.use('/dogsta', dogstaRouter) // 유정
-app.use('/mypage', pagesRouter) // 유정
-app.use('/chat', chatRouter) // 선희님
-app.use('/likes', likeRouter) // 유정
-app.use('/notification', notificationRouter) //선희님
-app.use('/comment', commentRouter) //선희님
+app.use("/dogs", dogsRouter); 
+app.use("/posts", detailRouter); 
+app.use("/users", infoRouter); 
+app.use("/users", usersRouter); 
+app.use("/dogsta", dogstaRouter); 
+app.use("/dogstaFilter", dogstaFilterRouter); 
+app.use("/mypage", pagesRouter); 
+app.use("/chat", chatRouter); 
+app.use("/likes", likeRouter); 
+app.use("/notification", notificationRouter); 
+app.use("/comment", commentRouter); 
 
 app.get('/', function (req, res, next) {
     res.render('index', { title: 'Express' })

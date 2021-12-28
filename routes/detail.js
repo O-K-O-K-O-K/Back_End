@@ -159,5 +159,3 @@ router.get('/main/seoulForest', async (req, res) => {
 })
 
 module.exports = router
-
-

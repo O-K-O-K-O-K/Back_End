@@ -9,13 +9,6 @@ const http = require('http');
 const path = require('path')
 const socketIo =  require("socket.io")
 const server = http.createServer(app);
-<<<<<<< HEAD
-server.keepAliveTimeout = 65000;
-server.headersTimeout = 66000;
-//  const { connection } = require('mongoose');
-//  const { isObject } = require('util');
-=======
->>>>>>> 37868d6110b3ecf6ede9343d8d37e07e89cd023f
 const io = socketIo({noServer:true});
 const webSocket = require('../socket')
 
