@@ -1,6 +1,7 @@
 "use strict";
 const { db } = require("../../models/index");
 
+
 const getMainFilter = async (req, res) => {
   const query = `SELECT *,
     (SELECT COUNT(*) FROM likes WHERE likes.dogPostId = dogSta.dogPostId) as count
