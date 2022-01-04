@@ -1,6 +1,33 @@
 "use strict";
 const { db } = require("../../models/index");
 
+const getMainFilter = async (req, res) => {
+  const query = `SELECT *,
+    (SELECT COUNT(*) FROM likes WHERE likes.dogPostId = dogSta.dogPostId) as count
+     FROM dogSta 
+     JOIN user
+     ON dogSta.userId = user.userId
+     LEFT JOIN dog
+     ON dog.userId = user.userId
+     ORDER BY dogSta.createdAt DESC
+     LIMIT 10`;
+
+  console.log("query", query);
+
+  await db.query(query, (error, rows) => {
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        msg: "메인 조회하기 실패",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      posts: rows,
+    });
+  });
+};
+
 const getLikeFilter = async (req, res) => {
   try {
     console.log("get method 연결완료!");
@@ -67,7 +94,7 @@ const getLikeFilter = async (req, res) => {
   }
 };
 
-const getMainFilter = async (req, res) => {
+const getRecentFilter = async (req, res) => {
   try {
     console.log("get method 연결완료!");
     const pageNum = Number(req.query.pageNum) || 1; // NOTE: 쿼리스트링으로 받을 페이지 번호 값, 기본값은 1
@@ -134,35 +161,8 @@ const getMainFilter = async (req, res) => {
   }
 };
 
-const getRecentFilter = async (req, res) => {
-  const query = `SELECT *,
-    (SELECT COUNT(*) FROM likes WHERE likes.dogPostId = dogSta.dogPostId) as count
-     FROM dogSta 
-     JOIN user
-     ON dogSta.userId = user.userId
-     LEFT JOIN dog
-     ON dog.userId = user.userId
-     ORDER BY dogSta.createdAt DESC
-     LIMIT 10`;
-
-  console.log("query", query);
-
-  await db.query(query, (error, rows) => {
-    if (error) {
-      return res.status(400).json({
-        success: false,
-        msg: "메인 조회하기 실패",
-      });
-    }
-    return res.status(200).json({
-      success: true,
-      posts: rows,
-    });
-  });
-};
-
 module.exports = {
-  getLikeFilter,
   getMainFilter,
+  getLikeFilter,
   getRecentFilter,
 };

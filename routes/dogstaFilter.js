@@ -4,12 +4,12 @@ const dotenv = require("dotenv");
 dotenv.config();
 const ctrl2 = require("../controllers/dogstaFilter/dogstaFilter.ctrl");
 
-// 개스타그램 메인 조회하기_추천순 페이지네이션
-router.get("/likeFilter", ctrl2.getLikeFilter);
-// 개스타그램 메인 조회하기_최신순 페이지네이션
-router.get("/recentFilter", ctrl2.getRecentFilter);
 //메인페이지_최신순 10개만
 router.get("/mainFilter", ctrl2.getMainFilter);
+// 개스타그램 메인 조회하기_추천순 페이지네이션
+router.get("/likeFilter/:pageNum", ctrl2.getLikeFilter);
+// 개스타그램 메인 조회하기_최신순 페이지네이션
+router.get("/recentFilter/:pageNum", ctrl2.getRecentFilter);
 
 module.exports = router;
 
