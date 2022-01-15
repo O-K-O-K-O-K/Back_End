@@ -30,6 +30,39 @@ router.patch('/completion/:postId', auth, ctrlPosts.completePlans)
 // 게시글 삭제
 router.delete('/:postId', auth, ctrlPosts.deletePosts)
 
+router.get('/', async (req, res) => {
+    try {
+        const query2 = `SELECT dog.dogId, dog.dogGender, dog.dogName, dog.dogSize, dog.dogBreed, dog.dogAge, dog.neutral, dog.dogComment, dog.dogImage, dog.userId,
+            post.userId, post.postId, post.meetingDate, post.completed, post.locationCategory
+            FROM post
+            JOIN dog
+            ON dog.userId=post.userId
+            ORDER BY post.createdAt DESC `
+        db.query(query2, (error, results) => {
+            console.log('들어오니')
+            if (error) {
+                console.log(error)
+                // logger.error('게시글 조회 중 DB관련 에러가 발생했습니다', error);
+                return res.sendStatus(400)
+            }
+            const result = {
+                success: true,
+                posts: results,
+                totalCount,
+            }
+            res.status(200).json({
+                success: true,
+                posts: result,
+            })
+            console.log('rows는', result)
+        })
+    } catch (err) {
+        console.log(err)
+        // logger.error('게시글 조회 중 에러가 발생 했습니다: ', err);
+        return res.sendStatus(500)
+    }
+})
+
 //메인 페이지 조회하기 - 올림픽 공원
 router.get('/main/olympicPark', async (req, res) => {
     const location = '올림픽공원'
