@@ -12,6 +12,7 @@ router.get("/likeFilter", ctrl2.getLikeFilter);
 // 개스타그램 메인 조회하기_최신순 페이지네이션
 router.get("/recentFilter", ctrl2.getRecentFilter);
 
+
 // // 안 산뜻하게 보내려면 -> rows[0]
 // // 개스타그램 메인 조회하기_추천순
 // router.get("/test/likeFilter", async (req, res) => {
