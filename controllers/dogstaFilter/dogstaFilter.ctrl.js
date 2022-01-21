@@ -57,7 +57,7 @@ const getLikeFilter = async (req, res) => {
       JOIN user
       ON dogSta.userId = user.userId
       LEFT JOIN dog
-      ON  dog.userId = user.userId
+      ON dog.userId = user.userId
       ORDER BY count DESC
       LIMIT ${skipSize},${contentSize}`;
       console.log(likeQuery);
