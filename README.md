@@ -1,7 +1,6 @@
-# 🐶 산책할게  
+# 🐶 Friendog 
 
-#### 나도 강아지도 혼자였던 산책에서 벗어나, 
-#### 산책 메이트와 일상을 공유하고 같이 산책하는 서비스 '산책할개'입니다.  
+#### Friendog is a web service that matches you and your dog with a friend to take a daily walk together.
 
 <img src="https://user-images.githubusercontent.com/88166362/144694893-52789e67-866c-4ead-b9a0-f63069c7dfbf.png" width="772" height="400">
 
